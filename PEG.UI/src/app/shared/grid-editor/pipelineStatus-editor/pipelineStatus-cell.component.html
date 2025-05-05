@@ -1,0 +1,10 @@
+<div class="industry-cell" id="pipelineStatus">
+    <div class="location-edit">
+        <ng-select #pipelineStatusComp name="qualifier" id="qualifier" class="selector" bindLabel="label" [items]="statusList" 
+            [(ngModel)]="selectedPercent" (change)="onStatusChange($event)" style="width:200px;"
+            (clear)="clearValue($event)"  (remove)="clearValue($event)" [clearable]="true"	 >
+        </ng-select>
+
+    </div>
+
+</div>

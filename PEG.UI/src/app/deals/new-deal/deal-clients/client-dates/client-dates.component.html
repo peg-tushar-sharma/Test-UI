@@ -1,0 +1,39 @@
+<div class="modal" id="dealClientDates" role="dialog">
+  <div class="modal-dialog mastercontainer " style="padding-top: 125px;max-width: 400px;">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">
+          <span>Call Dates</span>
+        </h5>
+        <button type="button" id="btnClientDateClose" data-dismiss="modal" class="close" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" style="padding: 1rem 1rem;max-height:425px;min-height: 375px;overflow-y: scroll;">
+        <div *ngIf="!isTabReadOnly" (click)="addClientDate()" class="labelText add-btn" style="float: right;
+            margin-top: 3px;"> Add <i class="fas fa-plus" style="font-size: 11px;"></i></div>
+        <br>
+        <br>
+        <div>
+          <table id="clientDates">
+            <tr *ngFor="let item of callDates;index as i">
+              <td style="width:92%">
+                <label *ngIf="isTabReadOnly" class="col-form-label form-control">{{item.dateValue?.jsdate | date : 'dd-MMM-yyyy'}}</label>
+              </td>
+              <td  *ngIf="!isTabReadOnly" style="padding:10px;cursor: pointer;"><i class="far fa-trash-alt" (click)="deleteClientDate(i,item)"></i>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button  *ngIf="!isTabReadOnly"  type="button" class="btn btn-danger" (click)="saveCallDates()">Save</button>
+      </div>
+
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,315 @@
+
+// ::ng-deep #pipelineGrid .ag-theme-bootstrap {
+// 	max-height: 87vh;
+// 	.ag-root {
+// 		border: none;
+// 	}
+// 	.ag-header {
+// 		background-color: #FFF !important;
+// 		border-bottom: 1px solid black !important;
+// 		font-weight: bold !important;
+// 		color:black !important;
+// 		box-shadow: none !important;
+// 	}
+// 	.ag-header-cell{
+// 		border-right:none !important;
+// 	}
+//  .ag-body-viewport {
+// 	background-color: #FFF !important;
+// }
+// .ag-header-cell .ag-header-cell-resize {
+//     background-color: #fff;
+//     transition: background-color 0s;
+//     width: 3px !important;
+// }
+// .ag-ltr .ag-cell {
+// 	font-size: 11px !important;
+// 	line-height: 2;
+// }
+
+// .ag-column-tool-panel-column-label{
+// 	margin-left: 18px;
+// }
+
+// .ag-column-drag{
+// 	display: none;
+// }
+// .ag-theme-bootstrap .ag-row-drag .ag-icon-row-drag{
+// 	height:14px !important;
+// }
+
+// .ag-theme-bootstrap .ag-header-cell, .ag-theme-bootstrap .ag-header-group-cell {
+// 	border-style: hidden;
+// }
+
+// .customHeaderLabel {
+// 	font-size: 12px;
+// }
+
+// .badge.badge-sm{
+// 	width: 15px;
+//     height: 15px;
+//     font-size: .6rem;
+//     display: flex;
+//     margin-top: 2px;
+// }
+
+// .ag-root.ag-layout-normal {
+// 	height: 97%;
+// }
+
+// }
+
+// #pipelineDisplayCount {
+// 	font-size: 10px;
+// }
+
+// #pipelineHeader {
+// 	padding:0 16px 0 16px !important;	
+// }
+
+// h5{
+// 	margin-bottom: 0 !important;
+// }
+
+// #pipeline-grid {
+//     height: calc(100vh - 124px);
+// }
+
+// .pageHeader{
+// 	margin-bottom: 0;
+// }
+// ::ng-deep #pipelineGrid .ag-theme-custom-angular {
+// 	max-height: 83.5vh;
+// 	.ag-root {
+// 		border: none;
+// 	}
+// 	.ag-header {
+// 		background-color: #FFF !important;
+// 		font-weight: bold !important;
+// 		color:black !important;
+// 		box-shadow: none !important;
+// 	}
+//  .ag-body-viewport {
+// 	background-color: #FFF !important;
+// }
+// .ag-header-cell .ag-header-cell-resize {
+//     background-color: #fff;
+//     transition: background-color 0s;
+//     width: 3px !important;
+// }
+// .ag-ltr .ag-cell {
+// 	font-size: 11px !important;
+// 	line-height: 2;
+// 	// border-width: 1px;
+// 	// border-style: none solid ;
+// 	// border-color: #E5E5E5;
+// 	padding-left: 4px;
+// 	// border-left: none;// for reducing border thickness of ag-cell
+// 	// border-right: 1px solid #E5E5E5 !important ;// for reducing border thickness of ag-cell
+// 	color: #000000; //added color to text in the cells
+// 	border-right: 1px solid #e5e5e5;
+	
+// }
+
+// // To maintain the content width
+// .ag-popup-editor {
+// 	min-width: max-content !important;
+// }
+
+// .ag-cell {
+// 	border-top: none !important;
+// 	border-bottom: none;
+// }
+
+// .client-position {
+// 	padding-left: 38px;
+// }
+
+// .ag-column-tool-panel-column-label{
+// 	margin-left: 18px;
+// }
+
+// .ag-column-drag{
+// 	display: none;
+// }
+// .ag-theme-custom-angular .ag-row-drag .ag-icon-row-drag{
+// 	height:14px !important;
+// }
+
+// .ag-row:hover {
+// 	background-color: #E5E5E5;
+// 	.ag-icon-row-drag {
+// 		background-image: url("/~/assets/img/ag-grid/drag.svg")!important;;
+// 		display: block;		
+// 	}
+// }
+
+// .ag-icon-row-drag {
+// 	display: none;
+// }
+
+// .ag-icon-contracted {
+// 	display: none;
+// }
+
+// .ag-icon-expanded {
+// 	display: none;
+// }
+
+// .ag-header {
+// 	margin-bottom: 0 !important;
+// }
+
+// .ag-theme-custom-angular .ag-header-cell {
+// 	// padding-bottom: 10px;
+// 	border-right:  1px solid #E5E5E5 !important ;
+// 	line-height: 24px;
+// }
+
+// .ag-header-cell {
+// 	border-style: none;
+// }
+
+// .ag-header-container {
+// 	border: 0px solid #E5E5E5; //reduced the border thickness of header cell
+// 	border-bottom: none;
+// }
+
+// .customHeaderLabel {
+// 	font-size: 11px;
+// 	color: #666666;
+// }
+
+// .ag-row {
+// 	// border-bottom: 1px solid #ccc;
+// 	// border-width: 1px !important;
+//     // border-color: #E5E5E5 !important
+// }
+
+// .ag-theme-custom-angular .ag-cell-wrapper > *:not(.ag-cell-value):not(.ag-group-value){
+// 	height:22px !important;
+// }
+
+// .ag-group-value{
+// 	font-weight: bold;
+// 	font-size: 12px !important;
+// 	margin-left: 7px;
+// 	font-family: 'Graphik';
+// 	color: #000000;
+
+// }
+// .ag-theme-custom-angular .ag-row:not(.ag-row-first) {
+//      border-top-style:none !important; 
+// }
+// .ag-theme-custom-angular .ag-row{
+// 	border:1px solid #e5e5e5;
+// 	border-left: 0;
+// 	&:first-child{
+// 		border-top:none;
+// 	}
+// }
+// .ag-theme-custom-angular .ag-ltr .ag-header-cell::after, .ag-theme-custom-angular .ag-ltr .ag-header-group-cell::after {
+// 	right: 0;
+// 	display: none;
+// }
+// .ag-cell-value {
+// 	width: 100%;
+// }
+
+// .ag-root-wrapper {
+// 	overflow-x: hidden !important;
+// 	margin-left: 1.2rem;
+// }
+
+// .ag-icon-tree-open, .ag-icon-tree-closed {
+// 	display: none;
+// }
+
+// .ag-row:hover {
+// 	background-color: #E5E5E5;
+// 	.ag-icon-grip {
+// 		background-image: url("/~/assets/img/ag-grid/drag.svg")!important;;
+// 		visibility: visible;	
+// 	}
+// }
+
+// .ag-icon-grip {
+// 	visibility: hidden;
+// }
+
+// .page-header {
+// 	margin-left: 1.2rem !important;
+// }
+
+// .ag-group-child-count{
+// 	display: none;
+// }
+
+// .badge.badge-sm{
+// 	width: 15px;
+//     height: 15px;
+//     font-size: .6rem;
+//     display: flex;
+//     margin-top: 2px;
+// }
+// }
+
+#pipelineDisplayCount {
+	font-size: 10px;
+}
+
+#pipelineHeader {
+	padding:0 16px 0 16px !important;	
+}
+
+h5{
+	margin-bottom: 0 !important;
+}
+
+#pipeline-grid {
+    height: calc(100vh - 140px);
+}
+
+.pageHeader{
+	margin-bottom: 0;
+}
+
+#pipeline-multi-grid{
+	max-height: 33vh;
+}
+
+#pipeline-multi-grid{
+    height: calc(100vh - 124px);
+}	
+
+// ::ng-deep .ag-theme-custom-angular .ag-header-row {
+// 	height: 32px !important;
+//   }
+
+  
+// .bs-datepicker {
+//     position: absolute !important;
+//     margin-top: 231px;
+//     margin-left: 214px;
+//     border: 1px solid #F5F5F5;
+//     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1) !important;
+//     border-radius: 5px;
+//     font-family: 'Graphik' !important;
+// }
+
+// .bs-datepicker-head {
+//     border-radius: 5px 5px 0px 0px !important;
+//     height: 37px !important;
+//     padding: 5px 10px !important;
+//     padding-top: 3px !important;
+// }
+
+// .bs-datepicker-container {
+//     padding: 9px !important;
+// }
+
+.page-header {
+    margin-left: 0.25rem !important;
+}
+

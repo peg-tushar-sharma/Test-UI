@@ -1,0 +1,121 @@
+<div class="row">
+  <div class="col-4 mb-3">
+    <label class="labelText font-weight-600">VDD Provider:</label>
+    <input *ngIf="!isTabReadOnly" type="text" class="form-control formattedInput" ngModel [(ngModel)]="deal.vddProvider"
+      name="vddProvider" autocomplete="off">
+    <span *ngIf="isTabReadOnly">
+      <br />
+      <label class="labelText">{{dealLabel?.vddProvider}}</label>
+
+    </span>
+  </div>
+  <div class="col-4 mb-3">
+    <label class="labelText font-weight-600">Bank Running Process:</label>
+    <input *ngIf="!isTabReadOnly" type="text" class="form-control formattedInput" ngModel name="bankRunningProcess"
+      [(ngModel)]="deal.bankRunningProcess" autocomplete="off">
+    <span *ngIf="isTabReadOnly">
+      <br />
+      <label class="labelText">{{dealLabel?.bankRunningProcess}}</label>
+
+    </span>
+  </div>
+  <div class="col-4 mb-3">
+    <label class="labelText font-weight-600">Bank Process Name:</label>
+    <input *ngIf="!isTabReadOnly" type="text" class="form-control formattedInput" ngModel name="bankProcessName"
+      [(ngModel)]="deal.bankProcessName" autocomplete="off">
+    <span *ngIf="isTabReadOnly">
+      <br />
+      <label class="labelText">{{dealLabel?.bankProcessName}}</label>
+
+    </span>
+  </div>
+
+</div>
+<div class="row">
+  <div class="col-4 mb-3">
+    <label class="labelText font-weight-600">Transacted to:</label>
+    <input *ngIf="!isTabReadOnly" type="text" class="form-control formattedInput" maxlength="250"
+      [(ngModel)]="deal.transactedTo" ngModel name="transactedTo" autocomplete="off">
+    <span *ngIf="isTabReadOnly">
+      <br />
+      <label class="labelText">{{dealLabel?.transactedTo}}</label>
+
+    </span>
+  </div>
+  <div class="col-4 mb-3">
+    <label class="labelText font-weight-600">Transacted date:</label>
+    <span *ngIf="isTabReadOnly">
+      <br />
+      <label class="labelText">{{dealLabel?.transactedDate?.jsdate | date :'dd-MMM-yyyy'}}</label>
+
+    </span>
+    <ng-template #blankValue><span>-</span></ng-template>
+  </div>
+  <div class="col-4 mb-3">
+    <label class="labelText font-weight-600"> Who supported winning bidder:</label>
+    <input *ngIf="!isTabReadOnly" type="text" class="form-control formattedInput" maxlength="250" ngModel
+      [(ngModel)]="deal.supportedWinningBidder" name="supportedWinningBidder" autocomplete="off">
+    <span *ngIf="isTabReadOnly">
+      <br />
+      <label class="labelText">{{dealLabel?.supportedWinningBidder}}</label>
+
+    </span>
+  </div>
+</div>
+<div class="row">
+  <div class="col-12 mb-3">
+    <label class="labelText font-weight-600">Process Expectation</label>
+    <textarea *ngIf="!isTabReadOnly" rows="3" type="text" maxlength="10000" class="form-control" id="formattedTextarea"
+      ngModel [(ngModel)]="deal.processExpectation" name="processExpectation" autocomplete="off"></textarea>
+    <span *ngIf="isTabReadOnly">
+      <br />
+      <label class="labelText truncate-6" [tooltip]="dealLabel?.processExpectation"
+        [delay]="700">{{dealLabel?.processExpectation}}</label>
+
+    </span>
+  </div>
+</div>
+<div class="row">
+  <div class="col-12 mb-3">
+    <div>
+      <span>
+        <label class="labelText font-weight-600">Important Dates:</label>
+      </span>
+      <span  class="float-right">
+        <a class="labelText addBid" [class.disabled]="isTabReadOnly" (click)="addImportantDates()">Add+</a>
+      </span>
+    </div>
+
+    <div class="impDatesBlock">
+
+      <!-- <div class="col-1" style="text-align: right;">
+    <a *ngIf="!isTabReadOnly" class="labelText addBid" (click)="addImportantDates()">Add+</a> </div> -->
+
+      <!-- <div class="col-12 mb-3"> -->
+
+        <table id="impDates" >
+
+          <tr *ngFor="let item of importantDates;index as i">
+            <!-- <td width="1%"><i class="fas fa-ellipsis-v"></i></td>
+        <td width="1%"><i class="far fa-eye"></i></td> -->
+
+            <td width="20%">
+            </td>
+            <td width="20%"><input [disabled]="isTabReadOnly" type="text" maxlength="50" class="form-control formattedInput "
+                [ngModelOptions]="{standalone: true}" [ngClass]="{'requiredDate':importantDates.isdirty}"
+                (ngModelChange)="modelChange($event,i)" [(ngModel)]="item.dateLabel" placeholder="Enter Date Label"
+                autocomplete="off"></td>
+            <td><input [disabled]="isTabReadOnly" type="text" maxlength="10000" class="form-control formattedInput" autocomplete="off"
+                [(ngModel)]="item.comment" (ngModelChange)="modelChange($event,i)" [ngModelOptions]="{standalone: true}"
+                placeholder="Enter Comment">
+            </td>
+            <td width="2%"><i [class.disabled]="isTabReadOnly" class="far fa-trash-alt"  (click)="deleteImportantDates(i,item)"></i>
+          </tr>
+        </table>
+
+        
+
+      <!-- </div> -->
+    </div>
+  </div>
+</div>

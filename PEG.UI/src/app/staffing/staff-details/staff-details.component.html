@@ -1,0 +1,309 @@
+<div id="staffDetailsWrap"
+  *ngIf="opportunityDetails?.registrationId>0 && opportunityDetails.isOpportunityStaffed; else cardDeleted">
+  <div *ngIf="opportunityDetails.isOpportunityStaffed; else notEdit">
+    <div class="flex-container">
+      <button class="staffing-button button" (click)="duplicateStaffingCard()"><i
+          class="fas fa-copy"></i>&nbsp;Duplicate</button>
+      <button class="staffing-button button" (click)="addNewStaffingOpportunity()"><i class="fas fa-plus"></i>&nbsp;Add
+        New Opportunity</button>
+    </div>
+    <div class="row-one-wrapper">
+      <!-- left side -->
+      <!-- details section -->
+      <div>
+        <h4>Details &nbsp;<span *ngIf="isInvalidDuration" style="color: #cc3000;">*Invalid Duration: Only Number/Decimal
+            allowed</span></h4>
+        <!--  -->
+        <table>
+          <tr>
+            <th>Opportunity Type Details</th>
+            <td>
+              <app-staff-editible inputName="opportunityTypeDetails" [formGroup]="formGroup"
+                type="opportunityTypeDetailComp" 
+                (saveOppChanges)="saveOppChanges($event)"></app-staff-editible>
+
+            </td>
+          </tr>
+          <tr>
+            <th>Stage</th>
+
+            <!-- value will come from API in the future -->
+            <td>
+              <app-staff-editible inputName="registrationStage" [formGroup]="formGroup" type="link"
+                [registrationId]="opportunityDetails.registrationId"
+                (saveOppChanges)="saveOppChanges($event)"></app-staff-editible>
+              <!-- <a name="registrationStage" [formControlName]="registrationStage"     (click)="openStageModal(opportunityDetails?.stage,$event)" style="color: blue;"> {{opportunityDetails?.stage?.stageTypeName??""}}</a> -->
+            </td>
+          </tr>
+          <tr>
+            <th>PEG Ops Status</th>
+            <td class="non-editable">
+              {{ opportunityDetails?.opsLikelihood?.opsLikelihoodName }}
+            </td>
+          </tr>
+          <tr>
+            <th>Client</th>
+            <td class="non-editable">{{getClientName( opportunityDetails?.client) }}</td>
+          </tr>
+          <tr>
+            <th>Priority</th>
+            <td class="non-editable">{{getPriorityName(opportunityDetails?.client) }}</td>
+          </tr>
+          <tr>
+            <th>Industry</th>
+            <td class="non-editable">{{ getIndustryName(opportunityDetails?.industry) }}</td>
+          </tr>
+          <tr>
+            <th>Sector</th>
+            <td class="non-editable">{{ getIndustryName(opportunityDetails?.sector) }}</td>
+          </tr>
+          <tr>
+            <th>Legal Status</th>
+            <td class="non-editable">{{ opportunityDetails?.legalStatus?.statusTypeName }}</td>
+          </tr>
+          <tr>
+            <th>MB Status</th>
+            <td class="non-editable">{{ opportunityDetails?.mbStatus?.mbStatusName }}</td>
+          </tr>
+          <tr>
+            <!--TODO: AIPD-66 Change this to fetch actual field.-->
+            <th>Sell-Side Status</th>
+            <td class="non-editable">{{ opportunityDetails?.sellSideStatus?.sellSideStatusName ?? "" }}</td>
+          </tr>
+          <tr>
+            <th>Additional Info</th>
+            <td>
+              <app-staff-editible inputName="additionalInfo" type="text" [formGroup]="formGroup"
+                (saveOppChanges)="saveOppChanges($event)"></app-staff-editible>
+            </td>
+          </tr>
+          <tr>
+            <th>Project Name</th>
+            <td>
+              <app-staff-editible inputName="projectName" type="text" [formGroup]="formGroup"
+                (saveOppChanges)="saveOppChanges($event)"></app-staff-editible>
+            </td>
+          </tr>
+          <tr>
+            <th>Size</th>
+
+            <td>
+              <app-staff-editible inputName="teamSize" type="multiSelect" [teamSize]="teamSizeItems"
+                bindLabel="teamSize" [formGroup]="formGroup" [multiple]="true"
+                (saveOppChanges)="saveOppChanges($event)"></app-staff-editible>
+
+            </td>
+          </tr>
+          <tr>
+            <th>Team Comments</th>
+
+            <td>
+              <app-staff-editible inputName="teamComments" type="text" [formGroup]="formGroup"
+                (saveOppChanges)="saveOppChanges($event)"></app-staff-editible>
+
+            </td>
+          </tr>
+          <tr>
+            <th>Expected Start Date</th>
+            <td>
+
+              <app-staff-editible inputName="expectedStart" type="datepicker" [formGroup]="formGroup"
+                (saveOppChanges)="saveOppChanges($event)"></app-staff-editible>
+            </td>
+          </tr>
+          <tr>
+            <th>Latest Start Date</th>
+            <td>
+              <app-staff-editible inputName="latestStartDate" inputName="latestStartDate" type="datepicker"
+                [formGroup]="formGroup" (saveOppChanges)="saveOppChanges($event)"></app-staff-editible>
+            </td>
+          </tr>
+          <tr>
+            <th>Duration</th>
+            <td>
+              <app-staff-editible inputName="duration" type="text" [formGroup]="formGroup"
+                (saveOppChanges)="saveOppChanges($event)"></app-staff-editible>
+            </td>
+          </tr>
+          <tr>
+            <th>Likelihood</th>
+            <td>
+              <app-staff-editible inputName="likelihood" type="select" [items]="statusItems" bindLabel="label"
+                [formGroup]="formGroup" (saveOppChanges)="saveOppChanges($event)"></app-staff-editible>
+            </td>
+          </tr>
+          <tr>
+            <th>Pipeline Notes (Client details)</th>
+            <td>
+              <app-staff-editible inputName="pipelineNotes" type="text" [formGroup]="formGroup"
+                (saveOppChanges)="saveOppChanges($event)"></app-staff-editible>
+            </td>
+          </tr>
+         
+        </table>
+      </div>
+
+      <!-- right side -->
+      <div class="right-side-wrapper">
+        <!-- leadership section -->
+        <div>
+          <h4>Leadership</h4>
+          <table>
+            <tr>
+              <th>Selling Partner</th>
+              <td>
+                <app-staff-editible inputName="sellingPartner" type="typeahead" [formGroup]="formGroup"
+                  (saveOppChanges)="saveOppChanges($event)"></app-staff-editible>
+              </td>
+            </tr>
+            <tr>
+              <th>SVP</th>
+              <td>
+                <app-staff-editible inputName="svp" type="typeahead" [formGroup]="formGroup" [multipleTypeahead]="true"
+                  (saveOppChanges)="saveOppChanges($event)"></app-staff-editible>
+              </td>
+            </tr>
+            <tr>
+              <th>I need support identifying an SVP</th>
+              <td>
+                <app-staff-editible inputName="isSVPHelp" type="select" [items]="leadershipHelp" bindLabel="label"
+                  [formGroup]="formGroup" (saveOppChanges)="saveOppChanges($event)"></app-staff-editible>
+              </td>
+            </tr>
+            <tr>
+              <th>OVP</th>
+              <td>
+                <app-staff-editible inputName="ovp" type="typeahead" [formGroup]="formGroup" [multipleTypeahead]="true"
+                  (saveOppChanges)="saveOppChanges($event)"></app-staff-editible>
+              </td>
+            </tr>
+            <tr>
+              <th>I need support identifying an OVP</th>
+              <td>
+                <app-staff-editible inputName="isOVPHelp" type="select" [items]="leadershipHelp" bindLabel="label"
+                  [formGroup]="formGroup" (saveOppChanges)="saveOppChanges($event)"></app-staff-editible>
+              </td>
+            </tr>
+            <tr>
+              <th>SM</th>
+              <td>
+                <app-staff-editible inputName="manager" type="typeahead" [formGroup]="formGroup"
+                  [multipleTypeahead]="false" (saveOppChanges)="saveOppChanges($event)"></app-staff-editible>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <!-- staffing section -->
+        <div>
+          <h4>Staffing</h4>
+          <table>
+            <tr>
+              <th>Office To Be Staffed</th>
+              <td>
+                <app-staff-editible inputName="officeToBeStaffed" type="tree" [items]="officesToBeStaffed"
+                  [formGroup]="formGroup" (saveOppChanges)="saveOppChanges($event)"></app-staff-editible>
+
+              </td>
+            </tr>
+            <tr>
+              <th>Language</th>
+              <td>
+                <app-staff-editible inputName="languageRequired" type="select" [items]="languages" bindLabel="name"
+                  multiple="true" [formGroup]="formGroup"
+                  (saveOppChanges)="saveOppChanges($event)"></app-staff-editible>
+              </td>
+            </tr>
+            <tr>
+              <th>Can staffing be solved locally?</th>
+              <td>
+                <app-staff-editible inputName="needOpsStaffingSupport" type="select" [items]="staffingSupportOptions"
+                  bindLabel="label" [isClearable]="false" [formGroup]="formGroup"
+                  (saveOppChanges)="saveOppChanges($event)"></app-staff-editible>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <!-- case information section -->
+        <div>
+          <h4>Case Information</h4>
+          <table>
+            <tr>
+              <th>Client Commitment</th>
+              <td class="non-editable">
+                {{ opportunityDetails?.clientCommitment?.clientCommitmentName }}
+              </td>
+            </tr>
+            <tr>
+              <th>Case Complexity</th>
+              <td class="non-editable" [ngbTooltip]="getInfo()">
+                {{caseComplexity }}
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ag Grid Wrapper -->
+    <!-- Only display if stage == "work started" or "work completed" -->
+    <div class="row-two-wrapper">
+      <div class="conflicts-header">
+        <i class="fas fa-info-circle conflicts-icon" [ngClass]="getConflictIconColor()"></i>
+        <h4>Conflicts</h4>
+      </div>
+
+      <div id="conflictsIconWrapper">
+        <div class='table-wrapper'>
+          <table class='fl-table'>
+            <thead>
+              <tr>
+                <th>Client name</th>
+                <th>Stage</th>
+                <th>Case code</th>
+                <th>Case start date</th>
+                <th>Case end date</th>
+                <th>Case Managing office</th>
+                <th>Likelihood</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let element of conflictsData">
+                <td>{{ (element.clientName ? element.clientName : '') }}</td>
+                <td> {{(element.stageTypeName ? element.stageTypeName : '') }}</td>
+                <td> {{(element.caseCode ? element.caseCode : '') }}</td>
+                <td> {{ element.caseStartDate | date:"dd-MMM-YYYY"}}</td>
+                <td> {{element.caseEndDate | date:"dd-MMM-YYYY"}}</td>
+                <td> {{(element.officeName ? element.officeName : '') }}</td>
+                <td> {{(element.likelihoodId ? element.caseCode?'': element.label+'%' : '') }}</td>
+              </tr>
+              <tr *ngIf="conflictsData?.length==0">
+                <td colspan="7" style="text-align: center;">No rows to show</td>
+
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+  <ng-template #notEdit>
+    <p>This Planning card has been deleted, please click on the cross icon to close the pop up</p>
+  </ng-template>
+</div>
+
+<ng-template #cardDeleted>
+  <div *ngIf="!opportunityDetails.isOpportunityStaffed else loading" id="staffDetailsWrap">
+    <p>This Planning card has been deleted, please click on the cross icon to close the pop up</p>
+  </div>
+
+  <ng-template #loading>
+    <div class="loading-center" *ngIf="opportunityDetails.isOpportunityStaffed else loading" id="staffDetailsWrap">
+      <i class="fas fa-circle-notch fa-spin customeStyle mr-2"></i> Please wait...
+    </div>
+
+  </ng-template>
+</ng-template>

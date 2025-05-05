@@ -1,0 +1,45 @@
+@import "../../../../../styles/abstract/variables.scss";
+
+.modal-header{
+    color: $bain-red !important;
+}
+
+.toggle-check-btn{
+  cursor: pointer;
+}
+
+/*** save button ***/
+.button-footer {
+  text-align: center;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.modal-title{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.add-btn{
+  cursor: pointer;
+  color: #CC0000 !important;
+}

@@ -1,0 +1,114 @@
+@import '../pipeline_styles';
+
+$borderColor: #C4C4C4;
+$buttonBlue: #0F77C7;
+$headerBlue: #97CDF5;
+
+.oppSlideoutContainer{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    pointer-events: none;
+    background:rgba(0,0,0,0.25);
+    z-index: 100000;
+    visibility:hidden;
+
+    &[show="true"]{
+        visibility:visible;
+        pointer-events: initial;
+        
+        .oppSlideoutPanel{
+            left: 0;
+        }
+    }
+}
+
+.oppSlideoutPanel{
+    position: absolute;
+    top: 0px;
+    left: -1260px;
+    height:100%;
+    max-width: 100%;
+    background: $headerLightBlue;
+    box-shadow: -5px 4px 14px rgba(0, 0, 0, 0.25);
+    border-radius: 5px 0px 0px 5px;
+    box-sizing: border-box;
+    pointer-events:auto;
+    padding:15px 20px;
+    position: relative;
+    overflow-y: auto;
+
+    -webkit-transition: all 300ms ease;
+    -moz-transition: all 300ms ease;
+    -ms-transition: all 300ms ease;
+    -o-transition: all 300ms ease;
+    transition: all 300ms ease;
+
+    .header, .content{
+        padding: 20px;
+    }
+
+    .header{
+        background: $headerBlue;
+        display: flex;
+        justify-content: space-between;
+
+        button.closeFilterPanel{
+            border: none;
+            background: none;
+
+            &::after{
+                color: #333;
+                content: "\2715";
+            }
+        }
+    }
+
+    .oppSlideoutButtons{
+        position: absolute;
+        right: 20px;
+
+        button{
+            border: none;
+            border-radius: 4px;
+            background: none;
+            font-size: 30px;
+            font-weight: bold;
+            color: $textGray;
+        }
+
+        button#saveOppDetails{
+            background: $primaryBlue;
+            color: #fff;
+        }
+    }
+
+    ::ng-deep .nav-tabs{
+        margin-bottom: 15px;
+    }
+        
+    ::ng-deep a.nav-link {
+        color: $textGray !important;
+        background: none !important;
+        border-left: none !important;
+        border-right: none !important;
+        border-top: none !important;
+    }
+
+    ::ng-deep a.nav-link.active {
+        color: $bainRed !important;
+        border-bottom: 3px solid $bainRed;
+    }
+
+    ::ng-deep .ng-select.ng-select-multiple .ng-select-container,
+    ::ng-deep .ng-select.ng-select-multiple .ng-select-container .ng-value-container{
+        flex-wrap: nowrap;
+    }
+
+    ::ng-deep .ng-select.ng-select-multiple .ng-value-label{
+        white-space: nowrap !important;
+    }
+}

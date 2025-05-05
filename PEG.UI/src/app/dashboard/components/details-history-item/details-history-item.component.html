@@ -1,0 +1,10 @@
+<div class="log-item d-flex flex-column mb-4">
+  <div class="log-content">
+    <ng-content></ng-content>
+  </div>
+  <div class="info d-flex align-items-center">
+    <span>{{ date | date: 'dd-MMM-yyyy' }}</span>
+    <span class="mx-2 dot-separator"></span>
+    <span>{{ user }}</span>
+  </div>
+</div>

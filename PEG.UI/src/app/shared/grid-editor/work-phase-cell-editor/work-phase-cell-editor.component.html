@@ -1,0 +1,34 @@
+<div class="cell-width">
+  
+    <div *ngIf="workPhase" class="custom" >
+        <span>Continuation:</span>
+        <span *ngIf="workPhase?.isContinuation"  style=" color: #cc0000;">Yes</span>
+        <span *ngIf="!workPhase?.isContinuation">No</span>
+        <span>
+            <input  type="checkbox" id="toggle" class="checkbox" [checked]="workPhase?.isContinuation"  (change)="toggleEvent($event,'isContinuation')" name="continuationPhase" />
+            <label for="toggle" class="switch"></label>
+         </span>
+    </div>
+    <div *ngIf="workPhase" class="custom" >
+        <span>  Next:</span>
+        <span  *ngIf="workPhase?.isNext"  style=" color: #cc0000;">Yes</span>
+        <span  *ngIf="!workPhase?.isNext">No</span>
+        <span>
+            <input type="checkbox" id="toggle2" class="checkbox"  [checked]="workPhase?.isNext" (change)="toggleEvent($event,'isNext')" name="nextPhase" />
+            <label for="toggle2" class="switch"></label>
+         </span>
+    </div>
+    <div *ngIf="workPhase"  class="custom" >
+        <span> Restart Phase:</span>
+        <span  *ngIf="workPhase?.isRestartPhase"  style=" color: #cc0000;">Yes</span>
+        <span  *ngIf="!workPhase?.isRestartPhase">No</span>
+        <span>
+            <input type="checkbox" id="toggle1" class="checkbox"  [checked]="workPhase?.isRestartPhase"  (change)="toggleEvent($event,'isRestartPhase')" name="restartPhase" />
+            <label for="toggle1" class="switch"></label>
+         </span>
+    </div>
+    <div  *ngIf="workPhase"  class="customX" >
+        <span> Related Case Code:</span>
+        <span><input #workPhaseComp class="input" style="width: 100%;" [(ngModel)]="relatedCaseCode" maxlength="100"  placeholder="" type="text"/></span>
+    </div>
+</div>

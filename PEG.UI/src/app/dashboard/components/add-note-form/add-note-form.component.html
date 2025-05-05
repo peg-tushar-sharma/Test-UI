@@ -1,0 +1,8 @@
+<div class="add-note-wrapper d-flex flex-column">
+  <div class="header"><h4>Add Note</h4></div>
+  <textarea [formControl]="noteInput" cols="30" rows="10" placeholder="Leave note with details"></textarea>
+  <div class="buttons d-flex justify-content-between mt-2">
+    <button class="btn btn-link p-2 ml-2" (click)="clearNote()">Clear</button>
+    <button class="btn btn-primary" (click)="addNote()">Save Note</button>
+  </div>
+</div>

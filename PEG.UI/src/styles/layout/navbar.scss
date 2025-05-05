@@ -1,0 +1,116 @@
+@use "sass:math";
+
+.navbar {
+  padding: math.div($base-padding,4) 0;
+  min-height: $header-height;
+  border-bottom: 3px solid $grey-extra-light;
+  position: fixed !important;
+  width: 100%;
+  z-index: 9;
+  .navbar-brand {
+    font-size: $brand-font-size;
+    // width: $sidebar-width;
+    padding: 0 ($base-padding * 1.5)-2px;
+    margin-right: $base-padding * 1.5;
+    @media only screen and (min-width: 768px) {
+      width: 400px;
+    }
+    @media only screen and (max-width: 360px) {
+      font-size: 20px;
+    }
+    a {
+      @include color-fade;
+      color: $text-regular;
+      &:hover {
+        color: $bain-red;
+        text-decoration: none;
+      }
+    }
+
+    img {
+      width: $logo-width;
+      height: $logo-height;
+      margin-right: $spacer;
+      transform: translateY(-1px);
+    }
+  }
+
+  .nav-item {
+    max-height: $nav-item-height;
+    a.nav-link {
+      @include color-fade;
+      position: relative;
+      z-index: 2;
+      font-size: $nav-item-font-size;
+      color: $text-regular;
+      padding-left: 0;
+      padding-right: 0;
+      margin-right: $spacer * 3;
+      white-space: nowrap;
+
+      &:hover {
+        color: $bain-red;
+      }
+
+      &:after {
+        content: "";
+        display: none;
+        position: absolute;
+        bottom: -12px;
+        width: 100%;
+        height: 3px;
+        background-color: $bain-red;
+      }
+    }
+    &.active a.nav-link {
+      color: $bain-red;
+      &:after {
+        display: block;
+      }
+    }
+  }
+
+  .profile-nav {
+    position: relative;
+    top: - math.div($base-padding,4);
+    img {
+      @extend .mr-2 !optional;
+      width: 38px;
+      height: 38px;
+      border: 1px solid $grey-light;
+      border-radius: 50%;
+    }
+    a.nav-link {
+      font-size: 14px;
+      margin-right: $spacer * 2;
+      cursor: pointer;
+    }
+  }
+
+  .navbar-toggler {
+    position: fixed;
+    right: math.div($base-padding,2);
+    top: math.div($base-padding,2);
+    &:focus {
+      outline: none;
+    }
+  }
+
+  .navbar-collapse.show,
+  .navbar-collapse.collapsing {
+    ul.navbar-nav {
+      padding-top: $base-padding;
+      padding-bottom: $base-padding;
+      padding-left: $base-padding * 1.5;
+
+      a {
+        &:after {
+          display: none;
+        }
+      }
+    }
+    .profile-nav {
+      display: none;
+    }
+  }
+}

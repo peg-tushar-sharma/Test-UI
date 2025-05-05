@@ -1,0 +1,98 @@
+<section class="closed-detail-modal">
+    <div class="closed-detail-modal-wrapper" *ngIf="isPageLoading">
+      <!-- header -->
+      <div>
+        <div class="d-flex align-items-center justify-content-between">
+          <h2 class="closed-detail-modal-title">Update Stage</h2>
+  
+          <!-- close button -->
+          <button class="closed-detail-modal-close-button" (click)="close()">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+  
+        <p class="closed-detail-reg-title">[{{ registration?.registrationClient?.clientName }}] submitted by {{ submittedBy }}</p>
+      </div>
+  
+      <!-- body row | stage picker -->
+      <div class="closed-detail-modal-body" id="body-row" *ngIf="selectedStage && selectedStage.registrationStageId">
+  
+        <label class="closed-detail-modal-body-label">Stage</label>
+  
+        <div #stageGroup class="btn-group">
+          <button *ngIf="selectedStage && selectedStage?.registrationStageId" type="button"
+            class="btn dropdown-toggle stage closed-detail-modal-body-button" name="stageGroup" data-toggle="dropdown">
+            {{ selectedStage ? selectedStage.stageTypeName : "Select stage" }}<span class="caret"></span>
+          </button>
+  
+          <ul class="dropdown-menu" role="menu">
+            <li>
+              <div class="column-filter dropdown-filter">
+                <ul>
+                  <li *ngFor="let stage of registrationStage" style="cursor: pointer;"
+                    [class.selected]="stage.registrationStageId == selectedStage?.registrationStageId"
+                    (click)="onStageSelectionChange(stage)">{{ stage.stageTypeName }}<i class="fa fa-check"></i>
+                  </li>
+                </ul>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+  
+      <ng-container *ngIf="showClosedFields">
+        <!-- body row | secondary reason -->
+        <div class="closed-detail-modal-body" *ngIf="!isCold">
+          <label class="closed-detail-modal-body-label">Secondary reason</label>
+  
+          <ng-container *ngFor="let option of secondaryOptions; let optionIndex = index">
+            <app-checkbox-select-staffing *ngIf="option.show" [isEditable]="true" [labelText]="option.label"
+              [uniqueId]="'stageModalStaffing'+option.secondaryNoteId" [name]="option.secondaryNoteId" [modelValue]="option.value"
+              (outModelChange)="updateSecondarySelection($event, optionIndex)"></app-checkbox-select-staffing>
+          </ng-container>
+        </div>
+  
+        <!-- body row | competitor -->
+        <div class="closed-detail-modal-body" *ngIf="isLost">
+          <label class="closed-detail-modal-body-label">Competitor</label>
+  
+          <div #competitorGroup class="btn-group">
+            <button *ngIf="secondaryOptions && secondaryOptions.length" type="button"
+              class="btn dropdown-toggle closed-detail-modal-body-button" name="competitorGroup" data-toggle="dropdown">
+              {{ selectedCompetitor ? selectedCompetitor.competitorName : "Select competitor" }}<span
+                class="caret"></span>
+            </button>
+  
+            <ul class="dropdown-menu" role="menu">
+              <li>
+                <div class="column-filter dropdown-filter">
+                  <ul>
+                    <li *ngFor="let competitor of competitorOptions" style="cursor: pointer;"
+                      [class.selected]="competitor.competitorId == selectedCompetitor?.competitorId"
+                      (click)="updateCompetitor(competitor)">{{ competitor.competitorName }}<i class="fa fa-check"></i>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+  
+        <!-- body row | notes -->
+        <div class="closed-detail-modal-body">
+          <label class="closed-detail-modal-body-label">Notes</label>
+          <textarea class="closed-detail-modal-body-input" (keyup)="onNotesChanged($event)" placeholder="Add note"
+            name="note" [(ngModel)]="note"></textarea>
+        </div>
+      </ng-container>
+  
+      <!-- footer -->
+      <div class="closed-detail-modal-footer">
+        <button class="closed-detail-modal-footer-button primary" name="registrationStage" (click)="save()"
+          [disabled]="! saveEnabled">Save</button>
+      </div>
+    </div>
+    <div *ngIf="!isPageLoading">
+      Please wait while we fetch the information...
+    </div>
+  </section>

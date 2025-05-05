@@ -1,0 +1,294 @@
+@import "../../../../styles/abstract/variables.scss";
+@import "../../../../styles/layout/form";
+@import "../../../../styles/layout/deal.scss";
+
+::ng-deep .card.customClass,
+::ng-deep .card.customClass .card-header,
+::ng-deep .panel.customClass {
+  padding: 0px;
+  background-color: #CC0000;
+  color: white;
+}
+
+::ng-deep .panel.customClass .panel-body {
+  background-color: rgba(249, 249, 249, 1);
+}
+
+::ng-deep .panel-heading {
+  box-shadow: 0px 3px 3px 0px #d3d3d3;
+  z-index: 9;
+}
+
+::ng-deep .panel-title button {
+  color: white;
+  font-size: 14px !important;
+}
+
+::ng-deep .panel-title button:hover {
+  color: #3c3c3c;
+  text-decoration: none;
+}
+
+.carretIcon {
+  float: right;
+  padding: 8px 20px;
+  font-size: 18px;
+  color: #c4c4c4;
+}
+
+.btn-link:hover {
+  text-decoration: none !important;
+}
+
+.context-data {
+  background-color: #FFFFFF;
+  padding: 10px;
+  padding-bottom: 30px;
+}
+
+.deal-headings {
+  text-align: left;
+  font: normal normal bold 14px/20px Graphik;
+  letter-spacing: 0px;
+  color: #CC0000;
+}
+
+.smsPadding {
+  padding-left: 100px;
+}
+
+@media screen and (max-width: 1368px) {
+  .smsPadding {
+    padding-left: 60px;
+  }
+}
+
+
+@import '../../../../styles/layout/deal.scss';
+@import '../../../../styles/layout/util.scss';
+@import '../../../../styles/abstract/variables.scss';
+
+#impDates {
+  width: 100%;
+}
+
+#impDates td {
+  padding: 5px 10px;
+}
+
+#impDates tr {
+  background-color: white;
+
+}
+
+#impDates .fas,
+#impDates .far {
+  color: #C9C9C9;
+}
+
+
+#impDates .fas:hover,
+#impDates .far:hover {
+  color: black;
+  cursor: pointer;
+}
+
+
+.requiredDate {
+  border: solid 1px #cc0000 !important;
+  color: red !important;
+}
+
+.borderRow {
+  border: 1px solid #eee;
+}
+
+
+.formattedInput {
+  border: none;
+  border-bottom: 1px solid #C4C4C4;
+  border-radius: 0px;
+  height: 30px;
+}
+
+#formattedTextarea {
+  border: none;
+  border-bottom: 1px solid #C4C4C4;
+  border-radius: 0px;
+  min-height: 50px;
+}
+
+::ng-deep .important-dates {
+  .mydp {
+    border: none !important;
+    border-bottom: 1px solid #c4c4c4 !important;
+    border-radius: 0px !important;
+    margin-top: -5px;
+  }
+
+  .mydp .selection {
+    height: 30px !important;
+    padding-top: 10px;
+  }
+}
+
+.impDatesBlock {
+  border: 1px solid #BEBEBE;
+  padding: 10px;
+  height: 200px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.saveBtn {
+  background: #CC0000;
+  height: 30px;
+  line-height: 1;
+  text-align: center;
+  border-radius: 0px;
+  outline: none !important;
+  color: #FFFFFF;
+  font-size: 12px;
+  font-family: 'Graphik';
+
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+.disabled {
+  pointer-events: none;
+}
+
+
+// Deal bain history
+@import '../../../../styles/layout/deal.scss';
+@import '../../../../styles/layout/util.scss';
+
+
+.chechboxFormat {
+  margin-left: 10px;
+  vertical-align: middle;
+}
+
+
+.deal-headings {
+  text-align: left;
+  font: normal normal bold 14px/20px 'Graphik';
+  letter-spacing: 0px;
+  color: #CC0000;
+}
+
+.bain-history-headings {
+  font: normal normal bold 12px/16px 'Graphik';
+  letter-spacing: 0px;
+  color: #707070;
+}
+
+.formattedInput {
+  border: none;
+  border-bottom: 1px solid #C4C4C4;
+  border-radius: 0px;
+  height: 30px;
+  background-color: #FFFFFF !important;
+}
+
+::ng-deep #context-screen .ng-select {
+  .ng-select-container {
+    border: none !important;
+    border-bottom: 1px solid #C4C4C4 !important;
+    border-radius: 0px !important;
+    min-height: 30px !important;
+  }
+}
+
+// ::ng-deep .ng-select.ng-select-single .ng-select-container {
+//   height: 30px !important;
+// }
+
+.labelText{
+  color: #A3A3A3;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 13px;
+  margin-bottom: 0;
+}
+
+/* Custom CHECK BOX */
+.checkContainer {
+  display: block;
+  position: relative;
+  padding-left: 25px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  font-size: 12px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.checkContainer input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 13px;
+  width: 13px;
+  background-color: #FFF;
+  border: 1px solid #CC0000;
+  box-sizing: border-box;
+  border-radius: 3px;
+}
+
+/* On mouse-over, add a grey background color */
+.checkContainer:hover input:enabled~.checkmark {
+  background-color: #CC0000;
+}
+
+
+/* When the checkbox is checked, add a blue background */
+.checkContainer input:checked~.checkmark {
+  background-color: #CC0000;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.checkContainer input:checked~.checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.checkContainer .checkmark:after {
+  left: 3px;
+  top: 0px;
+  width: 5px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+
+
+::-webkit-scrollbar {
+  width: 8px;
+}

@@ -1,0 +1,73 @@
+
+.CaseDropDown {
+  font-size: 14PX;
+  font-family: sans-serif;
+}
+
+.items {
+  margin-right: 20px;
+  float: left;
+}
+.grid-case-editor{
+    min-width: 700px;
+  }
+  .flex-parent {
+    display: inline-flex;
+    flex: 1 1 0px;
+    color: #000000;
+    flex-wrap: wrap;
+  }
+
+  .flex-item-casecode {
+    min-width: 40px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-left: 15px;
+  }
+
+  .flex-item-startDate {
+    flex: 1;
+    min-width: 85px;
+  }
+  .flex-item-endDate {
+    flex: 1;
+    min-width: 85px;
+  }
+
+  .flex-parent {
+    display: inline-flex;
+    flex: 1 1 0px;
+    color: #000000;
+    flex-wrap: wrap;
+  }
+  .flex-item-caseName {
+    
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: normal;
+    width:250px;
+    margin-left: 15px;
+  }
+  .flex-item-clientName {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: normal;
+    width: 400px;
+    margin-left: 10px;
+  }
+  .flex-item-officeAbbreviation {
+    flex: 1;
+    min-width: 40px;
+  }
+  .flex-item-startDate {
+    flex: 1;
+    min-width: 85px;
+  }
+  .flex-item-endDate {
+    flex: 1;
+    min-width: 85px;
+  }

@@ -1,0 +1,58 @@
+@import "../../../styles/abstract/variables.scss";
+@import "../../../styles/layout/modal.scss";
+@import "../../../styles/layout/form";
+@import "../../../styles/abstract/variables.scss";
+
+.iconHelp {
+  padding: 10px;
+  font-size: 30px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  @media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2) {
+    font-size: 20px;
+    padding: 0px;
+  }
+}
+
+h1 {
+  @media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2) {
+    font-size: 20px;
+    color: $text-dark;
+    margin-bottom: 1em;
+  }
+}
+
+h2 {
+  // font-size: 14px;
+  // color: $text-dark;
+  // font-weight: 500;
+  @media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2) {
+    font-size: 12px !important;
+    line-height: 1.4em;
+  }
+}
+
+.help-textarea {
+  resize: none;
+}
+
+.needs-validation.submitted {
+  div.invalid > label {
+    color: #cc0000 !important;
+  }
+}
+
+.needs-validation {
+  div.touched.invalid > label {
+    color: #cc0000 !important;
+  }
+}
+#requiredText {
+  // list-style-type:disc;
+  padding: 0;
+  margin-left: 10px;
+  color: #cc0000 !important;
+  font-size: 13px;
+  list-style-type: none;
+}

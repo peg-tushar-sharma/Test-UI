@@ -1,0 +1,12 @@
+.textLocation{
+    font-size: 11px;
+    margin-left: 4px;
+    font-weight: 600;
+    color: grey;
+}
+::ng-deep .ng-value-icon.left {
+    display: none !important;
+} 
+::ng-deep .ng-select .ng-arrow-wrapper{
+    display: none;
+  }

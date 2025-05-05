@@ -1,0 +1,6 @@
+<div style="width:182px">
+  <ng-select  [multiple]="false"  [items]="registrationStage"  [clearable] = 'isClearable' #stageStatus name="stageStatus"
+  [(ngModel)]="selectedStage" (change)="onSelectionChange($event)" bindLabel="stageTypeName" 
+  bindValue="registrationStageId"  (clear)="resetStage();" >
+  </ng-select>
+</div>

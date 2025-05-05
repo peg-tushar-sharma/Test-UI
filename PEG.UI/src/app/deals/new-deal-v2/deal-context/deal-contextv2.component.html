@@ -1,0 +1,309 @@
+<div class="context-data">
+  <div class="row">
+    <div class="col-7">
+      <div>
+        <p class="deal-headings">Deal Stats</p>
+        <div class="row">
+          <div class="col-3 labelText"># Work Completed: <span>{{mbHighlights.workCompleted}}</span></div>
+          <div class="col-3 labelText" style="padding: 0px;"># Clients: <span>{{totalUniqueClients}}</span></div>
+          <div class="col-3 labelText"># Work Started:<span>{{mbHighlights.workStarted}}</span></div>
+          <div class="col-3 labelText" style="padding: 0px;"># Registrations: <span>{{totalRegistration}}</span></div>
+          <div class="col-3 labelText"># Committed:<span>{{mbHighlights.commitment}}</span></div>
+          <div class="col-3 labelText" style="padding: 0px;"># Closed: <span>{{mbHighlights.terminated}}</span>
+          </div>
+          <div class="col-3 labelText"># Interest: <span>{{mbHighlights.interest}}</span></div>
+        </div>
+        <br />
+      </div>
+
+      <!-- Deal information -->
+      <div>
+        <p class="deal-headings">Deal Information</p>
+        <div class="row needs-validation" id="context-screen">
+          <div class="col-4 mb-3">
+            <label class="labelText font-weight-600" for="nickname">Deal Nickname: </label>
+            <input type="text" class="form-control formattedInput" #nickname="ngModel" ngModel
+              [(ngModel)]="dealTracker.nickname" autocomplete="off" name="nickname"
+              (change)="onFormValueChanged('nickname','fromProperty')">
+          </div>
+
+          <div class="col-4 mb-3">
+            <label class="labelText font-weight-600">Country/Location of Deal:</label>
+            <ng-select [multiple]="false" ngModel name="targetCountry" [clearable]=isClearOnLocation id="targetCountry"
+              [items]="locationOfDeal" [(ngModel)]="dealTracker.targetCountry" bindLabel="locationName"
+              bindValue="locationName" (change)="onLocationChange($event)">
+            </ng-select>
+          </div>
+
+          <div class="col-4 mb-3">
+            <label class="labelText font-weight-600">Deal Region:</label>
+            <ng-select [multiple]="true" ngModel name="dealRegion" id="dealRegion" [items]="dealRegion"
+              [(ngModel)]="dealTracker.dealRegion" bindLabel="regionName"
+              (change)="onFormValueChanged('dealRegion','fromProperty')">
+            </ng-select>
+          </div>
+
+          <div class="col-4 mb-3">
+            <label class="labelText font-weight-600">Target Owner:</label>
+            <input type="text" class="form-control formattedInput" [disabled]='dealTracker.isMasked' autocomplete="off"
+              ngModel [(ngModel)]="dealTracker.owner" name="owner"
+              (focusout)="onFormValueChanged('owner','fromProperty')">
+          </div>
+
+          <div class="col-4 mb-3">
+            <label class="labelText font-weight-600">Current EBITDA:</label>
+            <input type="text" class="form-control formattedInput" [(ngModel)]="dealTracker.currentEBITDA"
+              autocomplete="off" ngModel name="currentEBITDA"
+              (focusout)="onFormValueChanged('currentEBITDA','fromProperty')">
+          </div>
+
+          <div class="col-4 mb-3">
+            <label class="labelText font-weight-600">Deal Size:</label>
+            <input type="text" class="form-control formattedInput" autocomplete="off" [(ngModel)]="dealTracker.dealSize"
+              ngModel #dealSize="ngModel" name="dealSize" (focusout)="onFormValueChanged('dealSize','fromProperty')">
+          </div>
+
+          <div class="col-12 mb-3">
+            <label class="labelText font-weight-600">Target Description:</label>
+            <textarea type="text" rows="3" class="form-control formattedTextarea" [disabled]='dealTracker.isMasked'
+              ngModel autocomplete="off" [(ngModel)]="dealTracker.targetDescription" name="targetDescription" (keydown.enter)="onEnterKeyPress($event)"
+              (focusout)="onFormValueChanged('targetDescription','fromProperty')"></textarea>
+          </div>
+
+        </div>
+      </div>
+
+      <div style="margin-top: 20px;">
+        <p class="deal-headings">Deal Process</p>
+        <div class="row">
+
+          <div class="col-4 mb-3">
+            <label class="labelText font-weight-600">VDD Provider:</label>
+            <input type="text" class="form-control formattedInput" ngModel [(ngModel)]="dealTracker.vddProvider"
+              name="vddProvider" autocomplete="off" (change)="onFormValueChanged('vddProvider','fromProperty')">
+          </div>
+
+          <div class="col-4 mb-3">
+            <label class="labelText font-weight-600">Bank Running Process:</label>
+            <input type="text" class="form-control formattedInput" ngModel name="bankRunningProcess"
+              [(ngModel)]="dealTracker.bankRunningProcess" autocomplete="off"
+              (change)="onFormValueChanged('bankRunningProcess','fromProperty')">
+          </div>
+
+          <div class="col-4 mb-3">
+            <label class="labelText font-weight-600">Bank Process Name:</label>
+            <input type="text" class="form-control formattedInput" ngModel name="bankProcessName"
+              [(ngModel)]="dealTracker.bankProcessName" autocomplete="off"
+              (change)="onFormValueChanged('bankProcessName','fromProperty')">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-4 mb-3">
+            <label class="labelText font-weight-600">Transacted to:</label>
+            <input type="text" class="form-control formattedInput" maxlength="250"
+              [(ngModel)]="dealTracker.transactedTo" ngModel name="transactedTo" autocomplete="off"
+              (change)="onFormValueChanged('transactedTo','fromProperty')">
+          </div>
+
+          <div class="col-4 mb-3">
+            <label class="labelText font-weight-600">Transacted date:</label>
+            <input type="text" placeholder="DD-MMM-YYYY" #dateInput class="form-control mb-2 formattedInput"
+              bsDatepicker [(bsValue)]="transactedDate" (bsValueChange)="onTransactedDateChanged($event,'transactedDate')"
+              [bsConfig]="{ containerClass : 'theme-red',dateInputFormat: 'DD-MMM-YYYY' }" readonly>
+            <ng-template #blankValue><span>-</span></ng-template>
+          </div>
+          <div class="col-4 mb-3">
+            <label class="labelText font-weight-600"> Who supported winning bidder:</label>
+            <input type="text" class="form-control formattedInput" maxlength="250" ngModel
+              [(ngModel)]="dealTracker.supportedWinningBidder" name="SupportedWinningBidder" autocomplete="off"
+              (change)="onFormValueChanged('supportedWinningBidder','fromProperty')">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12 mb-3">
+            <label class="labelText font-weight-600">Process Expectation</label>
+            <textarea rows="3" type="text" maxlength="10000" class="form-control" id="formattedTextarea" ngModel (keydown.enter)="onEnterKeyPress($event)"
+              [(ngModel)]="dealTracker.processExpectation" name="processExpectation" autocomplete="off" (change)="onFormValueChanged('processExpectation','fromProperty')"></textarea>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="col-5 smsPadding">
+      <p class="deal-headings">Bain Information</p>
+
+      <div class="row">
+        <div class="col-12 mb-3">
+          <div>
+              <span>
+                <label class="labelText font-weight-600">Important Dates:</label>
+              </span>
+            <span class="float-right">
+                <a class="labelText addBid" (click)="addImportantDates()">Add+</a>
+              </span>
+          </div>
+
+          <div class="impDatesBlock">
+            <table id="impDates">
+              <tr *ngFor="let item of importantDates;index as i">
+                <td width="20%">
+                  <input type="text" placeholder="DD-MMM-YYYY" #dateInput class="form-control formattedInput"
+                         bsDatepicker [(bsValue)]="item.dateValue" (bsValueChange)="modelChange($event)"
+                         [bsConfig]="{ containerClass : 'theme-red',dateInputFormat: 'DD-MMM-YYYY' }" readonly>
+                </td>
+                <td width="20%"><input type="text" maxlength="50" class="form-control formattedInput "
+                                       [ngModelOptions]="{standalone: true}" [ngClass]="{'requiredDate':importantDates.isdirty}"
+                                       (change)="modelChange($event,i)" [(ngModel)]="item.dateLabel"
+                                       placeholder="Enter Date Label" autocomplete="off"></td>
+                <td><input type="text" maxlength="10000" class="form-control formattedInput" autocomplete="off"
+                           [(ngModel)]="item.comment" (change)="modelChange($event,i)"
+                           [ngModelOptions]="{standalone: true}" placeholder="Enter Comment">
+                </td>
+                <td width="2%"><i class="far fa-trash-alt" (click)="deleteImportantDates(i,item)"></i>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-6 mb-3">
+          <label class="labelText  font-weight-600">BAN</label>
+          <div class="mt-2">
+            <label for="banSupportRequested" class="checkContainer filter-text">BAN support requested?
+              <input type="checkbox" (change)="supportRequestedChange($event)" class="chechboxFormat"
+                [(ngModel)]="dealTracker.supportRequested" ngModel name="supportRequested" id="banSupportRequested"
+                (change)="onFormValueChanged('supportRequested','fromProperty')">&nbsp;
+              <span class="checkmark"></span>
+            </label>
+
+            <label class="checkContainer filter-text" for="expertLineUp">Bain expert line-up prepared?
+              <input type="checkbox" (change)="expertLineUpChange($event)" class="chechboxFormat" ngModel
+                [(ngModel)]="dealTracker.expertLineupPrepared" name="expertLineupPrepared" id="expertLineUp"
+                (change)="onFormValueChanged('expertLineupPrepared','fromProperty')">&nbsp;
+              <span class="checkmark"></span>
+            </label>
+
+            <label class="checkContainer filter-text" for="expertsonboard">BAN experts on board?
+              <input type="checkbox" (change)="expertOnBoardChange($event)" class="chechboxFormat" ngModel
+                name="expertOnBoard" [(ngModel)]="dealTracker.expertOnBoard" id="expertsonboard">&nbsp;
+              <span class="checkmark"></span>
+            </label>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-6">
+          <label class="labelText bain-history-headings font-weight-600">Created Date</label>
+          <div>
+            <label *ngIf="!(dealTracker && dealTracker.submissionDate)">-</label>
+            <label *ngIf="dealTracker && dealTracker.submissionDate">{{ dealTracker.submissionDate | date:'dd-MMM-yyyy'
+              }}</label>
+          </div>
+        </div>
+
+        <div class="col-6">
+          <label class="labelText bain-history-headings font-weight-600">Expert Train Up: </label>
+          <div class="form-row">
+            <div class="col-8 align-items-center">
+              <label class=" font-weight-600 checkContainer filter-text labelText">Call Needed?
+                <input type="checkbox" class="chechboxFormat" [(ngModel)]="dealTracker.isExpertTrainUpCall" ngModel
+                  name="isExpertTrainUpCall" id="callNeededYes"
+                  (change)="onFormValueChanged('isExpertTrainUpCall','fromProperty')">&nbsp;
+                <span class="checkmark"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" id="context-screen">
+        <div class="col-11 mb-3">
+          <div class="row align-items-center " [hidden]="!dealTracker.isExpertTrainUpCall">
+            <div class="col-6">
+              <label class="labelText  font-weight-600">Date of Call:</label>
+              <div class="row no-gutters align-items-center justify-content-start">
+                <div class="col-11 no-gutters">
+                  <input [disabled]="!dealTracker.isExpertTrainUpCall" type="text" placeholder="DD-MMM-YYYY" #dateInput
+                    class="form-control mb-2 formattedInput" bsDatepicker [(bsValue)]="myDateValue"
+                    (bsValueChange)="onDateChanged($event,'dateOfCall')"
+                    [bsConfig]="{ containerClass : 'theme-red',dateInputFormat: 'DD-MMM-YYYY' }" readonly>
+                </div>
+                <div class="col-1 no-gutters">
+                  <button style="margin-bottom: 24px;" type="button" (click)="cancel()" class="close mr-3" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6">
+              <label class="labelText  font-weight-600">Attendees:</label>
+              <ng-select dropdownPosition="top" [disabled]="!dealTracker.isExpertTrainUpCall" id="attendees"
+                name="attendees" [items]="attendeesList" [selectOnTab]="true" bindLabel="searchableName"
+                [clearSearchOnAdd]="true" (change)="setAttendees('attendees')" loadingText="loading..." [multiple]="true"
+                [hideSelected]="true" [clearable]="true" [compareWith]="compareObjects" [typeahead]="attendeesTypeAhead"
+                [(ngModel)]="selectedAttendees" [addTag]="true">
+                <ng-template ng-option-tmp let-item="item">
+                  <div [title]="item.employeeStatusCode!='EX'?item.employeeCode:''">{{item.searchableName}}
+                    <span *ngIf="item.employeeStatusCode=='EX'" style="font-size: 10px;
+                    padding: 0px 2px !important;" class="tag tag-gray ng-star-inserted">BAN</span>
+                  </div>
+                </ng-template>
+              </ng-select>
+            </div>
+
+            <div class="col-6">
+              <label class="labelText  font-weight-600">Trainer(s):</label>
+              <ng-select dropdownPosition="top" [disabled]="!dealTracker.isExpertTrainUpCall" id="trainers"
+                name="trainers" [items]="trainersList" [selectOnTab]="true" bindLabel="searchableName"
+                [clearSearchOnAdd]="true" (change)="setTrainers('trainers')" loadingText="loading..." [multiple]="true"
+                [hideSelected]="true" [clearable]="true" [compareWith]="compareObjects" [typeahead]="trainersTypeAhead"
+                [(ngModel)]="selectedTrainers" [addTag]="true">
+                <ng-template ng-option-tmp let-item="item">
+                  <div [title]="item.employeeStatusCode!='EX'?item.employeeCode:''">{{item.searchableName}}
+                    <span *ngIf="item.employeeStatusCode=='EX'" style="font-size: 10px;
+                    padding: 0px 2px !important;" class="tag tag-gray ng-star-inserted">BAN</span>
+                  </div>
+                </ng-template>
+              </ng-select>
+            </div>
+
+            <div class="col-6 align-items-center">
+              <label class="labelText font-weight-600">Call Notes/Materials also sent to:</label>
+              <ng-select dropdownPosition="top" [disabled]="!dealTracker.isExpertTrainUpCall" id="sentTo" name="sentTo"
+                [items]="sentToList" [compareWith]="compareObjects" [selectOnTab]="true" bindLabel="searchableName"
+                [clearSearchOnAdd]="true" (change)="setSentTO('sentTo')" loadingText="loading..." [multiple]="true"
+                [hideSelected]="true" [clearable]="true" [typeahead]="sentToTypeAhead" [(ngModel)]="selectedSentTO"
+                [addTag]="true">
+                <ng-template ng-option-tmp let-item="item">
+                  <div [title]="item.employeeStatusCode!='EX'?item.employeeCode:''">{{item.searchableName}}
+                    <span *ngIf="item.employeeStatusCode=='EX'" style="font-size: 10px;
+                    padding: 0px 2px !important;" class="tag tag-gray ng-star-inserted">BAN</span>
+                  </div>
+                </ng-template>
+              </ng-select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12 mb-3 ">
+          <label class="labelText bain-history-headings font-weight-600">Prior Work</label>
+          <textarea type="text" class="form-control" [(ngModel)]="dealTracker.priorWork" rows="10" ngModel (keydown.enter)="onEnterKeyPress($event)"
+            name="priorWork" id="priorWork" (focusout)="onFormValueChanged('priorWork','fromProperty')"></textarea>
+        </div>
+      </div>
+
+      <!-- Deal bain history -->
+
+    </div>
+
+  </div>
+</div>

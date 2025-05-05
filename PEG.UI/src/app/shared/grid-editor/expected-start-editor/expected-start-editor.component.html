@@ -1,0 +1,32 @@
+<div class="cell-width">
+  
+    <div class="custom" style="margin-top: 5px;">
+        <span>Start Date :</span>
+        <span >
+            <input type="text" #dpStart="bsDatepicker" (focusout)="calendarOpen = false" (focus)="calendarOpen = true" class="dateFormatter"  [disabled]="this.hideDate"
+            bsDatepicker [(ngModel)]="startDateValue" [(bsValue)]="startDateValue" value="{{ startDateValueChanged }}" (keyup)="checkEmptyDate($event,'start')" (bsValueChange)="onDateChanged($event)"
+           [bsConfig]="{ dateInputFormat: 'MM/dd', containerClass : 'theme-red',showWeekNumbers: false }"  readonly  >
+           <i class="fas fa-times altered"   (click)="clearDate('date')" *ngIf="startDateValue" ></i>
+        </span>
+    </div>
+    <div class="custom" style="margin-top: 5px;">
+        <span> Date Range:</span>
+        <span>
+            <input type="text" #dpRange="bsDaterangepicker"  (focusout)="rangeOpen = false" (focus)="rangeOpen = true" class="dateFormatter" [disabled]="this.hideRange"
+            bsDaterangepicker [(bsValue)]="endDateValue" value="{{ endDateValueChanged }}" (bsValueChange)="onRangeChanged($event)" (keyup)="checkEmptyDate($event,'range')"
+           [bsConfig]="{ rangeInputFormat: 'MM/dd', containerClass : 'theme-red',showWeekNumbers: false }"  readonly >
+
+           <i class="fas fa-times altered"    (click)="clearDate('range')"  *ngIf="endDateValue"></i>
+        </span>
+    </div>
+    <div class="custom" style="margin-top: 5px;">
+        <span> Qualifier:</span>
+        <span>
+            <select name="qualifier" id="qualifier" class="input" [(ngModel)]="selector">
+                <option  *ngFor="let eachQualifier of quantifier" value={{eachQualifier.quantifierId}}>
+                    {{eachQualifier.quantifierName}}</option>
+                
+              </select>
+        </span>
+    </div>
+</div>

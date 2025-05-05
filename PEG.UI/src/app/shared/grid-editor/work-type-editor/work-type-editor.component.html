@@ -1,0 +1,6 @@
+<div style="width:200px">
+  <ng-select  [multiple]="false"  [items]="workType" 
+  [(ngModel)]="selectedWorkType" (change)="onSelectionChange($event)" bindLabel="workTypeName" 
+  bindValue="workTypeId" (clear)="resetWorkType();" >
+  </ng-select>
+</div>

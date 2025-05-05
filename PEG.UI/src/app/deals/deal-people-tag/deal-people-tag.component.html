@@ -1,0 +1,86 @@
+<div class="modal" id="myModalTagPeoplr" role="dialog">
+  <div class="modal-dialog mastercontainer " *ngIf="deal" style="padding-top: 125px;">
+    <!-- Modal content-->
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">
+          <span *ngIf="deal.targetName">Grant Permissions to {{deal.targetName}}</span>
+          <span *ngIf="!deal.targetName">Grant Permissions </span>
+
+        </h5>
+        <button type="button" (click)="closeModal()" class="close" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form class="data-collection" novalidate #form="ngForm">
+        <div class="modal-body" style="padding: 2rem 1rem;">
+          <span *ngIf="HIDE_SAVE">
+
+          <h6>Select People:</h6>
+
+          <ng-select id="dealTagPeopleList" name="dealTagPeopleList" [items]="typeaheadPeopleList" [selectOnTab]="true"
+            bindLabel="searchableName" bindValue="employeeCode" [addTag]="false" [loading]="otherLoad"
+            [clearable]="true" (close)="clearItems();" loadingText="loading..." [multiple]="false" [hideSelected]="true"
+            [typeahead]="selectPeopleTypeAhead" [(ngModel)]="selectedPeople" (change)="onPeopleAdd($event)">
+
+            <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+              <div>
+                <div>
+                  <div [title]="item.employeeCode">
+                    {{ item.lastName + ', ' + (item.familiarName != null ? item.familiarName : item.firstName) + ' (' + item.officeAbbreviation + ')'}}
+                  </div>
+                  <div class="col-info-location"> {{item.officeName}}</div>
+                </div>
+
+              </div>
+            </ng-template>
+          </ng-select>
+
+          <br>
+        </span>
+
+          <h6>Access Granted: </h6>
+          <div *ngIf="taggedPplList" class="add-items-box">
+            <!-- people list -->
+            <div *ngFor="let key of objectKey(formatedCerts())">
+              <div class="roleHeader"> <i class="fas fa-caret-right"></i> &nbsp; {{key}}</div>
+
+              <ul class="addPersonUL" id="taggedPeopleList">
+                <ng-container *ngFor="let items of  formatedCerts()[key]">
+                  <li>
+                    <div class="onePerson">
+                      <div class="col-info tCol">
+                        <div class="col-info-name" [title]="items.employeeCode">
+                          {{ items.lastName + ', ' + (items.familiarName != null ? items.familiarName : items.firstName) + ' (' + items.officeAbbreviation + ')'}}
+                        </div>
+                        <div class="col-info-location">{{items.office_name}}, {{items.pegRoleName}}</div>
+                      </div>
+                      <div class="col-add tCol" >
+                        <div *ngIf="items.dealId !=0" class="toggle-check-btn">
+                          <i *ngIf="HIDE_SAVE" (click)="removePeople(items)"  title="Remove people" class="fas fa-times"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+
+                </ng-container>
+
+              </ul>
+              <!-- end people list -->
+              <!-- save button -->
+            </div>
+            <!-- end save button -->
+          </div>
+          <!-- end add items list -->
+        </div>
+      </form>
+      <div class="modal-footer" >
+        <button type="button" class="btn btn-danger" (click)="SaveTaggedPeople()" [disabled]="!hasChanged" *ngIf="HIDE_SAVE">Save</button>
+        <button type="button" class="close" data-dismiss="modal" #dismissButton hidden="true">&times;</button>
+      </div>
+
+    </div>
+
+  </div>
+</div>

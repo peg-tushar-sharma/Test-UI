@@ -1,0 +1,91 @@
+@use "sass:math";
+ 
+label.inline-editable{
+  position: relative;
+  left: - math.div($base-padding,4);
+  display: flex!important;
+  overflow: visible!important;
+
+  &:hover{
+    span{
+      border: 1px solid $grey-medium;
+      padding-right: $base-padding*1.5;
+      &:after{
+        content: '\f304';
+        color: $grey-medium;
+        position: absolute;
+        right: math.div($base-padding,4);
+        font-family: 'Font Awesome 5 Free';
+        font-weight: 900;
+      }
+    }
+  }
+
+  span{
+    border: 1px solid transparent;
+    padding: math.div($base-padding,4);
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+    text-overflow: ellipsis;    
+  }
+  
+  .form-control, .form-checks{
+    //display: none!important;  
+    position: absolute;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+    //transform: translateY(-25%);
+    max-width: 100%;
+    padding-left: math.div($base-padding,4);
+    padding-right: math.div($base-padding,4);
+  }
+
+  .field{
+    display: none!important;
+  }
+
+  &.editing{
+    overflow: visible!important;
+    span{
+      opacity: 0;     
+      padding-right: $base-padding*1.5;     
+    }
+    .form-control, .form-checks{
+      display: inline-block!important;
+    }    
+    .field{
+      display: inline-block!important;
+    }    
+  }
+}
+
+td.inline-editable{
+  left:0;    
+  outline-offset: -2px;
+  padding-right:1px;
+
+  .edit-icon{
+    right:10px;
+    margin-top:-1px;
+  }
+
+  input{
+    position: absolute;
+    top:0;
+    bottom:0;
+    left:4px;
+    right:0;
+    max-height: unset;
+    padding-left:10px;
+  }
+
+  &.active.inline-editable-text{
+    label{
+      visibility: hidden;
+      display: block!important;
+    }
+  }
+}

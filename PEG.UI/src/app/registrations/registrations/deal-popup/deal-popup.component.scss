@@ -1,0 +1,22 @@
+
+.needs-validation {
+    div.invalid > label {
+        color: #cc0000 !important;
+    }
+}
+
+.submitted {
+    div.invalid > input {
+        border-color: #cc0000 !important;
+    }
+}
+
+.submitted {
+    div.invalid > div.ng-select-container {
+        border: 1px solid #cc0000 !important;
+    }
+}
+
+div.invalid > label {
+    color: #cc0000 !important;
+}

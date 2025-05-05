@@ -1,0 +1,127 @@
+// Create New Opportunity Slideout
+.create-new-opp {
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  font-family: "Graphik";
+  height: 100%;
+  justify-content: flex-end;
+  left: 0px;
+  opacity: 0;
+  overflow: hidden;
+  position: fixed;
+  top: 0px;
+  transition: all 0.3s ease-in-out;
+  visibility: hidden;
+  width: 100%;
+  z-index: 10;
+
+  &.open {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  // Wrapper
+  .create-new-opp-wrapper {
+    background: none;
+    height: 100%;
+    overflow: auto;
+    padding: 0px;
+    position: relative;
+    right: -1200px;
+    top: 0px;
+    transition: all 0.3s ease-in-out;
+    visibility: hidden;
+    width: 1200px;
+
+    &.open {
+      right: 0px;
+      visibility: visible;
+    }
+
+    // sidebar
+    .registration-sidebar {
+      background-color: #f7f9ff !important;
+      display: flex;
+      flex-direction: column;
+      font-family: "Graphik";
+      height: 100%;
+      padding: 0px;
+
+      // flyout header
+      .flyout-header {
+        background-color: #ecf0ff;
+        color: #121212;
+        font-size: 16px;
+        font-weight: 500;
+        line-height: 20px;
+        min-height: 40px;
+        padding-inline: 20px;
+
+        .fas {
+          cursor: pointer;
+        }
+      }
+
+      // flyout container
+      .container {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        overflow: hidden;
+        padding: 0px;
+
+        // summary
+        .target-summary {
+          color: #121212;
+          font-size: 14px;
+          font-weight: 500;
+          gap: 10px;
+          line-height: 18px;
+          padding: 30px 20px;
+          white-space: nowrap;
+          width: 100%;
+
+          // ..name
+          #target {
+            font-size: 20px;
+            line-height: 24px;
+            max-width: 300px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+
+          // ..stage
+          .stage {
+            background-color: #4c63b2;
+            border-radius: 4px;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 19px;
+            padding: 4px 8px;
+            position: relative;
+          }
+
+          // ..status (clearance)
+          #idStatusTypeName {
+            gap: 10px;
+
+            #status {
+              background-color: #fff !important;
+              border: 1px solid #e0e4e8;
+              border-radius: 2px;
+              color: #616568 !important;
+              font-size: 14px;
+              font-weight: 500;
+              line-height: 19px;
+              outline: none;
+              padding: 2px 8px;
+              position: relative;
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,43 @@
+<div id="tab-content-audit-log" class="tab-content">
+  <div class="tab-details">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th width="20%">Date</th>
+          <th width="25%">Name</th>
+          <th>Event</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let auditLog of $auditLogs | async" id="AuditLog+{{ auditLog.id }}">
+          <!-- ..date -->
+          <td>{{ auditLog.submissionDate | formatTimeZone : true }}</td>
+
+          <!-- ..submitted by -->
+          <td>{{ auditLog.submittedByName }}</td>
+
+          <!-- ..event -->
+          <td>
+            <ng-container *ngIf="auditLog.fieldName">
+              <div *ngIf="auditLog.oldValue && auditLog.newValue" class="content">
+                {{ auditLog.fieldName }} has been updated from <span
+                  [innerHtml]="formatValues(auditLog, auditLog.oldValue)"></span> to
+                <span [innerHtml]="formatValues(auditLog, auditLog.newValue)"></span>
+              </div>
+
+              <div *ngIf="!auditLog.oldValue && auditLog.newValue && auditLog.fieldName != 'Email'" class="content">
+                {{ auditLog.fieldName }} has been set to <span
+                  [innerHtml]="formatValues(auditLog, auditLog.newValue)"></span>
+              </div>
+
+              <div *ngIf="auditLog.oldValue && !auditLog.newValue" class="content">{{ auditLog.fieldName }} has been
+                updated from <span [innerHtml]="formatValues(auditLog, auditLog.oldValue)"></span> to Empty</div>
+
+              <div *ngIf="auditLog.fieldName == 'Email'" class="content">{{ auditLog.fieldName }} has been resent</div>
+            </ng-container>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

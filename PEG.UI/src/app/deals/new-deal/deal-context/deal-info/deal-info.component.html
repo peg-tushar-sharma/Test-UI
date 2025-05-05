@@ -1,0 +1,80 @@
+<div class="row needs-validation" id="context-screen">
+  <div class="col-4 mb-3">
+    <label class="labelText font-weight-600" for="nickname">Deal Nickname: </label>
+    <input *ngIf="!isTabReadOnly" type="text" class="form-control formattedInput" #nickname="ngModel" ngModel
+      [(ngModel)]="deal.nickname" autocomplete="off" name="nickname">
+    <span *ngIf="isTabReadOnly">
+      <br />
+      <label class="labelText">{{dealLabel?.nickname}}</label>
+
+    </span>
+
+  </div>
+  <div class="col-4 mb-3">
+    <label class="labelText font-weight-600">Country/Location of Deal:</label>
+
+
+    <ng-select *ngIf="!isTabReadOnly" [multiple]="false" ngModel name="targetCountry" [clearable]=isClearOnLocation
+      id="targetCountry" [items]="locationOfDeal" [(ngModel)]="deal.targetCountry" bindLabel="locationName"
+      bindValue="locationName" (change)="onLocationChange($event)">
+    </ng-select>
+    <span *ngIf="isTabReadOnly">
+      <br />
+      <label class="labelText">{{dealLabel?.targetCountry}}</label>
+
+    </span>
+  </div>
+
+  <div class="col-4 mb-3">
+    <label class="labelText font-weight-600">Deal Region:</label>
+    <ng-select *ngIf="!isTabReadOnly" [multiple]="true" ngModel name="dealRegions" id="dealRegions"
+      [items]="dealRegions" [(ngModel)]="deal.dealRegions" bindLabel="regionName" bindValue="regionId">
+    </ng-select>
+    <span *ngIf="isTabReadOnly">
+      <br />
+      <label class="labelText">{{dealLabel?.dealRegions}}</label>
+
+    </span>
+  </div>
+
+  <div class="col-4 mb-3">
+    <label class="labelText font-weight-600">Target Owner:</label>
+    <input *ngIf="!isTabReadOnly" type="text" class="form-control formattedInput" [disabled]='deal.isMasked' autocomplete="off" ngModel [(ngModel)]="deal.owner"
+      name="owner">
+    <span *ngIf="isTabReadOnly">
+      <br />
+      <label class="labelText">{{dealLabel?.owner}}</label>
+
+    </span>
+  </div>
+  <div class="col-4 mb-3">
+    <label class="labelText font-weight-600">Current EBITDA:</label>
+    <input *ngIf="!isTabReadOnly" type="text" class="form-control formattedInput" [(ngModel)]="deal.currentEBITDA" autocomplete="off"
+      ngModel name="currentEBITDA">
+    <span *ngIf="isTabReadOnly">
+      <br />
+      <label class="labelText">{{dealLabel?.currentEBITDA}}</label>
+
+    </span>
+  </div>
+  <div class="col-4 mb-3">
+    <label class="labelText font-weight-600">Deal Size:</label>
+    <input *ngIf="!isTabReadOnly" type="text" class="form-control formattedInput" autocomplete="off" [(ngModel)]="deal.dealSize"
+      ngModel #dealSize="ngModel" name="dealSize">
+    <span *ngIf="isTabReadOnly">
+      <br />
+      <label class="labelText">{{dealLabel?.dealSize}}</label>
+
+    </span>
+  </div>
+  <div class="col-12 mb-3">
+    <label class="labelText font-weight-600">Target Description:</label>
+    <textarea *ngIf="!isTabReadOnly" type="text" rows="3" class="form-control formattedTextarea" [disabled]='deal.isMasked' ngModel autocomplete="off"
+      [(ngModel)]="deal.targetDescription" name="targetDescription"></textarea>
+    <span *ngIf="isTabReadOnly">
+      <br />
+      <label class="labelText truncate-6" [tooltip]="dealLabel?.targetDescription"  [delay]="700">{{dealLabel?.targetDescription}}</label>
+
+    </span>
+  </div>
+</div>

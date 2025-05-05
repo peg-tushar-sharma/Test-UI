@@ -1,0 +1,121 @@
+.CaseDropDown {
+  font-size: 14PX;
+  font-family: sans-serif;
+}
+
+.items {
+  margin-right: 20px;
+  float: left;
+}
+
+.flex-parent {
+  display: inline-flex;
+  flex: 1 1 0px;
+  color: #000000;
+  flex-wrap: wrap;
+}
+
+.flex-item {
+  flex: 1 1 0px;
+  border: 1px solid #c4c4c4;
+}
+
+.flex-item-casecode {
+  flex: 1;
+  min-width: 40px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.flex-item-caseName {
+  flex: 1;
+  min-width: 199px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-wrap: normal;
+}
+
+.flex-item-caseName-sidebar {
+  flex: 1;
+  min-width: 199px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-wrap: normal;
+}
+
+.flex-item-officeAbbreviation {
+  flex: 1;
+  min-width: 40px;
+}
+
+.flex-item-officeAbbreviation-sidebar {
+  flex: 1;
+  min-width: 40px;
+}
+
+.flex-item-startDate {
+  flex: 1;
+  min-width: 85px;
+}
+
+.flex-item-endDate {
+  flex: 1;
+  min-width: 85px;
+}
+
+.flex-item-clientName {
+  flex: 1;
+  min-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-wrap: normal;
+}
+
+.flex-item-clientName-sidebar {
+  flex: 1;
+  min-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-wrap: normal;
+}
+
+.grid-case-editor {
+  min-width: 700px;
+}
+
+.sidebar-case-editor {
+  width:700px;
+
+  ng-select{
+    width: 100%;
+  }
+}
+
+::ng-deep .ng-dropdown-panel.case-select{
+  min-width: 500px;
+
+  font-size: 12px;
+}
+
+.sidebar-caseData {
+  font-size: 11px;
+}
+
+.case-detail-label{
+  flex-wrap: nowrap;
+  min-height: 17px;
+  width: 100%;
+
+  .flex-item-officeAbbreviation-sidebar{
+    max-width: 35px;
+  }
+
+  .flex-item-startDate{
+    min-width: auto;
+  }
+}

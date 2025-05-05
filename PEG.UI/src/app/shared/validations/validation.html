@@ -1,0 +1,19 @@
+<div class="error-message">
+    <ng-container *ngIf="control && control.touched && control.errors">
+        <ng-container *ngIf="control.hasError('required') else otherErrors; ">
+            <div>
+                This field is required.
+            </div>
+        </ng-container>
+        <ng-container *ngIf="control.hasError('selectRequired') else otherErrors; ">
+                <div>
+                    This field is required.
+                </div>
+            </ng-container>
+        <ng-template #otherErrors>
+            <div [hidden]="!control.hasError('custom')">
+                This field has custom error.
+            </div>
+        </ng-template>
+    </ng-container>
+</div>

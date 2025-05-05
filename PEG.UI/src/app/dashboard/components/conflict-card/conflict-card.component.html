@@ -1,0 +1,51 @@
+<div class="wrapper align-items-center">
+  <div class="conflict-info d-flex flex-column align-items-start overflow-hidden">
+    <h4 style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%;">
+      {{ rowDataItem?.target.targetName }}
+      <span *ngIf="rowDataItem?.isPubliclyTradedEquity" style="color: #CC0910; font-weight: bold;"> (PTE) </span> 
+      <span>/ {{ rowDataItem?.client.clientName }}</span>
+    </h4>
+    <span>Submit date: {{ rowDataItem?.submissionDate | date: 'dd-MMM-yyyy' }}</span>
+    <app-conflict-area [data]="rowDataItem.workType"></app-conflict-area>
+    <div class="d-flex align-items-center py-2">
+      <div class="mb-status">
+        MB Status: <span class="badge-pill badge-info">{{rowDataItem.mbStatus?
+        rowDataItem.mbStatus.mbStatusName:'N/A'}}</span>
+      </div>
+       <div class="sell-side-status ml-3">
+        Sell-Side Status:
+        <span class="badge-pill badge-info">{{rowDataItem.sellSideStatus?
+          rowDataItem.sellSideStatus.sellSideStatusName:'N/A'}}</span>
+      </div>
+
+    </div>
+  </div>
+  <div class="conflict-data-form">
+    <app-conflict-assignee [rowData]="rowDataItem"
+      (assigneeChanges)="onAssigneeChanges($event)"></app-conflict-assignee>
+    <div class="conflict-status d-flex flex-column">
+      <div class="fields d-flex">
+        <div class="form-group mb-2 mr-3">
+          <label for="" class="d-flex align-self-start">Status</label>
+          <ng-select [items]="statuses" bindLabel="statusTypeName" style="width: 230px" [formControl]="status"
+            (change)="updateStatus($event)" [clearable]="false" bindValue="statusTypeName"></ng-select>
+        </div>
+        <div class="form-group mb-2">
+          <label for="" class="d-flex align-self-start">Stage</label>
+          <div class="cta justify-self-end align-items-end mt-3"><a style="cursor: pointer;" (click)=updateStage($event)
+              class="align-self-end">{{this.rowDataItem.registrationStage?.stageTypeName}}</a></div>
+        </div>
+      </div>
+      <span class="last-updated"> Last change:
+        <span *ngIf="rowDataItem.statusUpdateDate && rowDataItem.statusUpdateDate!='0001-01-01T00:00:00Z'">{{rowDataItem.statusUpdateDate | date: 'dd-MMM-yyyy hh:mm a'}}
+        </span>
+      </span>
+    </div>
+  </div>
+  <div class="cta d-flex flex-column justify-self-end align-items-end">
+    <button [routerLink]="['/pending-approval', rowDataItem.registrationId]" class="btn btn-outline-primary mb-2">View
+      Conflicts <i class="fa fa-chevron-right ml-1"></i></button>
+    <a class="align-self-end" [routerLink]="['/registrations', { registrationId: rowDataItem.registrationId }]"
+      target="_blank">Go to Registration</a>
+  </div>
+</div>

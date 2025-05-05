@@ -1,0 +1,31 @@
+ul {
+  margin: 0;
+  list-style: none;
+  padding-left: 0px;
+}
+
+ul.multiList {
+  width: auto;
+}
+
+ul.multiList>li {
+  text-indent: none;
+}
+
+ul.singleList {
+  list-style: none;
+}
+
+ul.singleList>li {
+  text-indent: none;
+}
+
+a {
+  color: inherit !important;
+}
+
+.active {
+  color: #CC0000 !important;
+}
+
+

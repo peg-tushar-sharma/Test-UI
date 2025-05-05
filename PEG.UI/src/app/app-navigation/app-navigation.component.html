@@ -1,0 +1,156 @@
+<app-new-updates *ngIf="!isStaffingUser"></app-new-updates>
+<create-edit-prohibition *ngIf="!isStaffingUser" [submittedByName]="getSubmittedByName()"></create-edit-prohibition>
+<app-modal *ngIf="!isStaffingUser">
+    <app-impersonate (impersonateClickEmitter)="getImpersonateUserInfo($event)"></app-impersonate>
+</app-modal>
+<div *ngIf="!isStaffingUser" class="sidebar masterContainer" id="helpSidebar">
+    <app-help></app-help>
+
+</div>
+
+
+
+<div role="alert" Id='noInternet' *ngIf="isOffline && !deviceInfo.isMobile">
+    <div class="container my-5 d-flex justify-content-center">
+        <div class="row justify-content-center ">
+            <div class="col">
+                <div class="card ">
+                    <div class="card-header pb-0 bg-white border-0 text-center px-sm-4"
+                        [ngClass]="networkStatus=='offline' ? 'offline' : 'online'">
+                        <h6 class="text-left mt-1 mb-3  font-weight-bold mb-0"><span><i [class]="statusIcon"
+                                    aria-hidden="true"></i>
+                            </span> {{statusInfoTitle}}</h6> <span class="img-1 text-center">
+                        </span>
+                    </div>
+                    <div class="card-body px-sm-4 mb-3">
+                        <br>
+
+                        <h5 style="text-align: center;font-size: 20px;font-weight: 600;">{{statusInfo}}</h5>
+                        <br>
+                        <ul class="list-unstyled text-muted" *ngIf="networkStatus=='offline'">
+                            <li>Please re-connect to the internet to continue use Footsteps.</li>
+                            <li>If you encounter problems:</li>
+                            <ul class="mt-2 inner">
+                                <li>Try restarting wireless connection on this device.</li>
+                                <li>Move close to your wireless access point.</li>
+                                <li>Checking the network cables, modem, and router</li>
+                            </ul>
+                        </ul>
+                        <div class="row justify-content-center mt-4 " *ngIf="networkStatus=='online'">
+                            <div class="col-auto"><button type="button" onClick="window.location.reload();"
+                                    class="btn btn-primary"><span>Refresh</span></button></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+<!-- COMPONENT: NAVBAR -->
+<nav *ngIf="!isStaffingUser" class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="navbar-brand">
+      <a routerLink="/" style="transition:none !important">
+        <img src="assets/img/logo.png" decoding="async" alt="">M&A Conflicts
+      </a> <span class="env_var">{{environment}}<span *ngIf="isTargetMasked"><i class="fa fa-eye-slash ml-1" aria-hidden="true"></i>
+      </span></span>
+  
+    </div>
+    <button *ngIf="!deviceInfo.isMobile" class="navbar-toggler" type="button" data-toggle="collapse"
+      data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav" *ngFor="let page of tabPages">
+        <li class="nav-item" routerLinkActive="active">
+          <ng-container *ngIf="page.name!='Deals' ; else template">
+            <a *ngIf="!page.isHideInNavigation" class="nav-link" [routerLink]="page.redirectionUrl">{{page.name}}</a>
+          </ng-container>
+          <ng-template #template>
+            <a class="nav-link" [routerLink]="page.redirectionUrl">{{'Deal Tracker'}}</a>
+          </ng-template>
+  
+        </li>
+      </ul>
+      <ul class="navbar-nav ml-auto profile-nav">
+        <li class="nav-item mt-2">
+  
+  
+          <div *ngIf="createAccess && createAccess.length>1" class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle ml-2" type="button" id="dropdownMenuButton"
+              (click)="disableMenuItem()" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Create
+            </button>
+  
+            <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+              <ng-container *ngFor="let item of createAccess">
+                <li role="menuitem"> <a class="dropdown-item" *ngIf="!item.isModal" href="javascript:void(0);"
+                    [class.disabled]="item.isDisabled" [routerLink]='item.redirectionUrl'>{{item.name}}</a> </li>
+                <li role="menuitem"><a class="dropdown-item" *ngIf="item.isModal" href="#" data-toggle="modal"
+                    (click)='addProhibition(item.modalTarget)' data-backdrop="static"
+                    attr.data-target='{{item.modalTarget}}'>{{item.name}}</a></li>
+              </ng-container>
+            </ul>
+  
+          </div>
+  
+          <button *ngIf="createAccess?.length==1" [routerLink]='createAccess[0]?.redirectionUrl'
+            class="btn btn-secondary ml-2" type="button" id="dropdownMenuButton">
+            {{createAccess[0].name}}
+          </button>
+  
+        </li>
+        <li class="nav-item ml-4 mt-1">
+          <a class="nav-link" style="    padding-top: 0px;">
+            <table class="impersonateTable">
+              <tr>
+                <td rowspan="3" style="vertical-align: text-bottom;">
+                  <a *ngIf="hasImpersonation" data-toggle="modal" data-target="#myModal">
+                    <img [src]="UserImagePath" alt="defaultImage"
+                      (error)="this.UserImagePath='./../assets/img/defaultUser.png'" decoding="async" />
+                  </a>
+                  <img *ngIf="!hasImpersonation" alt="userImage"
+                    (error)="this.UserImagePath='./../assets/img/defaultUser.png'" [src]="UserImagePath"
+                    decoding="async" />
+                </td>
+  
+                <td>{{currentUser}}</td>
+              </tr>
+  
+              <tr>
+                <td><b>{{UserRole}}</b></td>
+              </tr>
+  
+              <tr *ngIf="isImpersonated">
+                <td>
+                  <a style="color:#CC0000" href="javascript:void(0);" class="revokeImpersonationLink"
+                    (click)="refresh()">Return to Self</a>
+                </td>
+              </tr>
+            </table>
+  
+          </a>
+        </li>
+  
+      </ul>
+  
+  
+  
+    </div>
+  
+    <ul class="navbar-nav profile-nav" style="top: 0px;">
+      <li class="nav-item">
+  
+        <a class="nav-link">
+          <i title="Help" aria-hidden="true" (click)="toggleSidebar()" class="fa fa-question-circle"
+            style="font-size: 26px;vertical-align: middle;"></i>
+        </a>
+      </li>
+    </ul>
+    <div [innerHTML]="statusInfo" *ngIf="isOffline && deviceInfo.isMobile" [className]="mobileStatusClass"></div>
+  </nav>
+  

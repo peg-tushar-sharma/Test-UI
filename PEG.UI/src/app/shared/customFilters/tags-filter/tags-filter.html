@@ -1,0 +1,23 @@
+<div class="column-filter">
+    <p>Choose Tags</p>
+
+    <input type="checkbox" name="multibidder" [(ngModel)]="isMultibidder" (ngModelChange)="onChange($event)">
+    <div class="tag tag-blue tag-borders">MB</div>
+    <br />
+    <input type="checkbox" name="singlebidder" [(ngModel)]="isSingleBidder" (ngModelChange)="onChange($event)">
+    <div class="tag tag-blue tag-borders">SB</div>
+    <br />
+    <input type="checkbox" name="seller" [(ngModel)]="isSeller" (ngModelChange)="onChange($event)">
+    <div class="tag tag-blue tag-borders">S</div>
+    <br />
+    <input type="checkbox" name="urgent" [(ngModel)]="isUrgent" (ngModelChange)="onChange($event)">
+    <span class="tag tag-orange tag-borders"><i class="fa fa-exclamation-triangle"></i></span>
+    <br />
+    <input type="checkbox" name="hedgeFund" [(ngModel)]="isHedgeFund" (ngModelChange)="onChange($event)">
+    <div class="tag tag-borders">HF</div>
+    <br />
+    <input type="checkbox" name="publicTradedDept" [(ngModel)]="isPublicTradedDept" (ngModelChange)="onChange($event)">
+    <div class="tag tag-borders">PTD</div>
+    <br />
+
+</div>

@@ -1,0 +1,29 @@
+.badge{
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width:24px;
+  height:24px;
+  border-radius: 50%;
+  background-color: $grey-medium;
+  color: $white;
+  font-size: 16px;
+
+  &.badge-lg{
+    width: 32px;
+    height: 32px;   
+    font-size: 18px;  
+  }
+
+  &.badge-sm{
+    width: 20px;
+    height: 20px;
+    font-size:12px;    
+  }
+
+  &.badge-inverted{
+    background-color: $white;
+    color: $grey-medium;
+    border: 1px solid $grey-medium;
+  }
+}

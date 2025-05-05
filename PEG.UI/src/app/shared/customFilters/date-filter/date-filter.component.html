@@ -1,0 +1,21 @@
+<div class="column-filter date-range-filter">
+  <form>
+    <div #DatePickerFrom class="form-row">
+      <div class="col" >
+        <!-- <label>date</label> -->
+        <input type="text"
+           placeholder="DD-MMM-YYYY"
+           #dateInput
+           class="form-control mb-2"       
+           [ngClass]="isValidDate==false?'invalid':'valid'"    
+           bsDatepicker [(bsValue)]="date"
+           (bsValueChange) = "onDateChanged($event)"
+           [bsConfig]="{ dateInputFormat: 'DD-MMM-YYYY', containerClass : 'theme-red' }"
+           (input)="validateDate($event.target.value)"
+           (focus)="clearValues()"
+           (onShown)="addDatepickerToAgGridContext($event)"
+           >
+      </div> 
+    </div>
+  </form>                 
+</div>

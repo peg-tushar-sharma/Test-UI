@@ -1,0 +1,373 @@
+<div class="alert alert-info alert-dismissible fade show" *ngIf="_hasTrackerAutoSaved"
+  style="text-align: center;    margin-bottom: 0" role="alert">
+  Your tracker has been saved automatically.
+  <button type="button" class="close" (click)="_hasTrackerAutoSaved=false;">
+    <span>&times;</span>
+  </button>
+</div>
+
+
+<div *ngIf="trackerStatus"
+  style="position:absolute; background-color: gray; opacity:0.9;color:black; z-index:999; left:0;top:60px; height:100vh;width:100%;font-weight: 700;font-size: 19px;text-align: center;padding-top: 60px;">
+  <span>Tracker has been deleted or does not exist. Please click <a class="backLink" (click)="routeBack()">here</a> to
+    go back to Deal Tracker grid.</span>
+</div>
+<ng-container>
+
+
+
+  <div class="container-fluid target-history"  style="height: 92vh;">
+  <form focusFirstInvalidField #parentHeight class="needs-validation data-collection" [class.submitted]="form.submitted" novalidate
+    #form="ngForm" >
+    <div id="new-deal-header" *ngIf="deal" [ngClass]="{'edit-mode': dealSecurityService.isReadOnlyMode == false}"  #firstChild>
+      
+            <div class="mb-nav-segment col-5">
+
+                <h2 *ngIf="dealAuth.HeaderTab.isTabReadOnly" class="col-6">{{dealLabel?.targetName}}</h2>
+
+                <div *ngIf="!dealAuth.HeaderTab.isTabReadOnly" class="col-6" [class.touched]="targetName.touched"
+                  [class.invalid]="targetName.invalid">
+                  <h4>Name</h4>
+                  <input type="text" class="form-control col-12" #targetName="ngModel" [disabled]='deal.isMasked'
+                    autocomplete="off" name="targetName" required [(ngModel)]="deal.targetName">
+
+                </div>
+
+              <div id="mb-status-block" class="mb-nav-block col-3" >
+                
+                  <h4>MB Status</h4>
+                  <h3 *ngIf="dealAuth.HeaderTab.isTabReadOnly">
+                    {{selectedMBStatus?selectedMBStatus.mbStatusName:'MB
+                      Status'}}
+                    </h3>
+                  <div class="btn-group" dropdown *ngIf="!dealAuth.HeaderTab.isTabReadOnly">
+                    <button id="button-basic" style="
+                      overflow: hidden;
+                      text-overflow: ellipsis;" dropdownToggle type="button"
+                      title="{{selectedMBStatus?selectedMBStatus.mbStatusName:'MB Status'}}"
+                      class="btn btn-secondary dropdown-toggle header-dropdown" aria-controls="dropdown-basic">
+
+                      {{selectedMBStatus?selectedMBStatus.mbStatusName:'MB Status'}} <span class="caret"></span>
+                    </button>
+                    <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
+                      aria-labelledby="button-basic">
+
+                      <li *ngFor="let status of mbStatus" role="menuitem"><a class="dropdown-item"
+                          (click)="selectMBStatus(status)"
+                          style="cursor: pointer;color: #212529;">{{status.mbStatusName}}</a>
+                      </li>
+                    </ul>
+                  </div>                
+              </div>
+
+              <div class="mb-nav-block col-3">
+                <h4>Asset Status:</h4>
+                <h3 *ngIf="dealAuth.HeaderTab.isTabReadOnly"> {{selectedStatus?selectedStatus.dealStatusName:'Deal/Asset
+                  Status'}}</h3>
+                <ng-container *ngIf="!dealAuth.HeaderTab.isTabReadOnly">
+                  <div class="btn-group" dropdown>
+                    <button id="button-basic" style="overflow: hidden; text-overflow: ellipsis;" dropdownToggle type="button"
+                      class="btn btn-secondary dropdown-toggle header-dropdown" aria-controls="dropdown-basic">
+                      {{selectedStatus?selectedStatus.dealStatusName:'Deal/Asset Status'}} <span class="caret"></span>
+                    </button>
+                    <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
+                      aria-labelledby="button-basic">
+
+                      <li *ngFor="let status of dealStatus" role="menuitem"><a class="dropdown-item"
+                          (click)="selectStatus(status)"
+                          style="cursor: pointer;color: #212529;">{{status.dealStatusName}}</a>
+                      </li>
+                    </ul>
+                  </div>
+                </ng-container>
+              </div>
+
+
+
+              <div id="industry" class="mb-nav-block col-6">
+                <h4>Industry:</h4>
+                <ng-container *ngIf="dealAuth.HeaderTab.isTabReadOnly">
+                  <h3  [tooltip]="dealLabel?.industries" placement="auto"
+                    [delay]="700">{{dealLabel?.industries}}</h3>
+                </ng-container>
+                
+                <div *ngIf="!dealAuth.HeaderTab.isTabReadOnly" class="mx-n row no-gutters"
+                  [class.touched]="industry.touched" [class.invalid]="industry.invalid">
+                  <ng-select id="industries" class="custom compWidth" style="width: 100%;"
+                    name="industries" #industry="ngModel" bindLabel="industryName" [multiple]="true"
+                    [items]="industries" [(ngModel)]="deal.industries" (change)="onIndustryChange($event)"
+                    (remove)="onIndustryRemove($event)" (clear)="onIndustryClear($event)">
+                    <ng-template ng-multi-label-tmp let-items="items" let-clear="clear" style="width: 95%;">
+                      <div class="ng-value" *ngFor="let item of items | slice:0:1">
+                        <span class="ng-value-icon left" (click)="clear(item)" aria-hidden="true">×</span>
+
+                        <span class="ng-value-label"> {{item.industryName}}</span>
+                      </div>
+                      <div class="ng-value" *ngIf="items.length > 1">
+                        <span class="ng-value-label">+{{items.length - 1}}</span>
+                      </div>
+                    </ng-template>
+                  </ng-select>
+                </div>
+              </div>
+
+
+
+              <div id="sector" class="mb-nav-block col-6">
+                <h4>Sector:</h4>
+                <ng-container  *ngIf="dealAuth.HeaderTab.isTabReadOnly" >
+                  <h3  [tooltip]="dealLabel?.sectors" placement="auto" [delay]="700">
+                    {{dealLabel?.sectors}}</h3>
+                </ng-container>
+                <div class="mx-n row no-gutters" *ngIf="!dealAuth.HeaderTab.isTabReadOnly">
+                <ng-select id="sectors" class="custom compWidth" name="sectors" #sectors="ngModel" style="width: 100%;"
+                  bindLabel="sectorName" [multiple]="true" [items]="sectorsList" [(ngModel)]="deal.sectors"
+                  (change)="onSectorChange($event)" (remove)="onSectorRemove($event)" (clear)="onSectorClear($event)">
+                  <ng-template ng-multi-label-tmp let-items="items" let-clear="clear" style="width: 95%;">
+                    <div class="ng-value" *ngFor="let item of items | slice:0:1">
+                      <span class="ng-value-icon left" (click)="clear(item)" aria-hidden="true">×</span>
+                      <span class="ng-value-label"> {{item.sectorName}}</span>
+                    </div>
+                    <div class="ng-value" *ngIf="items.length > 1">
+                      <span class="ng-value-label">+{{items.length - 1}}</span>
+                    </div>
+                  </ng-template>
+                </ng-select>
+              </div>
+            </div>
+
+
+            <div class="mb-nav-block col-6">
+              <h4>Public</h4>
+              <ng-container *ngIf="dealAuth.HeaderTab.isTabReadOnly">
+                <label for="publiclyTraded" class="radioContainer">
+                  <input type="radio" *ngIf="deal.publiclyTraded" [value]="true" name="publiclyTraded" [(ngModel)]="deal.publiclyTraded"
+                    id="publiclyTraded" disabled>
+                    <input type="radio" *ngIf="!deal.publiclyTraded" [value]="false" name="publiclyTraded" [(ngModel)]="deal.publiclyTraded"
+                    id="publiclyTraded" disabled>
+                  <span class="radioMark"></span>
+                  {{deal.publiclyTraded ? 'Yes' : 'No'}}
+                </label>
+              </ng-container>
+
+              <ng-container *ngIf="!dealAuth.HeaderTab.isTabReadOnly">
+
+                <label for="publicYes" class="radioContainer">
+                  <input type="radio" [value]="true" name="publiclyTraded" [(ngModel)]="deal.publiclyTraded"
+                    id="publiclyNo">
+                  <span class="radioMark"></span>
+                  Yes
+                </label>
+
+                <label for="publicNo" class="radioContainer ml-2">
+                  <input type="radio" [value]="false" name="publiclyTraded" [(ngModel)]="deal.publiclyTraded"
+                    id="publiclyNo">
+                  <span class="radioMark"></span>
+                  No
+                </label>
+
+              </ng-container>
+            </div>
+
+
+              <div id="subsector" class="mb-nav-block col-6">
+                <h4>Subsector:</h4>
+                <ng-container *ngIf="dealAuth.HeaderTab.isTabReadOnly">
+                  <h3  [tooltip]="dealLabel?.subSectors" placement="auto"
+                    [delay]="700">
+                    {{dealLabel?.subSectors}}</h3>
+                </ng-container>
+                <ng-container *ngIf="!dealAuth.HeaderTab.isTabReadOnly">
+                <ng-select id="subSectors" class="custom compWidth" name="subSectors" #sectors="ngModel"
+                  style="width: 100%;" bindLabel="subSectorName" [multiple]="true" [items]="subSectorsList"
+                  [(ngModel)]="deal.subSectors">
+                  <div class="mx-n row no-gutters pr-2" *ngIf="!dealAuth.HeaderTab.isTabReadOnly"></div>
+                  <ng-template ng-multi-label-tmp let-items="items" let-clear="clear" style="width: 95%;">
+                    <div class="ng-value" *ngFor="let item of items | slice:0:1">
+                      <span class="ng-value-icon left" (click)="clear(item)" aria-hidden="true">×</span>
+
+                      <span class="ng-value-label"> {{item.subSectorName}}</span>
+                    </div>
+                    <div class="ng-value" *ngIf="items.length > 1">
+                      <span class="ng-value-label">+{{items.length - 1}}</span>
+                    </div>
+                  </ng-template>
+                </ng-select>
+              </ng-container>
+              </div>
+
+
+
+            </div><!--end nav segment-->
+
+          <div class=" mb-nav-segment col-3">
+            <div class="mb-nav-block col-12">
+              <h4>Notes:</h4>
+              
+              <textarea id="mb-notes" *ngIf="!dealAuth.HeaderTab.isTabReadOnly" type="text"
+                class="form-control mb-2 mr-sm-2" rows="4" #notes="ngModel" autocomplete="off" name="notes"
+                [(ngModel)]="deal.notes" id="deal-header-notes"></textarea>
+                <div [tooltip]="dealLabel?.notes"  placement="bottom">
+              <textarea id="mb-notes" *ngIf="dealAuth.HeaderTab.isTabReadOnly" type="text" 
+                class="form-control mb-2 mr-sm-2" disabled="true" rows="4" #notes="ngModel" autocomplete="off" name="notes"
+                [(ngModel)]="deal.notes" id="deal-header-notes"></textarea>
+              </div>
+            </div>
+          </div>
+
+
+
+
+          <div class="mb-nav-segment col-4">
+          <div class="mb-nav-flex col-4">
+            <div class="mb-nav-block col-12">
+              <h4 *ngIf="dealAuth.HeaderTab.isTabReadOnly">Managed By *: </h4><h3 *ngIf="dealAuth.HeaderTab.isTabReadOnly">{{dealLabel?.managedBy}}</h3>
+              <div *ngIf="!dealAuth.HeaderTab.isTabReadOnly" [class.touched]="managedBy.touched" [class.invalid]="managedBy.invalid" class="form-inline" >
+              <h4>Managed By *:</h4>
+                 <ng-select class="custom header-dropdown" required #managedBy="ngModel"
+                  [items]="mbManagerList" bindValue="employeeCode" [(ngModel)]="deal.managedBy"
+                  bindLabel="searchableName" name="managedBy" [searchFn]="customManagedBySearch">
+                </ng-select>
+              </div>
+            </div>
+            <div class="mb-nav-block col-12">
+              <h4>Redbook ODA</h4>
+              
+              
+              <ng-container *ngIf="dealAuth.HeaderTab.isTabReadOnly">
+                <label for="redbook" class="radioContainer">
+                    <input type="radio" [value]="1" *ngIf="deal.redbookAvailable==1" name="redbookAvailable" [(ngModel)]="deal.redbookAvailable"
+                    id="rebook" disabled>
+                    <input type="radio" [value]="0" *ngIf="deal.redbookAvailable==0" name="redbookAvailable" [(ngModel)]="deal.redbookAvailable"
+                    id="rebook" disabled>
+                    <input type="radio" [value]="2" *ngIf="deal.redbookAvailable==2" name="redbookAvailable" [(ngModel)]="deal.redbookAvailable"
+                    id="rebook" disabled>
+                  <span class="radioMark"></span>
+                  {{redbookAvailableText}}
+                </label>
+              </ng-container>
+
+              <div *ngIf="!dealAuth.HeaderTab.isTabReadOnly">
+                <app-redbook-available [redbookAvailable]="redbookAvailable" (redbookChange)="redbookChange($event)" [containerName]="redbookContainerName"></app-redbook-available>
+              </div>
+              
+            </div>
+          </div>
+
+          <div class="mb-nav-flex col-4" id="advisorMB">
+            <div class="mb-nav-block col-12" >
+              <h4>MB Advisor:</h4>
+              <textarea id="mb-advisors" class="readonly" *ngIf="dealAuth.HeaderTab.isTabReadOnly"
+                readonly>{{dealLabel?.mbAdvisor}}</textarea>
+              <ng-container *ngIf="!dealAuth.HeaderTab.isTabReadOnly">
+                <ng-select id="mbadvisor" [items]="mbAdvisorList" class="compWidth w-100" [selectOnTab]="true"
+                  bindLabel="searchableName" [clearSearchOnAdd]="true" [addTag]="false" [loading]="mbAdvisorLoad"
+                  loadingText="loading..." [multiple]="true" [hideSelected]="true" [clearable]="true"
+                  [typeahead]="mbAdvisorListTypeAhead" [(ngModel)]="selectedMBAdvisor"
+                  [ngModelOptions]="{standalone: true}" (change)="onMbAdvisorChange($event)">
+                </ng-select>
+              </ng-container>
+            </div>
+            
+          </div>
+          <div id="trackerControlsContainer" class="mb-nav-flex col-4">
+            <div>
+              <span *ngIf="activeUsers && activeUsers.length>0" class="mr-3"
+                style="width: 250px;line-height: 1.2;font-size: 12px;padding: 7px 0px;color: #cc0000;">
+                <i class="fa fa-lock mr-1" aria-hidden="true" style="font-size: 12px;"></i>
+                <span style="font-weight: 600;"> {{activeUserName}} </span><span>is
+                  editing</span>
+              </span>
+            </div>
+            <div class="smsHeaderWidth">
+              <div class="btn-class" *ngIf="!dealAuth.HeaderTab.isTabReadOnly">
+                <button *ngIf="fieldAuth.saveDeal.isVisible" type="submit" name="submitClose" id="saveTrackerButton"
+                  (click)="(form && form.valid)?submitClose():null;" [disabled]="isClicked || !isTrackerModified()"
+                  class="btn ml-3 ">
+                  <span *ngIf="dealId!=undefined && dealId!=0" class="fa fa-unlock unlock-icon mr-2"></span>
+                  {{dealId!=undefined && dealId!=0?'Save Changes':'Submit'}}
+                  <i class="fas fa-spinner fa-pulse" *ngIf="isClicked"></i>
+                </button>
+                <button (click)="routeBack()" class="clickable ml-3" id="close-tracker">
+                  <span class="fa fa-times fa-2x"></span>
+                </button>
+              </div>
+              <div class=" btn-class" style="display: inline-flex;" *ngIf="dealAuth.HeaderTab.isTabReadOnly">
+
+                <button *ngIf="!(activeUsers && activeUsers.length>0) && fieldAuth.saveDeal.isVisible"
+                  class="btn" (click)="editMode()" id="editTrackerButton">
+                  <i class="fa fa-unlock-alt mr-2" aria-hidden="true"></i> Edit Tracker
+                </button>
+                
+                <button (click)="routeBack()" class="clickable ml-3">
+                  <span class="fa fa-times fa-2x"></span>
+                </button>
+              </div>
+            </div>
+            <div class="form-inline" *ngIf="(form.submitted && form.invalid) || isInvalidForm">
+              <ul id="requiredText">
+                <li>Please complete all required fields</li>
+                
+              </ul>
+            </div>
+          </div>
+      </div>
+    </div>
+
+    <div class="row" id="poolgrid" style="height:647px" #secondChild
+      >
+      <div class="col-12 tbs" style="height: 100%;">
+        <tabset #staticTabs style="height: 100%;">
+
+          <!--ngIf needs to be updated to dealAuth.StrategyTab.isTabVisible when dealAuth.StrategyTab is implemented-->
+          <tab style="height: 100%;" heading="Strategy Work" *ngIf="isAdmin"
+            (selectTab)="selectTab('strategy')">
+            <app-deal-strategy [deal]="deal" [dealLabel]="dealLabel" *ngIf="isAdmin"
+              [isTabReadOnly]="false"></app-deal-strategy>
+
+          </tab>
+
+          <tab heading="Context" *ngIf="dealAuth.ContextTab.isTabVisible" (selectTab)="selectTab('context')">
+            <app-deal-context [deal]="deal" [dealLabel]="dealLabel" *ngIf="toggleTabs.context"
+              [isTabReadOnly]="dealAuth.ContextTab?.isTabReadOnly"></app-deal-context>
+          </tab>
+
+          <!--These tabs to be deleted after completion of strategy work tab, commenting out for future access-->
+
+          <tab style="height: 100%;" heading="Experts" *ngIf="dealAuth.ExpertsTab.isTabVisible"
+            (selectTab)="selectTab('experts')">
+            <app-deal-experts [deal]="deal" [dealLabel]="dealLabel" *ngIf="toggleTabs.experts"
+              [isTabReadOnly]="dealAuth.ExpertsTab?.isTabReadOnly"></app-deal-experts>
+          </tab>
+
+          <tab heading="Clients" *ngIf="dealAuth.ClientsTab.isTabVisible" (selectTab)="selectTab('clients')">
+            <app-deal-clients [deal]="deal" [isTabReadOnly]="dealAuth.ClientsTab?.isTabReadOnly" [dealLabel]="dealLabel" 
+              *ngIf="toggleTabs.clients" (emitUpdatedStatus)="setAssetStatus()" (emitUpdatedRegistration)="updateDealRegistrations($event)">
+            </app-deal-clients>
+          </tab>
+
+
+          <tab style="height: 100%;" heading="Allocation" *ngIf="dealAuth.AllocationTab.isTabVisible"
+            (selectTab)="selectTab('allocation')">
+            <app-deal-allocation [deal]="deal" [dealLabel]="dealLabel" *ngIf="toggleTabs.allocation"
+              [isTabReadOnly]="dealAuth.AllocationTab?.isTabReadOnly"></app-deal-allocation>
+
+          </tab>
+
+          <tab heading="Security" *ngIf="dealAuth.SecurityTab.isTabVisible" (selectTab)="selectTab('security')">
+            <app-deal-security style="height: 100%;" (outSecurityPeople)="outTaggedPeople($event)" [deal]="deal"
+              *ngIf="toggleTabs.security" [isReadOnly]="dealSecurityService.isReadOnlyMode">
+            </app-deal-security>
+          </tab>
+
+          <tab heading="Audit" *ngIf="dealAuth.AuditTab.isTabVisible" (selectTab)="selectTab('audit')">
+            <app-deal-audit style="height: 100%;" [dealId]="deal.dealId"></app-deal-audit>
+          </tab>
+         
+         
+        </tabset>
+      </div>
+    </div>
+  </form>
+</div>
+</ng-container>

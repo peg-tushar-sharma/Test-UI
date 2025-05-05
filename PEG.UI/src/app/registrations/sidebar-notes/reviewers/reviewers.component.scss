@@ -1,0 +1,38 @@
+.table-striped {
+  border: 1px solid #e0e4e8;
+  margin: 0px;
+
+  th,
+  td {
+    border: none;
+    color: #616568;
+    font-size: 12px;
+    line-height: 18px;
+    min-height: 35px;
+    padding: 10px 20px;
+  }
+
+  thead th {
+    background-color: #f7f9ff;
+    border-bottom: 1px solid #e0e4e8;
+    font-weight: 500;
+    vertical-align: middle;
+
+    input {
+      border-color: #e0e4e8;
+      font-size: 12px;
+    }
+  }
+
+  tbody tr {
+    background-color: #fff;
+
+    &:nth-of-type(even) {
+      background-color: #f7f9ff;
+    }
+
+    &:nth-of-type(odd) {
+      background-color: #fff;
+    }
+  }
+}

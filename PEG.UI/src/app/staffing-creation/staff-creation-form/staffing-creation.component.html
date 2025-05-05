@@ -1,0 +1,274 @@
+<div *ngIf="!isManualOpportunityPage">
+  <div class="select-peg-opp">
+    <div class="select-peg-opp__wrapper">
+      <div class="select-peg-opp__wrapper__header-wrapper">
+        <div>
+          <p id="subheader"> <b>To add pipeline information on behalf of a partner, please search for the registration below.</b>  
+            If you are not 100% certain which registration is correct, please reach out to <a [href]="'mailto:EMEAPEGDealOperations@bain.com'">{{'EMEAPEGDealOperations@bain.com'}}</a> for confirmation.</p>
+        </div>
+      </div>
+      <section class="select-peg-opp__wrapper__content-wrapper__form-row__form-section">
+        <div class="mt-2 p-4">
+          <div class="row justify-content-center">
+            <div class="col-12">
+              <div class="input-group">
+                <span class="input-group-text">
+                  <i class="fas fa-search"></i>
+                </span>
+                <input type="text" [(ngModel)]="searchRegValue" class="form-control"
+                  placeholder="Search by client, target description or submitter" aria-label="Search"
+                  (ngModelChange)="searchOpportunity($event)">
+              </div>
+            </div>
+          </div>
+
+          <div style="height: 440px; background:#fff;overflow: scroll; border:1px solid #d7d7d7;padding: 0px 5px;">
+
+            <div id="opportunitySearch">
+              <div class="flex-parent blue-left-border" *ngFor="let opportunity of opportunityList">
+                <div class="flex-item">{{opportunity.client?.clientName}}</div>
+                <div class="flex-item-fixed" style="min-width: 30%;">{{opportunity.targetDescription}}</div>
+                <div class="flex-item-fixed" style="min-width: 5%;">{{opportunity.industry?.abbreviation}}</div>
+                <div class="flex-item-fixed" style="min-width: 10%;">{{opportunity.dealLocation}}</div>
+
+                <div class="flex-item">
+                  <b id="bolded">Submitted By:</b>
+                  <span>{{ opportunity.submittedBy.lastName + ', ' + (opportunity.submittedBy.familiarName != null ?
+                    opportunity.submittedBy.familiarName : opportunity.submittedBy.firstName) + ' (' +
+                    opportunity.submittedBy.officeAbbreviation + ')'}}
+
+
+                  </span>
+                </div>
+
+                <div class="flex-item flex-date-width">
+                  <b id="bolded">Submitted Date:</b>
+                  <span>{{opportunity.submissionDate | date:'dd-MMM-yyyy'}}</span>
+                </div>
+
+                <div class="flex-item-fixed addIcon" (click)="addOpportunityToPipeline(opportunity)"><i
+                    class="  fas fa-plus-square"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+    <div class="select-peg-opp__wrapper__footer-wrapper">
+
+      <div style="color: #121212; width: 50%;font-size: 14px;">If you do not see the relevant registration, add a planning card by clicking <a  href="javascript:void(0);" (click)="onAddManualOpportunity()">here</a>.  </div>
+      <!-- Empty Space (Middle) -->
+      <div></div>
+
+      <!-- Right Buttons -->
+      <div>
+        <button class="select-peg-opp__wrapper__cta mr-4" id="cancel-cta" type="button" (click)="onClose()">
+          Discard & Close
+        </button>
+       
+      </div>
+    </div>
+
+
+  </div>
+
+</div>
+<div *ngIf="isManualOpportunityPage">
+  <form class="add-peg-opp" [formGroup]="mainForm" #form="ngForm" (ngSubmit)="onSubmit(form)">
+    <div class="add-peg-opp__wrapper">
+
+      <!-- header -->
+      <div class="add-peg-opp__wrapper__header-wrapper">
+        <div>
+          <p id="subheader" *ngIf="!isSearchedOpportunityExists">To add a new PEG opportunity, complete the form below:
+          </p>
+          <p id="subheader" *ngIf="isSearchedOpportunityExists">Enter pipeline information using the form below:</p>
+        </div>
+      </div>
+
+      <!-- content -->
+      <div class="add-peg-opp__wrapper__content-wrapper" [formGroup]="addPegOppForm">
+        <!-- form sections -->
+        <div class="add-peg-opp__wrapper__content-wrapper__form-row">
+          <!-- client -->
+          <section class="add-peg-opp__wrapper__content-wrapper__form-row__form-section">
+            <label id="section-label">Client <span>*</span></label>
+
+            <ng-select id="client" class="custom new-opp-client-select" formControlName="client"
+              placeholder="Search clients" [items]="clientList" [selectOnTab]="true" bindLabel="clientName"
+              maxSelectedItems=3 [clearSearchOnAdd]="true" [multiple]="false" [loading]="isClientLoading"
+              loadingText="loading..." [hideSelected]="true" [typeahead]="clientTypeAhead" groupBy="customGroup"
+              [class.invalid]="(addPegOppForm.controls['client'].status == 'INVALID' && form.submitted)">
+              <!-- label -->
+              <ng-template ng-label-tmp let-item="item" let-searchTerm="searchTerm">
+                <span>{{ item.clientName ? item.clientName : '' }}</span>
+                <span>{{ item.informalName && item.clientName != item.informalName ? ' (' +
+                  item.informalName + ')' : '' }}</span>
+              </ng-template>
+
+              <!-- value -->
+              <ng-template ng-option-tmp let-item="item" let-searchTerm="searchTerm">
+                <!-- <span >{{ searchTerm}}</span> -->
+                <span appSearchHighlight="{{searchTerm}}" [innerHTML]="item.clientName"></span>
+                <span appSearchHighlight="{{searchTerm}}"
+                  [innerHTML]="item.informalName  && item.clientName != item.informalName ? ' (' + item.informalName + ')' : ''"></span>
+              </ng-template>
+            </ng-select>
+          </section>
+          <!-- industry -->
+          <section class="add-peg-opp__wrapper__content-wrapper__form-row__form-section">
+            <label id="section-label">Industry (of target/work) <span>*</span></label>
+
+            <ng-select placeholder="Search industry" formControlName="industry" [items]="industryList"
+              [selectOnTab]="true" bindLabel="industryName" [clearSearchOnAdd]="true" [multiple]="false"
+              [hideSelected]="true"
+              [class.invalid]="(addPegOppForm.controls['industry'].status == 'INVALID' && form.submitted)"></ng-select>
+          </section>
+        </div>
+
+        <div class="add-peg-opp__wrapper__content-wrapper__form-row">
+          <!-- name -->
+          <section class="add-peg-opp__wrapper__content-wrapper__form-row__form-section">
+            <label id="section-label">Project Name</label>
+
+            <input type="text" id="form-section-input" placeholder="Enter a project name"
+              formControlName="projectName" />
+          </section>
+
+          <!-- Opp Type Details-->
+          <section class="add-peg-opp__wrapper__content-wrapper__form-row__form-section">
+            <label id="section-label">Opportunity Type Details</label>
+            <app-staffing-opportunity-type-details [buttonType]="'staffing-create-dropdown'" [isOpen] = "false" id="oppTypeDetails" 
+            name="opportunityTypeDetails" formControlName="opportunityTypeDetails"        (opportunityTypeDetailsChange)="onOpportunityTypeDetailsChange($event)"></app-staffing-opportunity-type-details>
+          </section>
+
+         
+        </div>
+
+        <div class="add-peg-opp__wrapper__content-wrapper__form-row">
+           <!-- start date -->
+           <section class="add-peg-opp__wrapper__content-wrapper__form-row__form-section">
+            <label id="section-label">Expected Start Date <span>*</span></label>
+
+            <input type="text" id="form-section-input" placeholder="DD-MMM-YYYY" autocomplete="off"
+              formControlName="expectedStartDate" bsDatepicker [bsConfig]="bsConfig" [minDate]="minDate"
+              [class.invalid]="(addPegOppForm.controls['expectedStartDate'].status == 'INVALID' && form.submitted)" />
+          </section>
+          <!-- Office to be staffed -->
+          <section class="add-peg-opp__wrapper__content-wrapper__form-row__form-section">
+            <label id="section-label">
+              Office to be staffed <span>*</span>
+            </label>
+
+            <div class="tree-container" [ngClass]="{
+                      'invalidDropdown': addPegOppForm.controls['officeToBeStaffed'].invalid && form.submitted
+                    }">
+              <app-location-tree-view [disabled]="false" [isStaffing]="true" [parentFormGroup]="addPegOppForm"
+                [formSubmitted]="form.submitted" (updateOfficeSelection)="updateOfficeSelection($event)" [officesToBeStaffed]="selectedOfficesToBeStaffed"
+
+                [saveOnlyOnBlur]="true" [dropdownTextItemsLimit]="2">
+              </app-location-tree-view>
+            </div>
+          </section>
+
+          
+
+        </div>
+
+
+        <div class="add-peg-opp__wrapper__content-wrapper__form-row">
+          <!-- Likelihood -->
+          <section class="add-peg-opp__wrapper__content-wrapper__form-row__form-section">
+            <label id="section-label">
+              Likelihood (%) <span>*</span>
+            </label>
+
+            <ng-select placeholder="Select a likelihood" formControlName="likelihood" [items]="likelihoodList"
+              [selectOnTab]="true" [minTermLength]="3" bindLabel="label" [clearSearchOnAdd]="true" [multiple]="false"
+              [hideSelected]="true" [class.invalid]="
+                      addPegOppForm.controls['likelihood'].invalid &&
+                      form.submitted
+                    ">
+            </ng-select>
+          </section>
+          <!-- duration -->
+          <section class="add-peg-opp__wrapper__content-wrapper__form-row__form-section">
+            <label id="section-label">Duration (in weeks) <span>*</span></label>
+
+            <input type="number" id="form-section-input" placeholder="Enter a value" min="0"
+              (keypress)="validateDurationKeys($event)" maxlength="4" formControlName="duration"
+              [class.invalid]="(addPegOppForm.controls['duration'].status == 'INVALID' && form.submitted)" />
+          </section>
+
+         
+        </div>
+
+        <div class="add-peg-opp__wrapper__content-wrapper__form-row">
+           <!-- partner -->
+           <section class="add-peg-opp__wrapper__content-wrapper__form-row__form-section">
+            <label id="section-label">Selling Partner</label>
+
+            <ng-select placeholder="Search partners" formControlName="sellingPartner" [items]="sellingPartnerList"
+              [selectOnTab]="true" bindLabel="searchableName" [clearSearchOnAdd]="true" [multiple]="true"
+              [clearable]="true" [loading]="isSellingPartnerLoading" [hideSelected]="true" loadingText="loading..."
+              [typeahead]="sellingPartnerTypeAhead" [dropdownPosition]="'top'">
+            </ng-select>
+          </section>
+          <!-- svp -->
+          <section class="add-peg-opp__wrapper__content-wrapper__form-row__form-section">
+            <label id="section-label">SVP</label>
+            <ng-select placeholder="Search SVP" formControlName="svp" [items]="svpList" [selectOnTab]="true"
+              bindLabel="searchableName" [clearSearchOnAdd]="true" [multiple]="true" [clearable]="true"
+              [loading]="isSVPLoading" [hideSelected]="true" loadingText="loading..." [typeahead]="svpTypeAhead"
+              [dropdownPosition]="'top'">
+            </ng-select>
+
+          </section>
+        </div>
+
+        <div class="add-peg-opp__wrapper__content-wrapper__form-row">
+           <!-- ovp -->
+           <section class="add-peg-opp__wrapper__content-wrapper__form-row__form-section">
+            <label id="section-label">OVP</label>
+            <ng-select placeholder="Search OVP" formControlName="ovp" [items]="ovpList" [selectOnTab]="true"
+              bindLabel="searchableName" [clearSearchOnAdd]="true" [multiple]="true" [clearable]="true"
+              [loading]="isOVPLoading" [hideSelected]="true" loadingText="loading..." [typeahead]="ovpTypeAhead"
+              [dropdownPosition]="'top'">
+            </ng-select>
+          </section>
+          <!-- Team Size -->
+          <section class="add-peg-opp__wrapper__content-wrapper__form-row__form-section">
+            <label id="section-label">Team Size (select more than one if you expect multiple teams)</label>
+
+            <ng-select placeholder="Team Size" id="teamSize" [items]="TeamSizeSelectList" bindLabel="teamSize" 
+              bindValue="teamSizeSelectId" (add)="onTeamSizeChange($event)" [multiple]="true" [selectOnTab]="true"
+              [clearable]="true" [hideSelected]="true" [maxSelectedItems]="teamSizeMaxSelectCount" (remove)="onRemoveTeamSize($event)"
+              (clear)="onClearTeamSize()" [dropdownPosition]="'top'"  formControlName="teamSize">
+            </ng-select>
+          </section>
+        </div>
+      </div>
+
+
+      <!-- footer -->
+      <div class="add-peg-opp__wrapper__footer-wrapper">
+
+        <button class="add-peg-opp__wrapper__cta" id="cancel-cta" (click)="goBackToSearchOpportunityPage()"
+          type="button">
+          <i class="fa fa-chevron-left" aria-hidden="true"></i> Search Registrations
+        </button>
+        <div></div>
+        <div>
+          <button class="add-peg-opp__wrapper__cta mr-4" id="cancel-cta" type="button" (click)="onClose()">
+            Discard & Close
+          </button>
+          <button class="add-peg-opp__wrapper__cta" id="add-cta" type="submit">
+            {{isSearchedOpportunityExists? 'Add Planning Card':'Submit'}}
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

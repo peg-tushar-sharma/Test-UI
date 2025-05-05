@@ -1,0 +1,47 @@
+html
+body{
+  font-family: sans-serif,'Graphik';
+  }
+
+body > main{
+  
+  min-height: calc(100vh - #{$header-height});
+  border-top:1px solid $grey-light;
+}
+
+.masterContainer{
+  padding-top:57px;
+}
+
+html.no-scroll, html.no-scroll body{
+  //overflow-y:hidden;
+}
+
+.icon-orange{
+  color: #f79824;
+  line-height: 1.25rem !important;
+}
+
+.info-text{
+  color: #424242;
+    font-family: "Helvetica Neue", sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+    
+      font-size: 12px;
+
+    }
+}
+
+.info-sub-text{
+  color: #424242;
+    font-family: "Helvetica Neue", sans-serif;
+    font-weight: 400;
+    font-size: 12px !important;
+    @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+    
+      font-size: 10px !important;
+
+    }
+}

@@ -1,0 +1,100 @@
+<div class="headerDiv">
+  <div>
+    <span class="label">Administration Settings</span> <label style="color: #cc0000;font-size: 14px;" class="ml-3">Total Users : {{rowData?.length}}</label>
+  </div>
+  <div class="column-edit">
+    <div class="column-span-input"> <i class="fas fa-search"></i>
+      <input class="inputHolder" [ngModel]="filterValue" type="search" (ngModelChange)="onFilterTextBoxChanged($event)"
+        placeholder="Name, Modified By" />
+    </div>
+
+    <span class="column-span"><button class="btn btn-primary" *ngIf ="!isAddNewUserButtonDisabled" (click)="openModel(undefined,false)"><i class="fas fa-plus"></i>
+        Add new user</button></span>
+  </div>
+
+</div>
+<div id="adminGrid" style="height: 85vh;padding: 18px;">
+  <ag-grid-angular #agGrid style="height: 100%;" class="ag-theme-alpine" [rowData]="rowData"
+    [columnDefs]="columnDefs" (gridReady)="onGridReady($event)" [gridOptions]="gridOptions">
+  </ag-grid-angular>
+</div>
+
+<!-- Add user Model -->
+
+<ng-template #template>
+  <form #form="ngForm" novalidate>
+
+    <div class="modal-header">
+      <h5 class="modal-title">{{isEditMode?"Update Security User":"Add Security User"}}</h5>
+
+      <button type="button" data-dismiss="modal" class="close" aria-label="Close" (click)="closePopup()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="container">
+        <div *ngIf="!(form && form.valid)" style="color: #949494;">Please fill all mandatory fields</div>
+        <div class="row mb-3">
+          <div class="col-6">
+            <div class="form-group">
+
+              <label for="employee">Resource*</label>
+              <ng-select [items]="employeeItems" id="employee" [selectOnTab]="true" bindLabel="searchableName" 
+                [multiple]="false" required name="employee" [clearable]="false"
+                [(ngModel)]="SelectedEmployeeDetails.employee" #employee="ngModel" [disabled]="isEditMode"
+                [typeahead]="selectEmployeeTypeAhead">
+              </ng-select>
+              
+            </div>
+          </div>
+          <div class="col-3">
+            <div class="form-group">
+
+              <label for="securityRoleId">Role*</label>
+              <ng-select [items]="securityRoles" id="securityRoleId" name="securityRoleId" bindLabel="name" (change)="onSecurityRoleChange($event)"
+                bindValue="id" [multiple]="false" #securityRoleId="ngModel" [clearable]="false" required
+                [(ngModel)]="SelectedEmployeeDetails.securityRoleId">
+              </ng-select>
+            </div>
+          </div>
+          <div class="col-3">
+            <label>Expiration Date</label>
+            <div style="display: flex;">
+              <input type="text" #dp="bsDatepicker" placeholder="dd-mm-yyyy" class="form-control calendarInput"
+                bsDatepicker [(ngModel)]="SelectedEmployeeDetails.expirationDate"
+                [bsConfig]="{ dateInputFormat: 'DD-MMM-YYYY', containerClass : 'theme-red',showWeekNumbers: false,showClearButton: true }">
+
+            </div>
+
+          </div>
+        </div>
+        <div class="row mb-3">
+
+          <div class="col-12" *ngIf="hasUserIndustryAccess()">
+            <label for="industries">Industry*</label>
+            <ng-select [items]="ind" bindLabel="industryName" [multiple]="true" [clearable]="true" required #industries="ngModel" id="industries" name="industries"
+              [(ngModel)]="SelectedEmployeeDetails.industries">
+            </ng-select>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-12">
+            <label for="note">Notes(Max 1000 characters)</label>
+            <textarea class="form-control" id="mb-notes" maxlength="1000" placeholder="Enter note"  name="note" id="note" #note="ngModel"
+              [(ngModel)]="SelectedEmployeeDetails.note"></textarea>
+         
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn btn-tertiary" (click)="closePopup()">Cancel</button>
+      <button type="submit" class="btn btn-primary" (click)="(form && form.valid)?addUser():null;" [disabled]="!(form && form.valid)" >{{isEditMode?'Update':'Add'}}</button>
+    </div>
+  </form>
+
+</ng-template>
+
+

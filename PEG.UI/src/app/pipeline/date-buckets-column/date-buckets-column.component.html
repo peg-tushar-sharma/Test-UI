@@ -1,0 +1,461 @@
+<div class="dateBucketsColumn" [class.grabbing]="draggingBucketGroup" id="buckets">
+  <!-- Header | Week & Expand -->
+  <div class="column-header">
+    <div class="dateBucketsWeek">
+      <div class="datebucketWeekHeading" [class.previousWeek]="weekNumber < 0">
+        <div>
+          Week of {{ currentWeekMonday }}
+          <div class="btn-group" dropdown>
+            <a id="button-config-sort " dropdownToggle class="dateBucketSort" aria-controls="dropdown-config-sort">
+              <i class="fa fa-sort" aria-hidden="true"></i>
+            </a>
+
+            <span class="bucketCount">({{ bucketCount }})</span>
+
+            <ul id="dropdown-config-sort" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
+              aria-labelledby="button-config-sort">
+              <li role="menuitem">
+                <div style="padding: 0 20px">Sort by</div>
+              </li>
+              <li class="divider dropdown-divider"></li>
+              <li role="menuitem">
+                <a class="dropdown-item" (click)="toggleSortWeeklyBucket('date')">
+                  Date
+                  <i class="fa" style="float: right; margin-top: 5px"
+                    [ngClass]="bucketSortOrder.date ? 'fa-sort-amount-up' : 'fa-sort-amount-down'" aria-hidden="true">
+                  </i>
+                </a>
+              </li>
+              <li role="menuitem">
+                <a class="dropdown-item" (click)="toggleSortWeeklyBucket('office')">Office
+                  <i class="fa" style="float: right; margin-top: 5px"
+                    [ngClass]="bucketSortOrder.office ? 'fa-sort-amount-up' : 'fa-sort-amount-down'" aria-hidden="true">
+                  </i>
+                </a>
+              </li>
+              <li role="menuitem">
+                <a class="dropdown-item" (click)="toggleSortWeeklyBucket('name')">Name
+                  <i class="fa" style="float: right; margin-top: 5px"
+                    [ngClass]="bucketSortOrder.name ? 'fa-sort-amount-up' : 'fa-sort-amount-down'" aria-hidden="true">
+                  </i>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <button class="caseStartFilter ml-auto" id="button-case-start-filter" [class.active]="filterByCaseStartDate"
+          (click)="toggleCaseStartFilter()" ngbTooltip="Recently Started Cases (7 Days)">
+          <i class="fas fa-eye"></i>
+        </button>
+
+        <!-- Add Group -->
+        <button class="newBucketBtn" (click)="addBucketGroup()" [disabled]="addingNewGroup">
+          + Add Group
+        </button>
+
+        <!-- Column View Picker -->
+        <div class="btn-group" dropdown>
+          <button class="dateBucketExpand d-flex align-items-center" aria-controls="dropdown-columns-picker"
+            dropdownToggle id="button-column-picker">
+            <span>{{ setNumberOfColumns }} {{ setNumberOfColumns == 1 ? "Column" : "Columns" }}</span>
+            <i class="fas fa-chevron-down ml-2"></i>
+          </button>
+
+          <ul *dropdownMenu role="menu" id="dropdown-columns-picker" class="dropdown-menu dropdown-menu-right"
+            aria-labelledby="button-column-picker">
+            <ng-container *ngFor="let item of columnViewOptions">
+              <li role="menuitem">
+                <button class="dropdown-item" [class.active]="item.value == setNumberOfColumns"
+                  (click)="toggleColumnNumber(item.value)">
+                  {{ item.label }}
+                </button>
+              </li>
+            </ng-container>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bucketListContainer" [ngClass]="setColumnsClass ? setColumnsClass : ''">
+    <div *ngFor="let columnIndex of columnsArray" [class.hide-column]="columnIndex >= setNumberOfColumns">
+      <div id="{{ 'bucketListWeek' + weekNumber + 'Column' + columnIndex}}" class="bucketList"
+        [attr.columnNumber]="columnIndex" [attr.weekStartDate]="weekStartDateLabel" [attr.weekNumber]="weekNumber"
+        [class.hide-placeholder]="! draggingGroupInThisBucket && setNumberOfColumns != 1"
+        [class.dragging-bucket-group]="draggingBucketGroup && setNumberOfColumns != 1" cdkDropListGroup cdkDropList
+        [cdkDropListData]="groupsByColumn[columnIndex]" [cdkDropListConnectedTo]="bucketGroupDragDropAccess"
+        (cdkDropListDropped)="groupDrop($event)">
+        <div *ngIf="groupsByColumn[columnIndex].length == 0" class="blankPlaceholder">
+          Drop group here
+        </div>
+        <div #bucketGroupElement class="bucketGroup column-margin-6" id="{{ 'bucketGroup' + bucket.bucketGroupId }}"
+          [attr.bucketGroupId]="bucket.bucketGroupId" [attr.fromWeekNumber]="weekNumber" [attr.fromColumn]="columnIndex"
+          *ngFor="let bucket of groupsByColumn[columnIndex]; let i = index;" [class.active]="bucket.showData"
+          [class.dragging-border-4]="draggingBucketGroup" cdkDrag [cdkDragData]="bucket"
+          (cdkDragStarted)="groupDragStarted()" (cdkDragEnded)="groupDragEnded()">
+
+          <div class="bucketGroupContent">
+            <div class="bucketHeader" id="dropPlaceholder" (dblclick)="onGroupHeaderDoubleClick($event, bucket)"
+              [ngClass]="bucket.isSelectedForMerge==true ? 'background-yellow' : ''">
+              <label class="weeknumber" hidden="true" id="{{ weekNumber }}"></label>
+              <label class="contentRowId" hidden="true" id="{{ bucket.tmpPipelineBucketId }}"></label>
+              <label class="bucketGroupId" hidden="true" id="{{ bucket.bucketGroupId }}"></label>
+
+              <div class="bucketToggle" id="dropPlaceholderToggle">
+                <label class="weeknumber" hidden="true" id="{{ weekNumber }}"></label>
+                <label class="contentRowId" hidden="true" id="{{ bucket.tmpPipelineBucketId }}"></label>
+                <label class="bucketGroupId" hidden="true" id="{{ bucket.bucketGroupId }}"></label>
+
+                <i class="fa fa-angle-up" data-toggle="collapse"
+                  [attr.data-target]="'#week' + weekNumber + 'bucket' + bucket.bucketGroupId"></i>
+                <i class="fa fa-angle-down" data-toggle="collapse"
+                  [attr.data-target]="'#week' + weekNumber + 'bucket' + bucket.bucketGroupId"></i>
+
+                <div class="bucketGroupName">
+                  <ng-container *ngIf="!bucket.isEditable && currentPipelineBucketInputId != bucket.bucketGroupId">
+                    <span class="bucketNameLabel" (click)="convertToBucketInput(bucket)"
+                      [title]="bucket.bucketGroupName">{{ bucket.bucketGroupName }}</span>
+                    <span>({{ weeklyBucketGroupCount(bucket.bucketGroupId) }})</span>
+                  </ng-container>
+                  <ng-container *ngIf="bucket.isEditable || currentPipelineBucketInputId == bucket.bucketGroupId">
+                    <input class="bucketNameInput" maxlength="50" type="text" autofocus [value]="bucket.bucketGroupName"
+                      (change)="saveBucketName($event, bucket)" (blur)="saveBucketName($event, bucket)"
+                      (keydown.enter)="saveBucketName($event, bucket)" (focus)="focusBucketName($event, bucket)" />
+                    <span>({{ weeklyBucketGroupCount(bucket.bucketGroupId) }})</span>
+                  </ng-container>
+                </div>
+                <div id="groupRowHeader" class="elementHide groupRowHeader">
+                  Drop here
+                  <label class="weeknumber" hidden="true" id="{{ weekNumber }}"></label>
+
+                  <label class="contentRowId" hidden="true" id="{{ bucket.tmpPipelineBucketId }}"></label>
+                  <label class="bucketGroupId" hidden="true" id="{{ bucket.bucketGroupId }}"></label>
+                </div>
+              </div>
+              <div class="buttonPanel">
+                <!-- Delete Button -->
+                <span class="deleteBucketGroup" (click)="clickGroupDelete($event, bucket)"><i
+                    class="fa fa-trash"></i></span>
+
+                <!-- New Button -->
+                <button class="newBucketBtn" *ngIf="!bucket.isSelectedForMerge"
+                  (click)="addBucketPlaceholder(bucket, 'week' + weekNumber + 'bucket' + bucket.bucketGroupId)">
+                  + New
+                </button>
+                <button class="newBucketBtn" (click)="onMergeClick(bucket)" *ngIf="bucket.isSelectedForMerge">
+                  Merge
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div id="{{ 'week' + weekNumber + 'bucket' + bucket.bucketGroupId }}" class="collapse weekBucketRow show"
+            [class.assigningOpp]="oppToBeAssigned">
+
+            <div cdkDropListGroup cdkDropList [cdkDropListData]="bucket.bucketMapping"
+              id="{{ 'bucket' + weekNumber + 'Group' + bucket.bucketGroupId }}"
+              [attr.bucketvalue]="bucket.bucketGroupId" [attr.pipelineBucketGroupId]="bucket.bucketGroupId"
+              class="placeholder-list" [attr.weekNumber]="weekNumber" cdkDropListSortingDisabled
+              (cdkDropListDropped)="drop($event)" [cdkDropListConnectedTo]="dragDropAccess">
+
+              <div
+                *ngIf="bucket.bucketMapping.length < 1 || (bucket.bucketMapping.length == 1 && dragOriginGroupId == bucket.bucketGroupId)"
+                class="blankPlaceholder lateral-opportunity-drag w-100">Drop an opportunity here</div>
+
+              <div *ngIf="bucket.bucketMapping.length < 1" id="groupRowHeader"
+                class="blankPlaceholder w-100 elementHide groupRowHeader">
+                Drop an opportunity here
+                <label class="weeknumber" hidden="true" id="{{ weekNumber }}"></label>
+
+                <label class="contentRowId" hidden="true" id="{{ bucket.tmpPipelineBucketId }}"></label>
+                <label class="bucketGroupId" hidden="true" id="{{ bucket.bucketGroupId }}"></label>
+              </div>
+
+              <div *ngFor="let item of bucket.bucketMapping" class="contantArea" cdkDrag [cdkDragData]="item"
+                (cdkDragStarted)="dragStarted($event, bucket.bucketGroupId)"
+                (cdkDragEnded)="dragEnded($event, bucket.bucketGroupId)" [cdkDragDisabled]="oppToBeAssigned"
+                (click)="assignOppToBucket($event, item)" [class.highlightOnSearch]="item.isHighlightedOnSearch"
+                (dragover)="placeholderDragOver($event, item)">
+                <div *ngIf="!item.isEditable" class="contantAreaData">
+                  <div>
+                    <span id="manager" class="flex-parent" style="min-height: 22px"
+                      *ngIf="item.rowType == bucketRowType.Manager">
+                      <input *ngIf="item?.employee?.employeeCode" class="availabledatwidth" type="text" placeholder="/"
+                        bsDatepicker [(ngModel)]="item.availableDate" (bsValueChange)="onDateChanged($event)"
+                        [bsConfig]="{ dateInputFormat: 'MM/DD    /YYYY', containerClass: 'theme-red date-positioner',
+
+                        showWeekNumbers: false }" readonly placement="bottom" (onHidden)="onHidden(item)" />
+                      <div class="cntry marginR" (click)="convertToTypeahead(item)">
+                        <span>{{ item?.employee?.officeAbbreviation }}</span>
+                      </div>
+                      <div class="tileName" (click)="convertToTypeahead(item)">
+                        <span title="{{ item?.employee?.lastName + ', ' + item?.employee?.firstName }}">{{
+                          (item?.employee?.lastName ? item?.employee?.lastName : "") +
+                          (item?.employee?.firstName ? ", " + item?.employee?.firstName : "")
+                          }}</span>
+                      </div>
+
+                      <div *ngIf="item?.employee?.employeeCode && item?.empAlertStatus" class="notes d-flex"
+                        Id="employeeAlertStatus" [ngbTooltip]="empToolTipContent"
+                        placement="bottom bottom-left bottom-right top-left top-right" container="body"
+                        tooltipClass="employeeAlertTooltip">
+
+                        <!-- Popover content -->
+                        <ng-template #empToolTipContent>
+                          <div class="notes">
+                            <div class="note-wrapper">
+                              <p><i>In next 6 weeks…</i></p>
+                              <ng-container *ngFor="let item of getEmployeeAlertData(item?.empAlertStatus)">
+                                <div><b>{{ item.alertType }}:&nbsp;</b>{{ item.startDate }} to {{ item.endDate }}</div>
+                              </ng-container>
+                            </div>
+                          </div>
+                        </ng-template>
+
+                        <i class="fas fa-exclamation-triangle pt-1"
+                          [ngClass]="getAlertIconClass(item?.empAlertStatus)"></i>
+                      </div>
+                      <div *ngIf="item?.employee?.employeeCode" class="notes" (click)="onNotesClick(item, 'Resource')"
+                        Id="employeeNotes">
+                        <span *ngIf="item?.hasNote || item?.hasCdWorkNote">
+                          <i class="fa fa-sticky-note"
+                            [style.color]="item?.hasNote ? item?.colorCode : item?.hasCdWorkNote ? 'rgb(215, 133, 255)' :null"
+                            placement="bottom" container="body" ngbTooltip="..." (mouseenter)="fetchNote(item)"></i>
+                          <i *ngIf="item?.hasCdWorkNote && item?.hasNote" class="fa fa-sticky-note secondary-note"
+                            placement="bottom" container="body" ngbTooltip="..." (mouseenter)="fetchNote(item)"
+                            [style.color]="'rgb(215, 133, 255)'"></i>
+                        </span>
+                        <i class="far fa-sticky-note" *ngIf="!item?.hasNote &&  !item?.hasCdWorkNote"
+                          [style.color]="item?.colorCode" placement="bottom" container="body" ngbTooltip="..."
+                          (mouseenter)="fetchNote(item)"></i>
+
+                      </div>
+                    </span>
+                    <span id="officeLocation" class="flex-parent" *ngIf="item.rowType == bucketRowType.Location">
+                    </span>
+                    <span id="officeLocation" class="flex-parent" *ngIf="item.rowType == bucketRowType.Location">
+                      <input *ngIf="item?.office?.officeName" class="availabledatwidth" type="text" placeholder="/"
+                        bsDatepicker [(ngModel)]="item.availableDate" (bsValueChange)="onDateChanged($event)"
+                        [bsConfig]="{ dateInputFormat: 'MM/DD', containerClass: 'theme-red',
+                        showWeekNumbers: false }" readonly placement="right" (onHidden)="onHidden(item)" />
+                      <div class="locationtitleName" (click)="convertToTypeahead(item)">
+                        <span title="{{ item?.office?.officeName }}">{{ item?.office?.officeName }}</span>
+                      </div>
+
+                      <div *ngIf="item?.office?.officeName" class="notes" (click)="onNotesClick(item, 'Resource')"
+                        Id="employeeNotes">
+                        <span *ngIf="item?.hasNote || item?.hasCdWorkNote">
+                          <i class="fa fa-sticky-note"
+                            [style.color]="item?.hasNote ? item?.colorCode : item?.hasCdWorkNote ? 'rgb(215, 133, 255)' :null"
+                            placement="bottom" container="body" ngbTooltip="..." (mouseenter)="fetchNote(item)"></i>
+                          <i *ngIf="item?.hasCdWorkNote && item?.hasNote" class="fa fa-sticky-note secondary-note"
+                            placement="bottom" container="body" ngbTooltip="..." (mouseenter)="fetchNote(item)"
+                            [style.color]="'rgb(215, 133, 255)'"></i>
+                        </span>
+                        <i class="far fa-sticky-note" *ngIf="!item?.hasNote &&  !item?.hasCdWorkNote"
+                          [style.color]="item?.colorCode" placement="bottom" container="body" ngbTooltip="..."
+                          (mouseenter)="fetchNote(item)"></i>
+
+                      </div>
+
+
+                    </span>
+                    <span id="place" *ngIf="!item.rowType" class="flex-parent" (click)="convertToTypeahead(item)"
+                      style="height: 22px">
+                    </span>
+                  </div>
+                </div>
+
+
+                <div *ngIf="item.isEditable" class="contantAreaData">
+                  <ng-select #selectemployeeTypeahead id="employeeTypeahead" class="bucket-typeahead" name="name"
+                    [items]="employees" bindLabel="label" (change)="onBucketChange($event, item)"
+                    [clearSearchOnAdd]="true" [(ngModel)]="selectedItem" [loading]="employeeLoad" [addTag]="false"
+                    (focusout)="focusOut()" (close)="convertToTile(item)" loadingText="Loading..." [multiple]="false"
+                    [clearable]="false" [typeahead]="employeeTypeAhead" groupBy="groupName" appendTo="body">
+                    <ng-template ng-optgroup-tmp let-item="item">
+                      <span style="font-weight: 600; color: #000"> {{ item.groupName }}</span>
+                    </ng-template>
+                    <ng-template ng-option-tmp let-item="item">
+                      <div class="flex-parent" *ngIf="item.employee">
+                        <div style="flex: 0 0 110px; overflow: hidden; text-overflow: ellipsis">
+                          <span title="{{ item?.employee?.lastName + ', ' + item?.employee?.firstName }}">{{
+                            (item?.employee?.lastName ? item?.employee?.lastName : "") +
+                            (item?.employee?.firstName ? ", " + item?.employee?.firstName : "")
+                            }}</span>
+                        </div>
+                        <div class="teamSize marginR">
+                          <span>{{ item?.employee?.levelGrade }}</span>
+                        </div>
+                        <div class="cntry marginR">
+                          <span>{{ item?.employee?.officeAbbreviation }}</span>
+                        </div>
+                      </div>
+                      <div *ngIf="item.office">{{ item.label }}</div>
+                    </ng-template>
+                  </ng-select>
+                </div>
+
+                <div class="placeholder" id="{{ 'placeholderUnit' + item.pipelineBucketId }}" cdkDropListGroup
+                  cdkDropList [cdkDropListData]="item.pipelineBucketMapping"
+                  [cdkDropListConnectedTo]="mappingDragDropAccess" (cdkDropListDropped)="dropOpp($event, item)">
+                  <div *ngIf="!item.pipelineBucketMapping">
+                    <div class="row empty">
+                      <div class="column">
+                        <div class="spacialTextArea" id="textAreaOpp">
+                          <div class="oppText spinnerHolder" id="oppSource" contenteditable="false">
+                            <i class="fa fa-spinner"></i>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div *ngFor="let mapping of item.pipelineBucketMapping"
+                    [ngClass]="{ 'background-color-select': mapping.pipeline?.isRowSelected }" cdkDrag
+                    [cdkDragData]="mapping" (cdkDragStarted)="dragOppStarted($event,item)"
+                    (cdkDragEnded)="dragOppEnded($event)" [cdkDragDisabled]="oppToBeAssigned">
+                    <div class="row" [class.empty]="!mapping?.pipeline?.oppName"
+                      [cdkContextMenuTriggerFor]="pipelineContextMenu" (contextmenu)="openContextMenu($event,mapping)"
+                      [style.background-color]="mapping?.pipeline?.opsLikelihood?.color" [attr.status]="item?.status">
+                      <div class="column">
+                        <div class="spacialTextArea" id="textAreaOpp">
+                          <div title="{{ mapping?.pipeline?.oppName }}" class="oppText"
+                            [class.partner-edit-flagged]="showPartnerEditFlag(mapping?.pipeline)"
+                            [style.color]="mapping?.pipeline?.isFlagged ? 'red':'black'" id="oppSource"
+                            (click)="selectBucketRow(item, mapping, $event)" contenteditable="false">
+                            {{ mapping?.pipeline?.oppName }}
+                            <label class="weeknumber" hidden="true" id="{{ weekNumber }}"></label>
+                            <label class="contentRowId" hidden="true" id="{{ item.tmpPipelineBucketId }}"></label>
+                            <label class="contentPoId" hidden="true" id="{{ mapping.pipeline?.poId }}"></label>
+                          </div>
+                          <div Id="conflictsIcon" *ngIf="mapping.pipeline?.mbStatus?.mbStatusId == 2">
+                            <i class="fas fa-exclamation ml-1 conflicts-icon"
+                              [ngClass]="getConflictIconColor(mapping.pipeline)"></i>
+                          </div>
+                          <div Id="conflictsIcon" *ngIf="mapping.pipeline?.mbStatus?.mbStatusId == 3">
+                            <i class="fas fa-exclamation ml-1 conflicts-icon" [popover]="conflictTooltip"
+                              [outsideClick]="true" container="body" (onShown)="getConflictsTooltip(mapping.pipeline)"
+                              placement="auto" [ngClass]="getConflictIconColor(mapping.pipeline)"></i>
+                          </div>
+
+                          <div class="crossIcon">
+                            <i (click)="clickPlaceholderDelete(mapping, item)"
+                              class="fas fa-times infoIcon itemVisible ml-2"></i>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ng-template #pipelineContextMenu>
+            <div class="cdk-context-menu" cdkMenu *ngIf="bucketContextMenuData?.pipeline?.oppName">
+              <div id="contextMenuTitle">
+                {{bucketContextMenuData?.pipeline?.oppName}}
+              </div>
+
+              <button class="cdk-context-menu-bar-item" cdkMenuItem [cdkMenuTriggerFor]="statusOpsLikelihoodSubMenu">
+                Set Ops Likelihood
+                <span style="float: right;">
+                  <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                </span>
+              </button>
+
+              <button class="cdk-context-menu-bar-item" cdkMenuItem (click)="openInOutlook($event)">Send email</button>
+              <button class="cdk-context-menu-bar-item" cdkMenuItem
+                (click)="openCaseCodeEditorPopUp(bucketContextMenuData)">Add
+                Case Code</button>
+              <button class="cdk-context-menu-bar-item" cdkMenuItem
+                (click)="updateOpportunityFlag(bucketContextMenuData)">Flag/Unflag</button>
+              <button class="cdk-context-menu-bar-item" cdkMenuItem
+                (click)="updateSelectedOpportunitesPartnerFlags(bucketContextMenuData)"
+                [disabled]="!bucketContextMenuData?.pipeline?.isPartnerEditFlagged">Unflag Partner Edit</button>
+            </div>
+            <div class="cdk-context-menu" cdkMenu *ngIf="!bucketContextMenuData?.pipeline?.oppName">
+              <div id="contextMenuWarning"><b>Note</b>: Please perform this action on an opportunity for additional options.
+              </div>
+            </div>
+
+          </ng-template>
+
+          <ng-template #statusOpsLikelihoodSubMenu>
+            <div class="cdk-context-menu" cdkMenu>
+              <button class="cdk-context-menu-item" *ngFor="let bucketStatus of opsLikelihood" cdkMenuItem
+                (click)="onPipelineBucketStatusChange(bucketContextMenuData, bucketStatus)">
+                <div style="padding:0px 10px"
+                  [ngStyle]="{ 'border-left': bucketStatus.color ? '4px solid' : 'none','border-color': bucketStatus.color }">
+                  {{bucketStatus.opsLikelihoodName}}
+                </div>
+              </button>
+            </div>
+          </ng-template>
+    
+          <!-- <div class="blankPlaceholder bucketGroupDrop" [class.hoverable]="draggingBucketGroup"
+        [attr.dropAreaColumn]="columnIndex" [attr.weekStartDate]="weekStartDateLabel"
+        [attr.gridIndex]="getGridIndex(columnIndex)">
+        Drop group here
+      </div> -->
+        </div>
+      </div>
+      <!--end bucket list-->
+    </div>
+
+    <ng-template #conflictTooltip>
+      <div class="noMatches" *ngIf="showLoader">
+        <i class="fas fa-circle-notch fa-spin customeStyle"></i>
+
+      </div>
+
+      <div class="popStyle" id="conflictsIconWrapper" *ngIf="!showLoader">
+        <div class="conflicts-header ">
+          <div class="truncate">
+            <span *ngIf="activeOffice || priorOffice || conflictedOffice">Conflicted offices :</span>
+            <span *ngIf="activeOffice"> <b> Active- </b>{{activeOffice}} </span>
+            <span *ngIf="priorOffice"><span *ngIf="activeOffice">,</span><b> Prior- </b> {{priorOffice}} </span>
+            <span *ngIf="conflictedOffice">
+              <span *ngIf="activeOffice || priorOffice">,</span> <b> Other- </b> {{conflictedOffice}}
+            </span>
+          </div>
+        </div>
+        <div class="table-wrapper">
+          <table class="fl-table">
+            <thead>
+              <tr>
+                <th>Client</th>
+                <th>Stage</th>
+                <th>End Date</th>
+                <th>Managing Office</th>
+                <th>Case Manager</th>
+                <th>Case Code</th>
+                <th>Retainer</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let element of conflictsData">
+                <td><span [ngClass]="getHighlightClass(element)">{{ element.clientName ? element.clientName : ""
+                    }}</span>
+                </td>
+                <td>{{ element.stageTypeName ? element.stageTypeName : "" }}</td>
+                <td>{{ element.caseEndDate | date : "dd-MMM-YYYY" }}</td>
+                <td>{{ element.officeName ? element.officeName : "" }}</td>
+                <td>{{ element.caseManager ? element.caseManager : "" }}</td>
+                <td><a href="{{staffingUrl}}{{element.caseCode}}" rel="noopener noreferrer" target="_blank">{{
+                    element.caseCode ? element.caseCode : "" }}</a></td>
+                <td>{{element.isRetainer !=null ? element.isRetainer :"" }}{{element.retainerNotes?'; '+
+                  element.retainerNotes:""}}</td>
+
+              </tr>
+              <tr *ngIf="conflictsData?.length == 0">
+                <td colspan="6" style="text-align: center">
+                  No rows to show
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </ng-template>

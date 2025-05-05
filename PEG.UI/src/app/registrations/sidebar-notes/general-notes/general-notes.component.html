@@ -1,0 +1,105 @@
+<div id="tab-content-general-notes" class="tab-content">
+  <div class="tab-details">
+    <table id="noteDetailsTable" class="table table-striped">
+      <thead>
+        <tr>
+          <th width="15%">Date</th>
+          <th width="25%">Name</th>
+          <th>Event</th>
+
+          <!-- add new note cta -->
+          <th width="60px">
+            <button authorize name="addNote" id="addNoteButton" [disabled]="addingNewNote || updatingNote"
+              class="btn d-flex align-items-center" (click)="addNewNote()">
+              <i class="fas fa-plus"></i>
+              <span>New</span>
+            </button>
+          </th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <!-- new note row -->
+        <tr id="new-legal-note" [hidden]="!addingNewNote">
+          <td class="editable editing" colspan="4">
+            <div class="editor">
+              <textarea id="newNoteTextArea" #newNoteTextArea name="newNote" #newNoteModel="ngModel"
+                [(ngModel)]="newNote.notes" required maxlength="2000" style="width: 100%"></textarea>
+
+              <!-- cancel | save ctas -->
+              <div class="footer d-flex align-items-center">
+                <div><i class="fa fa-eye"></i> Private to Legal</div>
+
+                <button id="cancelNewNoteButton" type="button" class="btn ml-auto mr-2"
+                  (click)="cancelSave()">Cancel</button>
+
+                <button id="saveNewNoteButton" type="button" class="btn primary"
+                  (click)="newNoteModel.valid ? saveNewNote() : null"
+                  [disabled]="newNoteModel && newNoteModel.invalid">Save</button>
+              </div>
+            </div>
+          </td>
+        </tr>
+
+        <tr *ngIf="generalNotes && generalNotes.length < 1">
+          <td colspan="4">No notes, add a new note</td>
+        </tr>
+
+        <!-- list existing notes -->
+        <ng-container *ngIf="generalNotes && generalNotes.length">
+          <tr id="note-{{ note.noteId }}" *ngFor="let note of generalNotes">
+            <!-- date -->
+            <td>
+              <div *ngIf="!isMasked">
+                {{ note.lastUpdated ? (note.lastUpdated | date : "dd-MMM-yyyy" : "EDT") : "" }}
+              </div>
+            </td>
+
+            <!-- ..name -->
+            <td>
+              <div *ngIf="!isMasked">
+                {{ note.lastUpdatedByName }}
+              </div>
+            </td>
+
+            <!-- ..note -->
+            <td class="editable" [class.editing]="note.isEditing">
+              <!-- ..saved note content -->
+              <div *ngIf="!isMasked && !note.isEditing" class="content">{{ note.notes }}</div>
+
+              <div *ngIf="isMasked" style="background-color: #bdbdbd; height: 40px"></div>
+
+              <!-- ..editing -->
+              <div class="editor" [class.hidden]="!note.isEditing">
+                <textarea id="editNoteTextAreaFor-{{ note.noteId }}" #editNoteTextArea name="editNotes"
+                  #editNoteModel="ngModel" [(ngModel)]="note.notes" required maxlength="2000"
+                  style="width: 100%"></textarea>
+
+                <!-- cancel | save ctas -->
+                <div class="footer d-flex align-items-center">
+                  <div *ngIf="note.notesTypeId == notesType.Legal"><i class="fa fa-eye"></i> Private to Legal</div>
+
+                  <button id="cancelEditNoteButtonFor-{{ note.noteId }}" type="button" class="btn ml-auto mr-2"
+                    (click)="cancelSave(note)">Cancel</button>
+
+                  <button id="updateNoteButtonFor-{{ note.noteId }}" type="button" class="btn primary"
+                    (click)="editNoteModel.valid ? saveNote(note) : null"
+                    [disabled]="(editNoteModel && editNoteModel.invalid) || editNoteModel.pristine">
+                    Update
+                  </button>
+                </div>
+              </div>
+            </td>
+
+            <!-- ..edit note -->
+            <td>
+              <i authorize name="editNote"
+                [hidden]="note.notesTypeId == notesType.General || addingNewNote || updatingNote" class="fa fa-edit"
+                (click)="editNote(note, editNoteTextArea, editNoteModel.control)"></i>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+</div>

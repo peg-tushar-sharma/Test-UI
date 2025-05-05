@@ -1,0 +1,4 @@
+
+<ng-template #blankValue><span>-</span></ng-template>
+ 
+<label *ngIf="!isEditable">{{(renderDateValue)?(renderDateValue | date:'dd-MMM-yyyy'):'-'}}</label>

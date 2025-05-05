@@ -1,0 +1,54 @@
+:host ::ng-deep {
+  .custom-dropdown {
+    position: relative;
+    width: 100%;
+  
+    .dropdown-toggle {
+      padding: 7px;
+      width: 100%;
+      border: 2px solid #E0E4E8 !important; // Always show a solid black border
+      border-radius: 4px;
+      cursor: pointer;
+      background-color: #fff !important; // White background
+      color: #000 !important;           // Always black text
+      font-size: 13px;
+      transition: all 0.2s ease-in-out;
+  
+      // Hover and focus still maintain the same border and text color
+      &:hover,
+      &:focus {
+        border-color: #E0E4E8 !important;
+        outline: none;
+        box-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+      }
+    }
+  
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      max-height: 300px;
+      overflow-y: auto;
+      background-color: #fff !important;
+      border: 1px solid #E0E4E8 !important; // Always show a solid black border for the menu
+      border-radius: 4px;
+      z-index: 1000;
+      color: #000 !important;
+  
+      &.show {
+        display: block;
+      }
+  
+      .dropdown-item {
+        color: #000 !important;
+  
+        &:hover {
+          background-color: #f0f0f0;
+          color: #000 !important;
+        }
+      }
+    }
+  }
+}

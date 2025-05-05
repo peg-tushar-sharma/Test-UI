@@ -1,0 +1,31 @@
+.recordId {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.register-btn {
+    display: block;
+    background-color: #E5E5E5;
+    color: #009E19;
+    width: 17px;
+    height: 17px;
+    font-size: 11px;
+    font-weight: 550;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 17px;
+}
+
+#showRecordId {
+    display: none;
+}
+
+.recordId:hover {
+    #showRBlock {
+        display: none;
+    }
+    #showRecordId {
+        display: block;
+    }
+}

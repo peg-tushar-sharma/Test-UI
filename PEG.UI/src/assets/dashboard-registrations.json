@@ -1,0 +1,93 @@
+[
+    {
+        "target": "Zetwerk",
+        "client": "Tiger Global",
+        "type": "Buy (Non-control equity)",
+        "sellingPartner": "Blankenship, John",
+        "submitted": "20 May 2019",
+        "status": "Pending Clearance",
+        "tags": {
+            "isHf": true,
+            "isTriangle": false,
+            "isPt": false
+        }
+    },
+    {
+        "target": "Bristol Bay",
+        "client": "Kana Corp",
+        "type": "Pre-Sale",
+        "sellingPartner": "Blankenship, John",
+        "submitted": "29 Mar 2019",
+        "status": "Leadership Needs To Approve",
+        "tags": {
+            "isHf": false,
+            "isTriangle": true,
+            "isPt": true
+        }
+    },
+    {
+        "target": "Kellogg",
+        "client": "Pepsi",
+        "type": "Buy (Equity Buyout)",
+        "sellingPartner": "Blankenship, John",
+        "submitted": "29 Mar 2019",
+        "status": "Legal Needs to Approve",
+        "tags": {
+            "isHf": true,
+            "isTriangle": true,
+            "isPt": false
+        }
+    },
+    {
+        "target": "Samsung",
+        "client": "Pepsi",
+        "type": "Buy (Equity Buyout)",
+        "sellingPartner": "Blankenship, John",
+        "submitted": "29 Mar 2019",
+        "status": "Legal Needs to Approve",
+        "tags": {
+            "isHf": true,
+            "isTriangle": false,
+            "isPt": false
+        }
+    },
+    {
+        "target": "Hamilton Beach",
+        "client": "Pepsi",
+        "type": "Buy (Equity Buyout)",
+        "sellingPartner": "Blankenship, John",
+        "submitted": "29 Mar 2019",
+        "status": "Legal Needs to Approve",
+        "tags": {
+            "isHf": true,
+            "isTriangle": false,
+            "isPt": false
+        }
+    },
+    {
+        "target": "Kellogg",
+        "client": "Pepsi",
+        "type": "Buy (Equity Buyout)",
+        "sellingPartner": "Blankenship, John",
+        "submitted": "29 Mar 2019",
+        "status": "Legal Needs to Approve",
+        "tags": {
+            "isHf": true,
+            "isTriangle": false,
+            "isPt": false
+        }
+    },
+    {
+        "target": "Samsung",
+        "client": "Pepsi",
+        "type": "Buy (Equity Buyout)",
+        "sellingPartner": "Blankenship, John",
+        "submitted": "29 Mar 2019",
+        "status": "Legal Needs to Approve",
+        "tags": {
+            "isHf": true,
+            "isTriangle": false,
+            "isPt": false
+        }
+    }
+]

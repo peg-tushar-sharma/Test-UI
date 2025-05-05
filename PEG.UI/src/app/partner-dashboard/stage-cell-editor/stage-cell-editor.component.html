@@ -1,0 +1,12 @@
+<!-- Dropdown Options -->
+<div class="dropdown-options-wrapper d-flex">
+    <button
+        class="dropdown-option btn-class"
+        *ngFor="let item of dropdownOptions"
+        [ngClass]="item.active ? 'active' : ''"
+        [style.width]="widthToUse"
+        (click)="handleStageSelection(item)"
+    >
+        {{ item.label }}
+    </button>
+</div>

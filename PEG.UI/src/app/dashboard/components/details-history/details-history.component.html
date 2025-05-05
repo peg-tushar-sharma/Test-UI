@@ -1,0 +1,30 @@
+<ng-container *ngIf="!isLoading">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <span class="sidebar-title">{{ historyType === 'audit' ? 'Audit Log' : 'Notes' }} ({{
+      historyType === 'audit' ? logs.length : notes.length
+      }})</span>
+    <i class="fa fa-times cursor-pointer" (click)="hideSidebar()"></i>
+  </div>
+  <div class="d-flex flex-column log-area" *ngIf="historyType === 'audit'">
+    <app-details-history-item *ngFor="let item of logs" [user]="item.submittedByName" [date]="item.submissionDate">
+      {{ item.fieldName }} has been updated from {{ item.oldValue }} to {{ item.newValue }}
+    </app-details-history-item>
+    <div *ngIf="historyType === 'audit' && logs.length == 0">
+      <span class="text-center">No logs found</span>
+    </div>
+  </div>
+  <div class="d-flex flex-column log-area-notes" *ngIf="historyType === 'notes'">
+    <app-details-history-item *ngFor="let item of notes" [user]="item.lastUpdatedByName" [date]="item.lastUpdated">{{
+      item.notes
+      }}</app-details-history-item>
+    <div *ngIf="historyType === 'notes' && notes.length == 0">
+      <span class="text-center">No notes found</span>
+    </div>
+  </div>
+  <div class="add-note-form" *ngIf="historyType === 'notes'">
+    <app-add-note-form (noteAdded)="addNewNote($event)" [registrationId]="registrationId"></app-add-note-form>
+  </div>
+</ng-container>
+<div class="loading" *ngIf="isLoading">
+  <span class="spinner-border spinner-border-sm"></span>
+</div>

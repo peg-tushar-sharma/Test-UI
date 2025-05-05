@@ -1,0 +1,89 @@
+<div class="modal-header">
+  <h5 class="modal-title">
+    <span> Case Code </span>
+  </h5>
+
+</div>
+<div class="modal-body">
+
+  <div class="grid-case-editor">
+
+    <ng-select id="case" class="custom" #client="ngModel" name="case" required [items]="cases" [selectOnTab]="true"
+      [dropdownPosition]="dropdownPosition" bindLabel="oldCaseCode" bindValue="oldCaseCode" [clearSearchOnAdd]="true"
+      [multiple]="isMultiple" [loading]="caseLoad" loadingText="loading..." [hideSelected]="false"
+      [typeahead]="caseTypeAhead" [(ngModel)]="selectedCases" (change)="onCaseChange($event)" groupBy="customGroup">
+
+      <ng-template ng-option-tmp let-item="item">
+        <div class="flex-parent ">
+          <div title="{{item.oldCaseCode}}" class="flex-item-casecode">{{item.oldCaseCode}} </div>
+          <div title="{{item.caseName}}" class="flex-item-caseName"> {{item.caseName}}</div>
+          <div title="{{item.clientName}}" class="flex-item-clientName"> {{item.clientName}}</div>
+          <div title="{{item.managingOfficeAbbreviation}}" class="flex-item-officeAbbreviation">
+            {{item.managingOfficeAbbreviation}}</div>
+          <div title="{{item.startDate}}" class="flex-item-startDate">{{item.startDate }}</div>
+          <div title="{{item.endDate}}" class="flex-item-endDate">{{item.endDate }}</div>
+        </div>
+      </ng-template>
+
+    </ng-select>
+    <div class="alert alert-primary" role="alert" style="margin-top: 15px;font-size: 14px;" *ngIf="caseInfo?.caseCode">
+      <div style="font-size: 16px;font-weight: 600;padding-bottom: 10px;">Case Information :</div>
+      <div class="form-row " *ngIf="caseInfo?.caseCode">
+        <div class="col-3">
+          <label class="control-label">Case Code:</label>
+        </div>
+        <div class="col-9">
+          <label class="control-label">{{caseInfo?.caseCode}}</label>
+        </div>
+      </div>
+      <div class="form-row " *ngIf="caseInfo?.caseName">
+        <div class="col-3">
+          <label class="control-label">Case Name:</label>
+        </div>
+        <div class="col-9">
+          <label class="control-label">{{caseInfo?.caseName}}</label>
+        </div>
+      </div>
+      <div class="form-row" *ngIf="caseInfo?.caseStartDate">
+        <div class="col-3">
+          <label class="control-label">Case Start Date:</label>
+        </div>
+        <div class="col">
+          <label class="control-label">{{caseInfo?.caseStartDate | date :'dd-MMM-yyyy'}}</label>
+        </div>
+      </div>
+
+      <div class="form-row " *ngIf="caseInfo?.caseEndDate">
+        <div class="col-3">
+          <label class="control-label">Case End Date:</label>
+        </div>
+        <div class="col">
+          <label class="control-label">{{caseInfo?.caseEndDate | date :'dd-MMM-yyyy'}}</label>
+        </div>
+      </div>
+
+      <div class="form-row " *ngIf="caseInfo?.caseOfficeName">
+        <div class="col-3">
+          <label class="control-label">Case Office:</label>
+        </div>
+        <div class="col">
+          <label class="control-label">{{caseInfo?.caseOfficeName}}</label>
+        </div>
+      </div>
+
+      <div class="form-row " *ngIf="caseInfo?.officeCluster">
+        <div class="col-3">
+          <label class="control-label">Case Office Cluster:</label>
+        </div>
+        <div class="col-9">
+          <label class="control-label">{{caseInfo?.officeCluster}}</label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <button type="button" id="btnNoteClose" data-dismiss="modal" (click)="close()" class="btn btn-danger">Close</button>
+  <button type="button" (click)="save()" class="btn btn-danger">Save</button>
+</div>

@@ -1,0 +1,189 @@
+<div class="row mb-3">
+
+
+  <!-- <div class="col-6 mb-3">
+    <label class=" bain-history-headings font-weight-600" >Redbook Available: </label>
+    <div *ngIf="!isTabReadOnly">
+      <app-redbook-available [redbookAvailable]="redbookAvailable" (redbookChange)="redbookChange($event)" [containerName]="redbookContainerName"></app-redbook-available>
+    </div>
+    <span *ngIf="isTabReadOnly">
+      <br />
+
+      <label class="labelText">{{redbookAvailableText}}</label>
+    </span>
+  </div>
+ -->
+
+
+
+  <div class="col-6 mb-3">
+    <label class="labelText  font-weight-600">BAN</label>
+    <div class="mt-2">
+      
+      <label for="banSupportRequested" class="checkContainer filter-text">BAN support requested?
+       
+      <input [disabled]="isTabReadOnly" type="checkbox" (change)="supportRequestedChange($event)" class="chechboxFormat" [(ngModel)]="deal.supportRequested"
+        ngModel name="supportRequested" id="banSupportRequested">&nbsp;
+        <span class="checkmark"></span>
+      </label>
+      
+      <label class="checkContainer filter-text" for="expertLineUp">Bain expert line-up prepared?
+      <input  [disabled]="isTabReadOnly" type="checkbox" (change)="expertLineUpChange($event)" class="chechboxFormat" ngModel [(ngModel)]="deal.expertLineupPrepared"
+        name="expertLineupPrepared" id="expertLineUp">&nbsp;
+        <span class="checkmark"></span>
+      </label>
+
+      <label class="checkContainer filter-text" for="expertsonboard">BAN experts on board?
+      <input [disabled]="isTabReadOnly"  type="checkbox" (change)="expertOnBoardChange($event)" class="chechboxFormat" ngModel name="expertOnBoard" [(ngModel)]="deal.expertOnBoard"
+        id="expertsonboard">&nbsp;
+        <span class="checkmark"></span>
+      </label>
+
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-6">
+
+    <label class="labelText bain-history-headings font-weight-600">Created Date</label>
+    <div>
+      <label *ngIf="!(deal && deal.submissionDate)">-</label>
+      <label *ngIf="deal && deal.submissionDate">{{ deal.submissionDate | date:'dd-MMM-yyyy' }}</label>
+
+    </div>
+
+  </div>
+
+  <div class="col-6">
+    <label class="labelText bain-history-headings font-weight-600">Expert Train Up: </label>
+
+    <div class="form-row">
+      <div class="col-8 align-items-center">
+        <label class=" font-weight-600 checkContainer filter-text labelText">Call Needed? 
+        <input type="checkbox" [disabled]="isTabReadOnly" class="chechboxFormat" [(ngModel)]="deal.isExpertTrainUpCall" ngModel name="isExpertTrainUpCall" id="callNeededYes">&nbsp;
+        <span class="checkmark"></span>  
+      </label>
+      </div>
+    </div>
+  </div>
+</div>
+  <div class="row" id="context-screen">
+  <div class="col-11 mb-3">
+    <div class="row align-items-center " [hidden]="!deal.isExpertTrainUpCall">
+
+
+      <div class="col-6">
+
+        <label class="labelText  font-weight-600">Date of Call:</label>
+        <div class="row no-gutters align-items-center justify-content-start">
+          <div class="col-11 no-gutters">
+            <input *ngIf="!isTabReadOnly" [disabled]="!deal.isExpertTrainUpCall" type="text" placeholder="DD-MMM-YYYY"
+              #dateInput class="form-control mb-2 formattedInput" bsDatepicker [(bsValue)]="myDateValue"
+              (bsValueChange)="onDateChanged($event)"
+              [bsConfig]="{ containerClass : 'theme-red',dateInputFormat: 'DD-MMM-YYYY' }" readonly>
+            <span *ngIf="isTabReadOnly">
+              <label class="labelText">{{myDateValue | date :'dd-MMM-yyyy'}}</label>
+
+            </span>
+          </div>
+          <div class="col-1 no-gutters">
+            <button *ngIf="!isTabReadOnly" type="button" (click)="cancel()" class="close mr-3" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-6">
+
+        <label class="labelText  font-weight-600">Attendees:</label>
+
+
+        <ng-select *ngIf="!isTabReadOnly" dropdownPosition="top" [disabled]="!deal.isExpertTrainUpCall" id="attendees"
+          name="attendees" [items]="attendeesList" [selectOnTab]="true" bindLabel="searchableName"
+          [clearSearchOnAdd]="true" (change)="setAttendees($event)" loadingText="loading..." [multiple]="true"
+          [hideSelected]="true" [clearable]="true" [compareWith]="compareObjects" [typeahead]="attendeesTypeAhead"
+          [(ngModel)]="selectedAttendees" [addTag]="true">
+          <ng-template ng-option-tmp let-item="item">
+            <div [title]="item.employeeStatusCode!='EX'?item.employeeCode:''">{{item.searchableName}}
+              <span *ngIf="item.employeeStatusCode=='EX'" style="font-size: 10px;
+              padding: 0px 2px !important;" class="tag tag-gray ng-star-inserted">BAN</span>
+            </div>
+          </ng-template>
+        </ng-select>
+        <span *ngIf="isTabReadOnly">
+          <br />
+
+          <label class="labelText ">{{dealLabel?.attendees }}</label>
+        </span>
+      </div>
+      <div class="col-6">
+
+        <label class="labelText  font-weight-600">Trainer(s):</label>
+
+
+        <ng-select *ngIf="!isTabReadOnly" dropdownPosition="top" [disabled]="!deal.isExpertTrainUpCall" id="trainers"
+          name="trainers" [items]="trainersList" [selectOnTab]="true" bindLabel="searchableName"
+          [clearSearchOnAdd]="true" (change)="setTrainers($event)" loadingText="loading..." [multiple]="true"
+          [hideSelected]="true" [clearable]="true" [compareWith]="compareObjects" [typeahead]="trainersTypeAhead"
+          [(ngModel)]="selectedTrainers" [addTag]="true">
+          <ng-template ng-option-tmp let-item="item">
+            <div [title]="item.employeeStatusCode!='EX'?item.employeeCode:''">{{item.searchableName}}
+              <span *ngIf="item.employeeStatusCode=='EX'" style="font-size: 10px;
+              padding: 0px 2px !important;" class="tag tag-gray ng-star-inserted">BAN</span>
+            </div>
+          </ng-template>
+        </ng-select>
+        <span *ngIf="isTabReadOnly">
+          <br />
+
+          <label class="labelText">{{dealLabel?.trainers }}</label>
+        </span>
+
+      </div>
+      <div class="col-6 align-items-center">
+        <label class="labelText font-weight-600">Call Notes/Materials also sent to:</label>
+        <ng-select *ngIf="!isTabReadOnly" dropdownPosition="top" [disabled]="!deal.isExpertTrainUpCall" id="sentTo"
+          name="sentTo" [items]="sentToList" [compareWith]="compareObjects" [selectOnTab]="true"
+          bindLabel="searchableName" [clearSearchOnAdd]="true" (change)="setSentTO($event)" loadingText="loading..."
+          [multiple]="true" [hideSelected]="true" [clearable]="true" [typeahead]="sentToTypeAhead"
+          [(ngModel)]="selectedSentTO" [addTag]="true">
+          <ng-template ng-option-tmp let-item="item">
+            <div [title]="item.employeeStatusCode!='EX'?item.employeeCode:''">{{item.searchableName}}
+              <span *ngIf="item.employeeStatusCode=='EX'" style="font-size: 10px;
+              padding: 0px 2px !important;" class="tag tag-gray ng-star-inserted">BAN</span>
+            </div>
+          </ng-template>
+        </ng-select>
+        <span *ngIf="isTabReadOnly">
+          <br />
+
+          <label class="labelText">{{dealLabel?.sentTo }}</label>
+        </span>
+      </div>
+
+
+
+
+    </div>
+  </div>
+</div>
+  
+
+
+<div class="row">
+ 
+
+
+  <div class="col-12 mb-3 ">
+    <!-- <p class="deal-headings">Bain History</p> -->
+    <label class="labelText bain-history-headings font-weight-600">Prior Work</label>
+    <textarea *ngIf="!isTabReadOnly" type="text" class="form-control" [(ngModel)]="deal.priorWork" rows="10" ngModel
+      name="priorWork" id="priorWork"></textarea>
+    <span *ngIf="isTabReadOnly">
+      <br />
+
+      <label class="labelText truncate-6" [tooltip]="dealLabel?.priorWork" [delay]="700">{{dealLabel?.priorWork }}</label>
+    </span>
+  </div>
+</div>

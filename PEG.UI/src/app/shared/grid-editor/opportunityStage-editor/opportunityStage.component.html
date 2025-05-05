@@ -1,0 +1,9 @@
+<div class="industry-cell" id="opportunityStage">
+    <div class="location-edit">
+        <ng-select name="oppStage" id="oppStage" class="selector" bindLabel="opportunityStageName" [items]="opportunityStage"  #oppStage
+            [(ngModel)]="selectedValue" (change)="onStatusChange($event)" style="width:200px;"
+            (clear)="clearValue($event)"  (remove)="clearValue($event)" [clearable]="false"	 >
+        </ng-select>
+    </div>
+
+</div>

@@ -1,0 +1,6 @@
+<div style="width:140px" >
+    <ng-select  [multiple]="false" [clearable] = false  [items]="answers"  #QuestionCellEditorComp 
+    [(ngModel)]="selectedAnswer" 
+   (change)="onSelectionChange($event)" bindLabel="name" 
+    bindValue="value"  ></ng-select>
+</div>

@@ -1,0 +1,42 @@
+<div class="">
+  <div class="grid-columns">
+    <p class="tagName">Opportunity Name </p>
+    <div class="headerContainer">
+      <!-- <strong>-</strong> -->
+
+      <span *ngFor="let ele of selectedHeaders;let i = index">
+
+        <label class="appliedHeaders"> {{ele.headerName}} </label>
+        <strong
+          *ngIf="(selectedHeaders.length> 1) && (selectedHeaders.length-1 != i)  && (ele.headerName != 'Client Name')"
+          class="mr-2 ml-1">{{ele.delimiter?ele.delimiter:'-'}}</strong>
+      </span>
+    </div>
+    <p class="tagHolder">Select Fields to include</p>
+    <div *ngFor="let data of sortByRoleColumOrder('roleSortOrder') ">
+      <div *ngIf="data.field!='oppName' && data.includeAsOppName==true" style="display: flex;">
+        <div style="flex-grow: 1;">
+          <label class="checkContainer filter-text">{{data.headerName}}
+            <input type="checkbox" name="selColumns" [(ngModel)]="data.isOppName" (change)="onOpportunitySelect(data)"
+              [disabled]="disableCheckBox">
+            <span class="checkmark"></span>
+          </label>
+        </div>
+        <div style="flex-grow: 1;text-align: right;">
+          <span *ngIf="data.isOppName">
+            <span (click)="data.isDropdownVisible=!data.isDropdownVisible" *ngIf="!data.isDropdownVisible"
+              style="cursor: pointer;font-size: 14px;">
+              {{data.delimiter?data.delimiter:'-'}}</span>
+            <input *ngIf="data.isDropdownVisible" maxlength="1" type="text" (keyup)="onDelimiterChange($event,data)"
+              class="custom-opp-input" [(ngModel)]="data.delimiterId" />
+
+
+          </span>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

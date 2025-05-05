@@ -1,0 +1,62 @@
+ <div class="structure">
+<!--<div class="header">
+      <span>Duration</span>
+      <span>Qualifier</span>
+    </div> -->
+   
+    <div class="body">
+      <div class-="duration-input-body">
+        <div class="duration-input-wrapper">
+          <input (keydown)="onKeyDown($event)" tabindex="1" #inputStartDuration [style.border]="errorDuration.startDuration ? '1px solid #cc0000' : '1px solid #eee'"
+            [(ngModel)]="startDuration"  class="duration-input" (keyup)="validation($event,'startDuration')"
+            type="text" style="border: 1px solid #eee;" />
+   
+          <!-- alert Icon -->
+          <svg title="" *ngIf="errorDuration.startDuration" id="alert-icon" width="12" height="12" viewBox="0 0 24 24"
+            fill="none" stroke="#cc0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="feather feather-alert-circle">
+            <circle cx="12" cy="12" r="10">
+            </circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg> 
+   
+        </div>
+   
+        <div class="seperator">
+          -
+        </div>
+   
+        <div class="duration-input-wrapper">
+          <input  [disabled]="isStartDurationValid()" tabindex="2" (keydown)="onKeyDown($event)" [style.border]="errorDuration.endDuration ? '1px solid #cc0000' : '1px solid #eee'"
+            [(ngModel)]="endDuration" class="duration-input" (keyup)="validation($event, 'endDuration')"
+            type="text" style="border: 1px solid #eee;" />
+   
+          <!-- alert Icon -->
+          <svg title="" *ngIf="errorDuration.endDuration" id="alert-icon" width="12" height="12" viewBox="0 0 24 24"
+            fill="none" stroke="#cc0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="feather feather-alert-circle">
+            <circle cx="12" cy="12" r="10">
+            </circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+   
+        </div>
+   
+      </div>
+   
+      <div class="duration-body">
+        <input class="dropdown-body-input" tabindex="3" class="duration-input" (keydown)="onKeyDownquantifier($event,true)" maxlength="100"  [(ngModel)]="mDescription" type="text" style="border: 1px solid #eee;" />
+   
+        <ul *ngIf="quantifier">
+          <ng-container *ngFor="let item of quantifier; let i = index;">
+            <li tabindex={{i+4}} (focus)="selectOption($event)"  (click)="selectOption($event)" (keydown)="onKeyDownquantifier($event,i)" style="padding: .2rem;">{{item.quantifierName}}</li>
+            
+          </ng-container>
+        </ul>
+   
+        <!-- <input class="date-input" style="border: 1px solid #c4c4c4;" type="text" /> -->
+      </div>
+    </div>
+  </div> 

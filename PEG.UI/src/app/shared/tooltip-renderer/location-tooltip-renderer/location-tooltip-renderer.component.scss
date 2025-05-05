@@ -1,0 +1,28 @@
+ 
+:host {
+    position: absolute;
+    background: #FFFFFF;
+    box-sizing: border-box;
+    overflow: hidden;
+    pointer-events: none;
+    transition: opacity 1s;
+    display: flex;
+  }
+  
+  .textLocation{
+    font-size: 11px;
+    margin-left: 4px;
+    font-weight: 600;
+    color: grey;
+}
+.custom-tooltip {
+    border: 1px solid #C4C4C4;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1) !important;
+    display: flex;
+    padding: 5px;
+    font-size: 14px;
+    height: 30px;
+}
+.flex{
+    display: flex;
+}

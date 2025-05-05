@@ -1,0 +1,22 @@
+.status {
+  display: flex;
+  align-items: center;
+  text-transform: capitalize;
+}
+
+.icon {
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  margin-right: 4px;
+  background-color: #ccc;
+
+  &.active {
+    background-color: #8EE8B4;
+
+  }
+
+  &.archived {
+    background-color: #F0F2F3;
+  }
+}

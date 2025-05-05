@@ -1,0 +1,23 @@
+#filters{
+  .input-group.search{
+    width: 385px;
+
+    .results{      
+      z-index:3;
+    }
+  }
+
+  .status-filter{
+    width:275px!important;
+  }
+
+  .fa-remove-filter{
+    &:after{
+      content: '\f00d';
+      font-family: 'Font Awesome 5 Free';
+      font-size: 8px;
+      position: relative;
+      top:3px;
+    }
+  }
+}

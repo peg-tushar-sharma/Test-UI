@@ -1,0 +1,5 @@
+<div>
+<ng-select [clearable]=isClearOnIndustry id="industries" class="custom" name="industrySelect" #industry="ngModel" required  bindLabel="industryName" 
+bindValue="industryName"  [items]="industries" [multiple]="true" [(ngModel)]="selectedIndustries" (change)="onIndustryChange($event)" >
+</ng-select>
+</div>

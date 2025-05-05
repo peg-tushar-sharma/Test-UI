@@ -1,0 +1,12 @@
+<div class="custom-tooltip" style="height: auto;width:auto;" *ngIf="preferred || conflicted || allocated">
+    <div>
+     <label *ngIf="preferred"> <i class="fas fa-unlock-alt" style="color: grey;"></i>
+        <b class="textLocation" >{{preferred}}</b> </label>
+        <br *ngIf="conflicted">
+     <label *ngIf="conflicted"><i class="fas fa-minus-circle" style="color: red;"></i>
+        <b class="textLocation" >{{conflicted}}</b></label> 
+        <br *ngIf="allocated">
+     <label *ngIf="allocated"><i  class="fas fa-lock"></i>
+        <b class="textLocation" >{{allocated}}</b> </label> 
+  </div>
+  </div>

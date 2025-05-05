@@ -1,0 +1,34 @@
+.industry-cell{
+    // width: 341px;
+    border: 1px solid #cdcccc;
+}
+
+.location-edit{
+    padding: 8px;
+    color: grey;
+    display: flex;
+    margin-top: auto;
+    background-color: white;
+    color: grey;
+}
+.location-edit1{
+    padding: 8px;
+    display: grid;
+    margin-top: auto;
+    background-color: white;
+    grid-template-columns: 26% 72%;
+}
+
+
+.inputlocation{
+    outline: none;
+    border: 0.8px solid grey;
+    border-radius: 4px;
+    margin-left: 5px;
+    min-height: 30px;
+    width: 100%;
+}
+::ng-deep .ng-select.compWidth .ng-select-container{
+    height: auto;
+    min-height: 30px;
+}

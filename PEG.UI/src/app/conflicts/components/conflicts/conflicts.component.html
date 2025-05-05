@@ -1,0 +1,37 @@
+<div class="dashboard-page d-flex">
+      <div class="content-wrapper">
+          <!-- Header Wrapper -->
+          <div class="header-wrapper">
+              <h5 style="grid-area: header1;" (click)="toggleConflictTypeTab(false)"
+                  [ngClass]="activeTab === 'active' ? 'activeHeader' : ''">Active Conflicts <span
+                      *ngIf="activeTab === 'active'">({{recordCount}})</span></h5>
+
+              <h5 style="grid-area: header2;" (click)="toggleConflictTypeTab(true)"
+                  [ngClass]="activeTab !== 'active' ? 'activeHeader' : 'archiveHeader'">Archived Conflicts <span
+                      *ngIf="activeTab !== 'active'">({{recordCount}})</span></h5>
+
+              <div style="grid-area: search;" class="search-input-wrapper d-flex align-items-center">
+                  <i class="fas fa-search"></i>
+                  <input class="inpt" id="filter-text-box" type="text" placeholder="Search" [(ngModel)]="searchText"
+                      (keyup)="onSearchChanged($event)" />
+              </div>
+
+              <a style="grid-area: cta1;" class="color-lav full  primary d-flex align-items-center" title="Reset filters" (click)="onResetFilter($event)">
+                  <i class="fa fa-filter"></i>
+              </a>
+
+              <a style="grid-area: cta2;" class="btn-class full primary d-flex align-items-center" (click)="createConflict(null)">
+                  <i class="fas fa-plus mr-2"></i>
+                  <span>New Conflict</span>
+              </a>
+          </div>
+
+          <!-- Table Wrapper -->
+          <div class="table-wrapper">
+              <ag-grid-angular class="ag-theme-alpine" style="flex: 1; width: 100%"
+                  [rowData]="rowData" [columnDefs]="columnDefs" [defaultColDef]="defaultColDef" [animateRows]="true"
+                  (cellDoubleClicked)="onCellDoubleClicked($event)"
+                  [gridOptions]="gridOptions" (gridReady)="onGridReady($event)"></ag-grid-angular>
+          </div>
+      </div>
+</div>

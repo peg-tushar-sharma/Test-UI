@@ -1,0 +1,7 @@
+<div>
+    <ng-select #clientCommitmentComp [clearable]=isClear id="clientCommitments" class="custom" name="clientCommitments"   bindLabel="clientCommitmentName" style="width: 250px;" 
+     [items]="clientCommitments" [multiple]="false" [(ngModel)]="selectedclientCommitments" (change)="onClientCommitmentChange($event)" >
+   
+    </ng-select>
+    </div>
+    

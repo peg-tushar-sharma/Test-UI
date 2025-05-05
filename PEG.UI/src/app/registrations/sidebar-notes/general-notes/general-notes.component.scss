@@ -1,0 +1,88 @@
+.table-striped {
+  border: 1px solid #e0e4e8;
+  margin: 0px;
+
+  th,
+  td {
+    border: none;
+    color: #616568;
+    font-size: 14px;
+    line-height: 18px;
+    min-height: 35px;
+    padding: 10px 20px;
+  }
+
+  thead th {
+    background-color: #f7f9ff;
+    border-bottom: 1px solid #e0e4e8;
+    font-weight: 500;
+    vertical-align: middle;
+
+    .btn {
+      background-color: #ecf0ff;
+      border: none;
+      color: #284ce0;
+      font-size: 14px;
+      font-weight: 500;
+      gap: 4px;
+      line-height: 5px;
+      outline: none;
+    }
+  }
+
+  tbody tr {
+    background-color: #fff;
+
+    .fa.fa-edit {
+      color: #616568;
+      cursor: pointer;
+      font-size: 14px;
+      opacity: 0;
+    }
+
+    .btn {
+      background: none;
+      border: none;
+      color: #121212;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 4px 8px;
+      width: fit-content;
+
+      &.primary {
+        background-color: #284ce0 !important;
+        color: #fff !important;
+      }
+
+      &:disabled {
+        opacity: 0.5;
+      }
+    }
+
+    // note edit mode
+    .editor {
+      height: auto;
+      overflow: hidden;
+
+      &.hidden {
+        height: 0px;
+      }
+    }
+
+    td:last-of-type {
+      text-align: center;
+    }
+
+    &:nth-of-type(odd) {
+      background-color: #f7f9ff;
+    }
+
+    &:nth-of-type(even) {
+      background-color: #fff;
+    }
+
+    &:hover .fa.fa-edit {
+      opacity: 1;
+    }
+  }
+}

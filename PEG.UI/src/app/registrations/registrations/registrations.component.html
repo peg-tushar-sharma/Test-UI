@@ -1,0 +1,357 @@
+<div class="registrations">
+  <div class="row no-gutters h-100">
+    <div id="stage" class="col no-sidebar">
+      <div id="filters" class="row">
+        <div class="col-1">
+          <h1 id="pageHeader">
+            Registrations
+            <span id="displayCount">Displaying {{ displayCount }} records </span>
+          </h1>
+        </div>
+        <div class="col">
+          <form class="form-inline align-items-start justify-content-end">
+            <!-- !!!DONT REMOVE!!!    This will be added later -->
+            <!-- <div class="input-group ml-3">
+              <select class="form-control">
+                <option value="all" selected>All Registrations</option>
+                <option value="last6">Last 6 Months</option>
+              </select>
+            </div> -->
+            <!-- !!!DONT REMOVE!!!    This will be added later -->
+            <div *ngIf="isAllSearch && !hasQueryParam" style="width: 380px" class="ml-2">
+
+              <div class="btn-group" dropdown [insideClick]="true" [isDisabled]="isLoading">
+                <button id="button-custom-html" dropdownToggle type="button" style="width: 350px;" name="SearchBox"
+                  class="btn btn-secondary dropdown-toggle btn-with-caret" aria-controls="dropdown-custom-html">
+                  <span class="btn-text" *ngIf="registrationTypeLabel!=''">{{registrationTypeLabel}} </span>
+                  <span class="btn-text" *ngIf="!(registrationTypeLabel!='')">Registration Type </span>
+                  <span class="caret float-right"></span>
+                </button>
+                <ul id="dropdown-custom-html" *dropdownMenu class="dropdown-menu" role="menu" style="width: 350px;"
+                  aria-labelledby="button-custom-html">
+                  <li *ngFor="let item of registrationStatusOptions" role="menuitem"
+                    (click)="registrationTypeChange(item)">
+                    <a class="dropdown-item">{{item.label}}
+                      <span *ngIf="item.isSelected" class="fa fa-check check-mark float-right"></span></a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="input-group search ml-2 searchWidth">
+              <input name="filterValue" class="form-control py-2 border-right-0 border" autocomplete="off"
+                [(ngModel)]="filterValue" type="search" placeholder="{{ quickfilterPlaceHolder }}"
+                (ngModelChange)="onFilterTextBoxChanged()" />
+              <span class="input-group-append">
+                <div class="input-group-text bg-white border-left-0"><i class="fa fa-search"></i></div>
+              </span>
+
+
+
+
+            </div>
+
+            <!-- !!!DONT REMOVE!!!    This will be added later -->
+            <!-- <button type="button" onclick="$('#stage').toggleClass('advanced-filters-active')"
+              class="btn btn-secondary advanced-filters ml-2 position-relative">
+              <i class="fa fa-sliders-h"></i>
+            </button> -->
+            <!-- !!!DONT REMOVE!!!    This will be added later -->
+
+            <button type="button" class="btn btn-secondary clear-filters ml-2 position-relative"
+              (click)="onClearAllFilters()">
+              <i class="fa fa-filter"></i>
+              <i class="fa fa-times fa-stack-1x"></i>
+            </button>
+
+            <button *ngIf="enableExcelDownload" type="button" [disabled]="isLoading" class="btn btn-secondary ml-2"
+              (click)="!isDownloadingExcel && !isLoading ? downloadExcel($event) : null">
+              <i class="fa" [ngClass]="isDownloadingExcel ? 'fa-circle-notch fa-spin' : 'fa-download'"></i>
+            </button>
+            <button type="button" [disabled]="isLoading" class="btn btn-secondary ml-2"
+              (click)="refreshGrid()">Refresh</button>
+
+
+
+            <div  dropdown *ngIf="isAllSearch" class="dropdown ml-1">
+              <button id="button-basic" dropdownToggle type="button" class="btn btn-secondary dropdown-toggle"
+                      aria-controls="dropdown-basic">
+                      Create <span class="caret"></span>
+              </button>
+              <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right"
+                  role="menu" aria-labelledby="button-basic">
+                <li role="menuitem"><a class="dropdown-item"  href="javascript:void(0);"   routerLink="/opportunity/newopportunity" (click)="newOpportunity()">New Opportunity</a></li>
+              </ul>
+            </div>
+            
+
+            <button *ngIf="!isAllSearch" routerLink="/opportunity/newopportunity" (click)="newOpportunity()"
+              class="btn btn-secondary ml-2" type="button" id="dropdownMenuButton">New Opportunity</button>
+
+              <div dropdown *ngIf="enableStageButton" class="dropdown ml-1">
+                <button id="button-basic" dropdownToggle type="button" class="btn btn-primary dropdown-toggle"
+                  aria-controls="dropdown-basic">
+                  Action <span class="caret"></span>
+                </button>
+                <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
+                  aria-labelledby="button-basic">
+                  <li role="menuitem" *ngIf="isLegalUserorAdmin">
+                    <a class="dropdown-item" data-toggle="modal" data-target="#stageModal"
+                      href="javascript:void(0);">Update Stage</a>
+                  </li>
+                  <li role="menuitem" *ngIf="isMultibidderUserorAdmin">
+                    <a class="dropdown-item" (click)="setSelectedRegistrations('copy')" data-toggle="modal"
+                      data-target="#convertDealPopup" href="javascript:void(0);">Add to a new Deal
+                      Tracker</a>
+                  </li>
+                  <li role="menuitem" *ngIf="isMultibidderUserorAdmin && disableAddToTrackerShortcut()">
+                    <a class="dropdown-item" (click)="setSelectedRegistrations('add')" data-toggle="modal"
+                      data-target="#addRegistrationDealPopup" data-backdrop="static" data-keyboard="false"
+                      href="javascript:void(0);">Add to existing Deal
+                      Tracker</a>
+                  </li>
+                </ul>
+              </div>
+          </form>
+        </div>
+      </div>
+
+      <div *ngIf="hasQueryParam">
+        <label style="font-weight: 600">Applied Filters : </label>
+        <label class="filtersApplied1" *ngFor="let label of rowData">
+          {{ label.id }}
+          <!-- <i class="fas fa-times" style="font-size: 12px;"></i> -->
+        </label>
+        <label class="filtersApplied1 pointer" (click)="resetFilter()"> <i class="fas fa-filter"></i> <i
+            class="fas fa-times" style="font-size: 12px"></i></label>
+      </div>
+
+      <div [class.sidebar-visible]="isSidebarVisible" [class.sidebar-minimized]="minimized"
+        class="grid-container row no-gutters mt-4">
+        <div class="col grid-column">
+          <div id="registrations-grid" class="ag-theme-balham">
+            <loading [isLoading]="isLoadingColumns"></loading>
+            <ag-grid-angular [hidden]="!columnDefs" [gridOptions]="gridOptions" style="height: 100%" [rowData]="rowData"
+              [columnDefs]="columnDefs" rowSelection="multiple" class="ag-theme-bootstrap"> </ag-grid-angular>
+          </div>
+        </div>
+        <div id="sidebar-mask"></div>
+
+        <!--  -->
+        <!--  -->
+
+        <!-- Start of Flyout -->
+        <div *ngIf="registration && registration.rt != registrationType.Prohibitions" id="registrations-sidebar"
+          class="col sidebar-column registration-sidebar active">
+          <!-- changes banner -->
+          <div id="informationChangeBanner" *ngIf="renderPendingChangesBanner()">
+            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+            Stage Upgrade Pending Legal Approval
+          </div>
+
+          <!-- flyout-header -->
+          <div class="flyout-header d-flex align-items-center justify-content-between">
+            <div class="d-flex">
+              <span>{{ registration?.cl?.clientName }}</span>
+              <span class="mx-4">|</span>
+              <span>Priority: {{ registration?.cl?.clientPriorityName ?
+                registration?.cl?.clientPriorityName : 'Non-P' }}</span>
+            </div>
+
+            <i class="fa fa-times" (click)="hideSidebar()" style="cursor: pointer"></i>
+          </div>
+
+          <!-- content -->
+          <div class="container sidebar-normal">
+            <!-- summary -->
+            <div class="target-summary d-flex align-items-center">
+              <!-- target -->
+              <span title="{{ registration.tdn && registration.tdn !== '' ? registration.tdn : 'Project Name' }}"
+                id="target">Target: {{ registration.tdn && registration.tdn !== "" ? registration.tdn : "Project Name"
+                }}</span>
+
+              <!-- clearance status | bidder -->
+              <div class="d-flex align-items-center" id="idStatusTypeName">
+                <span>Status</span>
+
+                <!-- status -->
+                <div #clearanceStatus class="btn-group" class="clearance-status">
+                  <!-- status, bidder toggle -->
+                  <button *ngIf="fieldAuth.clearanceStatus.isVisible" type="button" id="status"
+                    class="btn btn-default dropdown-toggle w-100"
+                    [class.no-selection]="!registration?.stn || !registration?.stn?.statusTypeName"
+                    (click)="setRegistrationStatus()" name="clearanceStatus" data-toggle="dropdown">
+                    {{ registration && registration.stn ? registration.stn.statusTypeName : "Clearance Status" }}<span
+                      class="caret"></span>
+                  </button>
+
+                  <!-- status, bidder dropdown -->
+                  <ul class="dropdown-menu" role="menu">
+                    <li>
+                      <div *ngIf="registrationStatus && registrationStatus.length > 0"
+                        class="column-filter dropdown-filter">
+                        <ul>
+                          <ng-container *ngFor="let status of filteredRegistrationStatus">
+                            <li
+                              *ngIf="status.registrationStatusId != 3 && status.registrationStatusId != 7; else ElseTemplate"
+                              (click)="listSelect($event)" [attr.statusId]="status.registrationStatusId"
+                              class="show-multibidder"
+                              [class.selected]="registration.stn.statusTypeName == status.statusTypeName">
+                              {{ status.statusTypeName }}<i class="fa fa-check"></i>
+                            </li>
+
+                            <ng-template #ElseTemplate>
+                              <li *ngIf="status.registrationStatusId" [attr.statusId]="status.registrationStatusId"
+                                (click)="listSelect($event)"
+                                [class.selected]="registration.stn.statusTypeName == status.statusTypeName">{{
+                                status.statusTypeName }}<i class="fa fa-check"></i></li>
+                            </ng-template>
+                          </ng-container>
+
+                          <div class="border-top"></div>
+
+                          <!-- multi bidder -->
+                          <li (click)="listSelect($event)"
+                            [ngClass]="registration.imb ? 'multibidder selected' : 'multibidder'">Multibidder<i
+                              class="fa fa-check multibidder" (click)="listSelect($event)"></i></li>
+
+                          <!-- single bidder -->
+                          <li (click)="listSelect($event)"
+                            [ngClass]="registration.isb ? 'singlebidder selected' : 'singlebidder'">
+                            Single Bidder<i class="fa fa-check singlebidder" (click)="listSelect($event)"></i>
+                          </li>
+
+                          <!-- seller -->
+                          <li (click)="listSelect($event)"
+                            [ngClass]="registration.isSeller ? 'seller selected' : 'seller'">Seller<i
+                              class="fa fa-check seller" (click)="listSelect($event)"></i></li>
+                        </ul>
+
+                        <!-- cta wrapper -->
+                        <div class="dropdown-ctas d-flex align-items-center">
+                          <!-- ..cancel -->
+                          <button class="btn secondary" onclick="$('body').trigger('click')">Cancel</button>
+
+                          <!-- ..apply -->
+                          <button id="btnStatusApply" [disabled]="disableClrStatus" class="btn primary"
+                            (click)="updateRegistrationStatus()">Apply</button>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+
+                <!-- stage -->
+                <ng-container *ngIf="isStageEditable">
+                  <button *ngIf="registrationStage && registrationStage.length" type="button" class="btn stage"
+                    [disabled]="!fieldAuth.stageTypeName.isEditable" (click)="onStageClicked()">
+                    {{ registration.sgTN || "Select stage" }}<span class="caret"></span>
+                  </button>
+                </ng-container>
+
+                <!-- bidder -->
+                <app-custom-tags [ispubliclyTradedEquity]="_regReqService.registration.pte"
+                  [ispubliclyTradedDebt]="_regReqService.registration.ptd"
+                  [workToStart]="_regReqService.registration.wts" [typeOfWork]="registration.wti"
+                  [isMultibidder]="registration.imb" [isSingleBidder]="registration.isb"
+                  [isSeller]="registration.isSeller" [openMarketPurchase]="registration.iomp"
+                  [showFullTagName]="showFullTagName"></app-custom-tags>
+              </div>
+
+              <!-- resend email.. -->
+              <div class="resend-email-wrapper d-flex align-items-center ml-auto"
+                *ngIf="fieldAuth.resendEmail.isVisible == undefined ? false : fieldAuth.resendEmail.isVisible">
+                <!-- ..cta -->
+                <button *ngIf="!_regReqService.registration.ier" (click)="resendEmail()" title="Resend Email"
+                  class="btn retry-btn d-flex align-items-center">
+                  <i class="far fa-envelope"></i>
+                  <span>Resend Email</span>
+                </button>
+
+                <!-- ..in progress spinner -->
+                <div *ngIf="_regReqService.registration.ier" class="tag tag-borderless" title="Sending email.."><i
+                    class="fas fa-circle-notch fa-spin"></i></div>
+
+                <!-- ..error while sending -->
+                <div
+                  *ngIf="(_regReqService.registration.ec == 0 || _regReqService.registration.ec == 1) && _regReqService.registration.ie == 0 && !_regReqService.registration.ier"
+                  class="tag tag-borderless">
+                  <i title="Error while sending email" style="color: #cc0000" class="fas fa-exclamation-circle"></i>
+                </div>
+
+                <!-- ..error while re-sending -->
+                <div
+                  *ngIf="_regReqService.registration.ec > 1 && _regReqService.registration.ie == 0 && !_regReqService.registration.ier"
+                  class="tag tag-borderless">
+                  <i title="Error while retrying email" style="color: #999999" class="fas fa-exclamation-circle"></i>
+                </div>
+              </div>
+            </div>
+
+            <app-sidebar-notes style="height: 100%; width: 100%; overflow: auto" [fieldAuthConfig]="fieldAuth"
+              [isRegRefresh]="isRegDetailsRefresh" [sgTI]="registration.sgTI" [completionDate]="registration.ceD"
+              [commitDate]="registration.cd" [registrationId]="registration.id"
+              (emitRegistrationDetails)="updateRegistrationDetails($event)"
+              (workTypeEmitter)="OnWorkTypeChanged($event)" (emitUpdatedValue)="updatedValue($event)"
+              [activeTab]="defaultNotesTab" [isMasked]="registration.isMasked"></app-sidebar-notes>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="registrationModal" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Create New Registration</h5>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body mb-4">
+          <!-- <app-new-registration></app-new-registration> -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" disabled class="btn btn-primary mr-auto">Save</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="button" disabled class="btn btn-primary">Submit to Legal</button>
+          <button type="button" disabled class="btn btn-primary">Submit and New</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="stageModal" role="dialog">
+    <div class="modal-dialog masterContainer" style="max-width: 500px">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <app-registrationBulkUpdate [registrationStage]="registrationStage"
+          (emittedConfirmation)="processBulkUpdate($event)"></app-registrationBulkUpdate>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bulk Convert to Deal -->
+  <div class="modal fade" id="convertDealPopup" role="dialog">
+    <div class="modal-dialog .modal-lg masterContainer" style="max-width: 800px">
+      <div class="modal-content">
+        <app-deal-popup *ngIf="this.gridApi" [selectedRegistrations]="selectedRegistration" [type]="type"
+          (refreshRegistrations)="refreshRegistrationsAfterCopy($event)" (resetSelection)="resetSelection($event)">
+        </app-deal-popup>
+      </div>
+    </div>
+  </div>
+  <!-- Bulk Convert to Deal -->
+
+  <!-- Add registrations to deal -->
+  <div class="modal fade" id="addRegistrationDealPopup" role="dialog">
+    <div class="modal-dialog .modal-lg masterContainer" style="max-width: 600px">
+      <div class="modal-content">
+        <app-add-registrations-to-deal-popup (updatedRegistrations)="updatedRegistrations($event)"
+          (resetSelection)="resetSelection($event)" *ngIf="this.gridApi" [selectedRegistrations]="selectedRegistration">
+        </app-add-registrations-to-deal-popup>
+      </div>
+    </div>
+  </div>
+  <!-- Add registrations to deal -->
+</div>

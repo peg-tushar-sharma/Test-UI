@@ -1,0 +1,24 @@
+<div id="single-date-text-editor" class="row no-gutters align-items-center">
+  <div class="col-9 mt-2 ml-2">
+    <input type="text" placeholder="DD/MM" #textInput class="form-control mb-2"
+    value="{{ myDateValue | date:'dd/MM' }}" (input)="updateTypedDate($event)" (change)="onTypedDateChanged(textInput.value)" (focus)="$event.target.select()">
+    <div #calendar id="calender" (click)="clearTypeDate()"></div>
+    <input id="dateInput" type="text" placeholder="DD-MMM-YYYY" #dateInput="bsDatepicker" class="form-control mb-2"
+        bsDatepicker [(bsValue)]="myDateValue"
+         (bsValueChange)="onDateChanged($event)" (focus)="$event.target.select()"
+       [bsConfig]="bsConfig" (onShown)="changeCalendarPosition()">
+      <div #calendar id="calender" (click)="clearTypeDate()"></div>
+    </div>
+  <div class="col-1 ml-1 calendar-container">
+    <button (click)="dateInput.show()">
+      <i class="fas fa-calendar" ></i>
+    </button>
+   
+      </div>  
+  <div class="col-1 ml-1">
+    <button type="button" (click)="cancel()" class="close" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+</div>
+  <textarea *ngIf="currentColumn=='expectedStart'" (keydown)="onEnterKeyPress($event)" class="col-9 ml-2"  [(ngModel)]="notes" maxlength="200" style="height: 120px;" ></textarea>

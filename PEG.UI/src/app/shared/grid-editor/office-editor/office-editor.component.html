@@ -1,0 +1,6 @@
+<div style="width:150px">
+  <ng-select [multiple]="false" [items]="bainOffices" 
+  [(ngModel)]="selectedOfficeCode" (change)="onSelectionChange($event)" bindLabel="officeName" 
+  bindValue="officeCode" (clear)="resetOffice();">
+  </ng-select>
+</div>

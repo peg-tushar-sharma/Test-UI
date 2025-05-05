@@ -1,0 +1,41 @@
+.staff-editible{
+
+    display: flex;
+    justify-content: space-between;
+
+    .editible-value{
+        flex-grow: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+
+        &.text-area {
+            border: none;
+            overflow: auto;
+            padding: 0px;
+            resize: none;
+            white-space: pre;
+        }
+    }
+
+    span.edit{
+        cursor:pointer;
+    }
+
+    form{
+        position: relative;
+        // max-width: 250px;
+        width: 100%;
+
+        input{
+            width:100%;
+        }
+
+        span.crossIcon{
+            position: absolute;
+            right: 10px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+    }
+}

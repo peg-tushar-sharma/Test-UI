@@ -1,0 +1,63 @@
+<div class="structure">
+  <div class="header">
+    <span>Date</span>
+    <span>Qualifier</span>
+  </div>
+ 
+  <div class="body">
+    <div class="date-body">
+      <div class="date-input-wrapper">
+        <input ngxMask="00-BBB-0000" placeholder="DD-MMM-YYYY" (keydown)="onKeyDown($event,0)" class="date-input" tabindex="1" #inputExpectedStartDate
+          (keyup)="validation($event,'expectedStartDate')" (focus)="validation($event,'expectedStartDate')"
+          [style.border]="errorDate.expectedStartDate ? '1px solid #cc0000' : '1px solid #eee'" [(ngModel)]="expectedStartDate"
+          type="text" style="border: 1px solid #eee;" />
+ 
+        <!-- alert Icon -->
+        <svg title="" *ngIf="errorDate.expectedStartDate" id="alert-icon" width="12" height="12" viewBox="0 0 24 24"
+          fill="none" stroke="#cc0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          class="feather feather-alert-circle">
+          <circle cx="12" cy="12" r="10">
+          </circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+ 
+      </div>
+ 
+      <div class="seperator">
+        -
+      </div>
+ 
+      <div class="date-input-wrapper">
+        <input ngxMask="00-BBB-0000" placeholder="DD-MMM-YYYY" class="date-input" [disabled]="isStartDateValid()" tabindex="2" (keydown)="onKeyDown($event,0)"
+          [style.border]="errorDate.expectedEndDate ? '1px solid #cc0000' : '1px solid #eee'" [(ngModel)]="expectedEndDate"
+          (keyup)="validation($event,'expectedEndDate')" (focus)="validation($event,'expectedEndDate')" type="text" style="border: 1px solid #eee;" />
+ 
+        <!-- alert Icon -->
+        <svg title="" *ngIf="errorDate.expectedEndDate" id="alert-icon" width="12" height="12" viewBox="0 0 24 24"
+          fill="none" stroke="#cc0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          class="feather feather-alert-circle">
+          <circle cx="12" cy="12" r="10">
+          </circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+ 
+      </div>
+ 
+    </div>
+ 
+    <div class="dropdown-body">
+      <input class="dropdown-body-input" tabindex="3" (keydown)="onKeyDown($event,0)"  [(ngModel)]="mDescription" type="text" style="border: 1px solid #eee;" />
+ 
+      <ul *ngIf="quantifier">
+        <ng-container *ngFor="let item of quantifier; let i = index;">
+          <li tabindex={{i+4}} (focus)="selectOption($event)"  (keydown)="i==j?return:onKeyDown($event,i)" (click)="selectOption($event)" style="padding: .2rem;">{{item.quantifierName}}</li>
+          
+        </ng-container>
+      </ul>
+ 
+      <!-- <input class="date-input" style="border: 1px solid #c4c4c4;" type="text" /> -->
+    </div>
+  </div>
+</div> 

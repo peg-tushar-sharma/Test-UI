@@ -1,0 +1,16 @@
+<div class="divWidth" >
+    <ng-select id="clientComp" class="custom" #clientComp name="client" required [items]="clients"
+        [selectOnTab]="true" [dropdownPosition]="dropdownPosition" bindLabel="clientName" bindValue="clientName"
+        [clearSearchOnAdd]="true" [clearable]="false" maxSelectedItems=5 [multiple]="isMultiple" [loading]="clientLoad"
+        loadingText="loading..." [hideSelected]="false" [typeahead]="clientTypeAhead" [(ngModel)]="selectedClients"
+        (change)="onClientChange($event)" [addTag]="!isMultiple" (open)="onDropdownOpen()">
+
+        <ng-template ng-option-tmp let-item="item">
+            <div class="flex-parent">
+                <div title="{{item.clientName}}" class="flex-item-clientname">{{item.clientName}}</div>
+                <div title="{{item.clientPriorityName}}" class="flex-item-priorityname">{{item.clientPriorityName }}</div>
+            </div>
+        </ng-template>
+
+    </ng-select>
+</div>

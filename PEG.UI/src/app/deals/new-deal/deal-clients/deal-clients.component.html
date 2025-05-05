@@ -1,0 +1,31 @@
+<div class="list-group col-12 clientList" style="font-size: 13px; background-color:#FFFFFF!important;padding:0;height: 10%;">
+  <a href="javascript:void(0);" class="item" style="color: #707070 !important;">
+    <div class="row">
+      <div class="col-10" style="text-decoration: none;">Client</div>      
+      <div class="col-2">
+        <a title="Add Client" *ngIf="!isTabReadOnly" href="javascript:void(0);" style="float:right;color:#707070 !important;">
+          <i (click)="addClient()" id="addClient" class="fas fa-plus"></i>
+        </a>
+        <a title="Download Excel" href="javascript:void(0);" style="float:right;color:#707070 !important;margin-right:28px">
+          <i (click)="excelDownload()" id="downloadExcel" class="fa fa-download"></i>
+        </a>
+      </div>
+    </div>
+  </a>
+</div>
+
+<div class="grid-container row no-gutters">
+  <div class="col grid-column">
+ 
+    <ag-grid-angular style="height:548px" *ngIf="rowData" [gridOptions]="gridOptions"
+    class="ag-theme-balham" [rowData]="rowData" [columnDefs]="columnDefs" rowSelection="single"
+      (cellValueChanged)="onCellValueChanged($event)" [suppressKeyboardEvent]="suppressKeyboardEvent"
+      [defaultColDef]="defaultColDef" (gridReady)="onGridReady($event)"
+     >
+    </ag-grid-angular>
+
+  </div>
+
+  <app-client-dates [deal]="deal" [dealClientId]="selectedDealClientId" [dealLabel]="dealLabel" [isTabReadOnly]="isTabReadOnly"></app-client-dates>
+
+</div>

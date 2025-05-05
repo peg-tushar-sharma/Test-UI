@@ -1,0 +1,18 @@
+
+<div class="grid-office-editor">
+    <ng-select  id="office" #office name="office" required [items]="offices" [selectOnTab]="true"
+        [dropdownPosition]="dropdownPosition" bindLabel="officeName" bindValue="officeName" [clearSearchOnAdd]="true"
+        [multiple]=false [loading]="officeLoad" loadingText="loading..." [hideSelected]="false"
+        [typeahead]="officeTypeAhead" [(ngModel)]="selectedOffice" (change)="onOfficeChange($event)"
+         >
+        <ng-template ng-option-tmp let-item="item">
+            <div class="flex-parent">
+                <div title="{{item.officeName}}" class="flex-item-officecode">{{item.officeName}} </div>
+     
+            </div> 
+        </ng-template>
+    </ng-select>
+
+</div>
+
+

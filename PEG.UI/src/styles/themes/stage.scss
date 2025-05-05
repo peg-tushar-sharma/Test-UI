@@ -1,0 +1,19 @@
+#stage{
+  // height: calc(100vh - #{$header-height});  
+  padding:$base-padding * 1.5;
+  background-color: $white;
+
+  h2{
+    font-size:28px;            
+  }    
+
+  &.no-sidebar{
+    background-color: $grey-extra-light;
+    padding: $base-padding*1.5;
+  }
+}
+
+.ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-marked {
+  background-color: #3390ff !important;
+  color: white !important;
+}

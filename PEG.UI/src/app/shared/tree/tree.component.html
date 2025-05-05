@@ -1,0 +1,35 @@
+<div id="apptree">
+    <div class="search-container" *ngIf="!(searchDisabled || disabled)">
+        <input [formControl]="searchControl" [placeholder]="placeholder" />
+    </div>
+
+    <div *ngIf="!nodesFound" class="no-results-message">No Records found</div>
+
+    <mat-tree [dataSource]="dataSource" [levelAccessor]="levelAccessor" class="compact-tree">
+
+        <!-- Node without children -->
+        <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding [matTreeNodePaddingIndent]="15"
+            [ngClass]="{'disabled-node': disabled}">
+            <li class="tree-node-nostyle-list" (click)="toggleNode(node, $event)" style="padding-left: 16px;">
+                <mat-checkbox [checked]="isSelected(node)" [indeterminate]="node.indeterminate" class="custom-checkbox"
+                    [disabled]="disabled" [ngClass]="{'disabled-checkbox': disabled}">
+                </mat-checkbox>
+                <span class="node-text">{{ node.text }}</span>
+            </li>
+        </mat-tree-node>
+
+        <!-- Node with children -->
+        <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding [matTreeNodePaddingIndent]="15"
+            [ngClass]="{'disabled-node': disabled}">
+            <li class="tree-node-nostyle-list" (click)="toggleNode(node, $event)">
+                <span class="node-toggle-icon" (click)="toggleExpansion(node, $event)">
+                    {{ node.expanded ? '▼' : '▶' }}
+                </span>
+                <mat-checkbox [checked]="isSelected(node)" [indeterminate]="node.indeterminate" class="custom-checkbox"
+                    [disabled]="disabled" [ngClass]="{'disabled-checkbox': disabled}">
+                </mat-checkbox>
+                <span class="node-text">{{ node.text }}</span>
+            </li>
+        </mat-tree-node>
+    </mat-tree>
+</div>

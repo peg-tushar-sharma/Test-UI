@@ -1,0 +1,17 @@
+<div class="clientPriority-cell" id="clientPriority">
+    <div class="location-edit">
+       <span style="margin-top: 5px;">PreDefined-{{client.clientPriorityName}}</span>
+        <ng-select [items]="priorities"
+        class="slectComponent"
+        bindLabel="priorityName"
+        [multiple]="false"
+        [(ngModel)]="customPriority"
+       (change)="callEvent($event)"
+        placeholder="Add priority"
+        id="priorityComp"
+        #priorityComp
+       >
+        </ng-select>
+    </div>
+    
+ </div>

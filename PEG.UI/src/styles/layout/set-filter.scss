@@ -1,0 +1,61 @@
+@use "sass:math";
+
+.ag-filter{
+  .ag-filter-body-wrapper{
+    padding: $base-padding math.div($base-padding,2) math.div($base-padding,2) math.div($base-padding,2);
+    background-color: $white;    
+    .ag-filter-filter{
+      @extend .form-control;
+    }
+
+    .ag-set-filter-list {
+      width: 300px !important;
+    }
+  }  
+
+  #ag-mini-filter ~ .ag-filter-header-container{
+    height: 40px!important;
+    display: flex;
+    align-items: center;
+    margin-top: $base-padding;
+    cursor: pointer;
+
+    &:hover{
+      background-color: $grey-lighter;        
+    }
+
+    #selectAllContainer{
+      cursor: pointer;
+      padding-left: math.div($base-padding,2);
+      margin-bottom: 0;
+      #selectAll{
+        position: absolute;
+        right: $base-padding;
+      }
+    }
+  }
+
+  .ag-set-filter-list{   
+    padding-top: 0!important; 
+    .ag-set-filter-item{
+      padding-left: math.div($base-padding,2);
+      padding-right: math.div($base-padding,2);
+      cursor: pointer;
+      &:hover{
+        background-color: $grey-lighter;        
+      }
+      .ag-filter-checkbox{
+        position: absolute;
+        right: math.div($base-padding,2);
+      }
+    }
+  }
+
+  .fa-check-square:before{
+    content:"\f00c";
+  }
+
+  .fa-square, .ag-icon-checkbox-indeterminate{
+    display: none;
+  }
+}

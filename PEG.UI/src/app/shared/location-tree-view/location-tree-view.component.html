@@ -1,0 +1,9 @@
+<div class="custom-dropdown" #dropdown>
+    <div class="dropdown-toggle" (click)="toggleDropdown()">
+        {{ selectedOfficesText }}
+    </div>
+    <div class="dropdown-menu" [class.show]="isDropdownOpen" style="overflow: hidden;">
+        <app-tree *ngIf="isDataLoaded" [treeData]="treeData" [disabled]="disabled"
+            (selectionChanged)="onSelectionChanged($event)" [defaultSelectedNodes]="defaultSelectedNodes"></app-tree>
+    </div>
+</div>

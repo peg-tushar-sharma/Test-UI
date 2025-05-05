@@ -1,0 +1,62 @@
+@import "../../../../styles/abstract/variables.scss";
+
+@import "../../../../styles/layout/form";
+@import "../../../../styles/layout/deal.scss";
+
+::ng-deep .card.customClass,
+::ng-deep .card.customClass .card-header,
+::ng-deep .panel.customClass {
+  padding: 0px;
+  background-color: #CC0000;
+  color: white;
+}
+::ng-deep .panel.customClass .panel-body {
+  background-color: rgba(249, 249, 249, 1);
+}
+
+::ng-deep .panel-heading {
+  box-shadow: 0px 3px 3px 0px #d3d3d3;
+  z-index: 9;
+}
+
+::ng-deep .panel-title button {
+  color: white;
+  font-size: 14px !important;
+}
+::ng-deep .panel-title button:hover {
+  color: #3c3c3c;
+  text-decoration: none;
+}
+.carretIcon {
+  float: right;
+  padding: 8px 20px;
+  font-size: 18px;
+  color: #c4c4c4;
+}
+
+.btn-link:hover {
+  text-decoration: none !important;
+}
+
+.context-data {
+  background-color: #FFFFFF;
+  padding: 10px;
+  padding-bottom: 30px;
+}
+
+.deal-headings {
+  text-align: left;
+  font: normal normal bold 14px/20px Graphik;
+  letter-spacing: 0px;
+  color: #CC0000;
+}
+
+.smsPadding {
+  padding-left: 100px;
+}
+
+@media screen and (max-width:1368px) {
+  .smsPadding {
+    padding-left: 60px;
+  }   
+}

@@ -1,0 +1,36 @@
+.strategy-clients-popup {
+  font-family: "Graphik";
+  padding: 20px;
+  width: 100%;
+
+  // Header
+  &__header-wrapper {
+
+    .header,
+    .btn-class {
+      color: #121212;
+      font-size: 24px;
+      line-height: 28px;
+      margin: 0px;
+    }
+  }
+
+  // Body
+  &__body-wrapper .ag-theme-alpine {
+    border: 1px solid #f0f2f3;
+    height: 75vh;
+    width: 100%
+  }
+
+  .btn {
+    color: #284ce0;
+    font-size: 12px;
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+// Ag Grid Notes
+::ng-deep .cell-wrap-text:hover {
+  white-space: normal !important;
+}

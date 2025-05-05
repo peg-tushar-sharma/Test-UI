@@ -1,0 +1,295 @@
+<div class="wrapper d-flex flex-column">
+  <nav class="actions d-flex justify-content-between w-100 py-2 px-3 position-sticky bg-white">
+    <button class="btn btn-link" (click)="onBackClick()"><i class="fa fa-angle-left mr-2"></i> Back</button>
+    <!-- Will re-enable once we have the functionality ready -->
+    <div class="other-actions flex justify-content-between">
+      <button class="btn btn-link flex align-items-center" (click)="showAuditLog()">
+        Audit <img class="ml-1" height="15" src="../../../assets/icons/audit.svg" alt="" />
+      </button>
+      <!-- <button class="btn btn-link">Email <i class="ml-2 fa fa-envelope"></i></button> -->
+      <button class="btn btn-link mx-1"  (click)="showNotes()">Notes <i class="ml-2 fa fa-file-alt"></i></button>
+      <!-- <button class="btn btn-link"  target="_blank" [routerLink]="['/registrations', { registrationId: conflictId }]">Go to Registration</button> -->
+      <a class="btn btn-link" [routerLink]="['/registrations', { registrationId: conflictId }]" target="_blank">Go to Registration</a>
+    </div>
+  </nav>
+  <div class="content h-100">
+    <aside>
+      <button class="btn-class" *ngFor="let item of menuButtons" (click)="openLink(item)">
+        <div
+          class="icon-wrapper d-flex align-items-center justify-content-center"
+          [ngClass]="item.icon ? 'with-icon' : ''"
+        >
+          <i class="fas fa-{{ item.icon }}" *ngIf="item.icon !== null"></i>
+          <img
+            src="./../../../assets/img/{{ item.image }}"
+            alt="{{ item.label }}"
+            *ngIf="item.image !== null"
+            height="{{ item.height }}"
+          />
+        </div>
+        <span>{{ item.label }}</span>
+      </button>
+    </aside>
+    <article *ngIf="conflictRowData">
+      <div class="conflict-info p-4">
+        <div class="flex flex-column align-items-start">
+          <h2 class="flex m-0 p-0">
+            <span class="text-bold">{{ conflictRowData.target.targetName }}</span>
+            <span *ngIf="conflictRowData?.isPubliclyTradedEquity" style="color: #CC0910; font-weight: bold;"> (PTE) </span> /
+            {{ conflictRowData.client.clientName }}
+          </h2>
+          <p class="m-0 p-0">Submitted Date: {{ conflictRowData.submissionDate | date: 'dd-MMM-yyyy' }}</p>
+          <a *ngIf="!showEditWebsite" [href]="conflictRowData.website" target="_blank" class="btn btn-link p-0">{{
+            conflictRowData.website
+          }}</a>
+          <input type="text" class="inpt" *ngIf="showEditWebsite" [(ngModel)]="conflictRowData.website" />
+          <i
+            *ngIf="!showEditWebsite"
+            class="ml-1 fa fa-pencil-alt cursor-pointer"
+            (click)="showEditWebsite = !showEditWebsite"
+          ></i>
+          <i *ngIf="showEditWebsite" class="ml-1 fa fa-check cursor-pointer" (click)="onWebsiteChangeClick($event)"></i>
+        </div>
+        <div class="conflict-area d-flex align-content-center">
+          <app-conflict-area [data]="conflictRowData.workType" customClass="m-0"></app-conflict-area>
+        </div>
+        <div class="d-flex align-items-center">
+          <div class="mb-status d-flex align-items-center">MB Status:
+            <div class="status ml-2">
+              {{ conflictRowData.mbStatus ? conflictRowData.mbStatus.mbStatusName : 'N/A' }}
+            </div>
+          </div>
+         <div class="sell-side-status d-flex align-items-center ml-4">
+            Sell-Side Status:
+            <div class="status ml-2">
+              {{conflictRowData.sellSideStatus?
+              conflictRowData.sellSideStatus.sellSideStatusName:'N/A'}}
+            </div>
+          </div>
+        </div>
+        <div class="priority d-flex align-items-center" *ngIf="featureComplete">
+          <b class="mr-4">Priority</b>
+          <div class="priorities w-auto d-flex align-items-center">
+            <div class="target d-flex flex-column justify-content-center">
+              <div class="icon d-flex justify-content-center align-items-center">P1X</div>
+              <div class="text">Target</div>
+            </div>
+            <div class="separator">&nbsp;</div>
+            <div class="client d-flex flex-column justify-content-center">
+              <div class="icon d-flex justify-content-center align-items-center">P2</div>
+              <div class="text">Client</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-info my-1 p-4">
+        <app-conflict-assignee
+          [rowData]="conflictRowData"
+          (assigneeChanges)="onAssigneeChanges($event)"
+        ></app-conflict-assignee>
+        <div class="input-group flex flex-column">
+          <label for="">Target Owner</label>
+          <input
+            type="text"
+            class="inpt"
+            [(ngModel)]="conflictRowData.corporateRelationship"
+            (change)="onCorporateRelationshipChange($event)"
+          />
+        </div>
+        <div class="input-group flex flex-column">
+          <label for="">Status</label>
+          <ng-select
+            [items]="statuses"
+            bindLabel="statusTypeName"
+            bindValue="registrationStatusId"
+            [clearable]="false"
+            (change)="onRegistrationStatusChange($event)"
+            [(ngModel)]="conflictRowData.registrationStatus.registrationStatusId"
+            size="sm"
+          ></ng-select>
+        </div>
+
+        <div class="input-group flex flex-column">
+          <label for="">Stage</label>
+
+          <div class="cta justify-self-end align-items-end mt-2">
+            <a
+              style="cursor: pointer; color: #284ce0; font-weight: 600; font-size: 14px"
+              (click)="updateStage($event)"
+              class="align-self-end"
+              >{{ conflictRowData.registrationStage?.stageTypeName }}</a
+            >
+          </div>
+        </div>
+      </div>
+      <div class="conflict-details p-4">
+        <div class="registration-details flex flex-column">
+          <h5>Registration Details</h5>
+          <div class="grid">
+            <div class="info-group">
+              <span>Industry</span><span>{{ conflictRowData.industry?.industryName }}</span>
+            </div>
+            <div class="info-group">
+              <span>Sector</span><span *ngFor="let sector of conflictRowData?.sector">{{ sector?.sectorName }}</span>
+            </div>
+            <div class="info-group">
+              <span>Client is a hedge fund</span><span>{{ conflictRowData.isHedgeFundClient ? 'Yes' : 'No' }}</span>
+            </div>
+            <div class="info-group">
+              <span>Market Flags</span>
+              <span *ngIf="conflictRowData.isSpecialPurposeAcquisitionCompany">SPAC </span>
+              <span *ngIf="conflictRowData.isPubliclyTradedEquity">Publicly Traded Equity</span>
+              <span *ngIf="conflictRowData.isPubliclyTradedDebt">Publicly Traded Debt</span>
+              <span *ngIf="conflictRowData.carveOut">Carve-Out</span>
+              <span *ngIf="conflictRowData.isOpenMarketPurchase">Open Market Purchase</span>
+            </div>
+            <div class="info-group">
+              <span>Country / Location of Deal</span><span>{{ conflictRowData.locationDeal?.locationName }}</span>
+            </div>
+            <div class="info-group">
+              <span>Work to Start/With</span><span>{{ conflictRowData.workToStart?.workToStartName }}</span>
+            </div>
+            <div class="info-group">
+              <span>Estimated Start Date</span
+              ><span>{{ conflictRowData.expectedStartDate | date: 'dd-MMM-yyyy' }}</span>
+            </div>
+            <div class="info-group">
+              <span>Client Heads</span
+              ><span *ngFor="let head of conflictRowData?.clientHeads">
+                {{ head.lastName }}, {{ head.firstName }} ({{ head.officeAbbreviation }})
+              </span>
+            </div>
+            <div class="info-group">
+              <span>Client Sector Leads</span
+              ><span *ngFor="let sectorLead of conflictRowData?.sectorLeads">
+                {{ sectorLead.lastName }}, {{ sectorLead.firstName }} ({{ sectorLead.officeAbbreviation }})
+              </span>
+            </div>
+            <div class="info-group">
+              <span>Other Partners Who Should See The Registration</span
+              ><span *ngFor="let otherPartner of conflictRowData?.othersInvolved">
+                {{ otherPartner.lastName }}, {{ otherPartner.firstName }} ({{ otherPartner.officeAbbreviation }})
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="pipeline-details flex flex-column mt-4" *ngIf="featureComplete">
+          <h5>Pipeline Details</h5>
+          <div class="grid">
+            <div class="info-group">
+              <span>Opportunity Stage</span
+              ><span>{{ pipelineInfo?.oportunityStage ? pipelineInfo.opportunityStage : '-' }}</span>
+            </div>
+            <div class="info-group"><span>Delivery Capability 1</span><span>All</span></div>
+            <div class="info-group"><span>Delivery Capability 2</span><span>All</span></div>
+            <div class="info-group"><span>Opportunity Sub-stage</span><span>-</span></div>
+            <div class="info-group"><span>Solution 1</span><span>All</span></div>
+            <div class="info-group"><span>Solution 2</span><span>Accelerated Performance</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="tracking-info p-4">
+        <div class="info-group">
+          <span>Submitted By</span
+          ><span>{{
+            (conflictRowData.submittedBy?.lastName ? conflictRowData.submittedBy?.lastName : '') +
+              (conflictRowData.submittedBy?.firstName ? ', ' + conflictRowData.submittedBy?.firstName : '') +
+              ' (' +
+              conflictRowData.submittedBy?.officeAbbreviation +
+              ')'
+          }}</span>
+        </div>
+        <div class="info-group">
+          <span>Submitter Office:</span><span>{{ conflictRowData.submittedBy?.officeName }}</span>
+        </div>
+        <div class="info-group">
+          <span>Last Updated Date</span><span> {{ conflictRowData?.lastUpdated | date: 'dd-MMM-yyyy' }} </span>
+        </div>
+        <div class="info-group">
+          <span>Submitted Date</span><span>{{ conflictRowData?.submissionDate | date: 'dd-MMM-yyyy' }}</span>
+        </div>
+        <div class="info-group">
+          <span>Commit Date</span
+          ><span *ngIf="conflictRowData?.commitmentDate">{{
+            conflictRowData?.commitmentDate | date: 'dd-MMM-yyyy'
+          }}</span>
+        </div>
+      </div>
+      <div class="registrations p-4 flex flex-column">
+        <h4>
+          Registrations <span>({{ relatedData.length }})</span>
+        </h4>
+        <table class="mb-2">
+          <thead>
+            <tr>
+              <td style="width: 6%;">Registration ID</td>
+              <td>Target</td>
+              <td>Target Owner</td>
+              <td>Client</td>
+              <td>Type of Work</td>
+              <td style="width: 9%;">Market Flags</td>
+              <td style="width: 6%;">Hedge Fund</td>
+              <td style="width: 7%;">Submission Date</td>
+              <td style="width: 7%;">Stage</td>
+              <td style="width: 10%;">Status</td>
+              <td style="width: 6%;">Status Update</td>
+            </tr>
+          </thead>
+          <tbody *ngIf="!relatedData.length == 0">
+            <tr *ngFor="let trackerClient of relatedData">
+              <td>
+                <a [routerLink]="['/registrations', { registrationId: trackerClient.registrationId }]" target="_blank"
+                  class="btn btn-link"><b>{{ trackerClient.registrationId }}</b></a>
+              </td>
+              <td>{{trackerClient.target?.targetName}}</td>
+              <td>{{trackerClient.corporateRelationShip}}</td>
+              <td>{{trackerClient.client?.clientName}}</td>
+              <td>{{trackerClient.worktype?.workTypeName}}</td>
+              <td>
+                <span *ngIf="trackerClient.isSpecialPurposeAcquisitionCompany" class="badge bg-primary mt-1">SPAC</span>
+                <span *ngIf="trackerClient.isPubliclyTradedEquity" class="badge bg-danger mt-1">Publicly Traded Equity</span>
+                <span *ngIf="trackerClient.isPubliclyTradedDebt" class="badge bg-success  mt-1">Publicly Traded Debt</span>
+                <span *ngIf="trackerClient.carveOut" class="badge bg-warning text-dark  mt-1"  >Carve-Out</span>
+                <span *ngIf="trackerClient.isOpenMarketPurchase" class="badge bg-info  mt-1">Open Market Purchase</span>
+              </td>
+              <td>{{trackerClient.isHedgeFundClient?'Yes':'No'}}</td>
+              <td>{{trackerClient.submissionDate| date: 'dd-MMM-yyyy'}}</td>
+              <td>{{ trackerClient.registrationStage?.stageTypeName }}</td>
+              <td>{{trackerClient.registrationStatus?.statusTypeName}}</td>
+              <td><span
+                  *ngIf="trackerClient.statusUpdateDate && trackerClient.statusUpdateDate!='0001-01-01T00:00:00Z'">{{
+                  trackerClient.statusUpdateDate | date: 'dd-MMM-yyyy' }}</span></td>
+
+            </tr>
+          </tbody>
+          <tbody *ngIf="relatedData.length == 0">
+            <tr>
+              <td colspan="10" class="text-center">No Registrations Found</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="conflicts p-4 flex flex-column">
+        <h4>
+          Conflicts <span>({{ matchedCompany.length }})</span>
+        </h4>
+        <div class="cards">
+          <!-- TODO: This is going to need actual data once it's done -->
+          <app-conflict-gallery [conflictData]="cardData?.partnership" header="Partnerships"></app-conflict-gallery>
+          <app-conflict-gallery [conflictData]="cardData?.investments" header="Investments"></app-conflict-gallery>
+          <app-conflict-gallery [conflictData]="cardData?.prohibitions" header="Prohibitions"></app-conflict-gallery>
+          <app-conflict-gallery [conflictData]="cardData?.bordOfDirectors" header="Board of Directors">
+          </app-conflict-gallery>
+          <app-conflict-gallery [conflictData]="cardData?.confidentialClient" header="Confidential Clients">
+          </app-conflict-gallery>
+          <!-- <app-conflict-gallery [conflictData]="cardData?.maOpportunities"
+            header="M&A Opportunities"></app-conflict-gallery> -->
+        </div>
+      </div>
+    </article>
+  </div>
+</div>
+
+<div class="notes p-2 d-flex flex-column" [class.is-hidden]="minimized" *ngIf="isSidebarVisible" style="border: 1px thin black;">
+  <app-details-history [registrationId]="conflictId" (sidebarHidden)="hideSidebar()" [historyType]="historyType"></app-details-history>
+</div>

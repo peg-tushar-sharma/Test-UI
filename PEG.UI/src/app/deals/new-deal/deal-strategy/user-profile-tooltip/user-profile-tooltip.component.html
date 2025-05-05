@@ -1,0 +1,40 @@
+<div class="row">
+
+  <div class="col-12">
+    <div class="expertProfile">
+
+      <div class="expertProfileHead">
+        <span class="expertName">{{item.expertName}}</span>
+
+        <ng-select class="rating-select" id="expertRating" name="expertRating" [(ngModel)]="selectedCategory"
+        [items]="expertCategories" bindLabel="expertCategoryName" [clearable]="false" (change)="saveCategory()">
+        </ng-select>
+      </div>
+
+
+      <br>
+      <span class="expertProfileTitle">{{item.title}}</span>
+      <div class="mt-2" style="-webkit-box-orient: vertical !important;">
+
+        <div class="expertPoolItem" *ngFor="let itemColor of item.expertPoolColor; let i = index;">
+          <span
+            [style.background-color]="itemColor.expertPoolColor!=undefined && itemColor.expertPoolColor.colorCode!=undefined?itemColor.expertPoolColor.colorCode:'#b3b3b3'"
+            style="height: 12px;width:12px;border-radius: 50%; display: inline-block;"> </span> 
+          <span class="poolName ml-2">{{itemColor.poolGroupName}}</span>
+
+         <span class="poolCategory">
+            <i style="padding-left: 6px;">
+            <!--<span>{{itemColor.categoryId==0 ? '' : itemColor.categoryId== NACategoryID ? 'NA' : itemColor.categoryName}}</span> -->
+          </i>
+          </span>
+
+          <textarea placeholder="Add notes" [(ngModel)]="itemColor.poolExpertNotes" type="text" id="expertNotes"
+            (change)="saveNotes($event,itemColor, i)" (keydown.enter)="saveNotes($event,itemColor, i)"></textarea>
+
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>

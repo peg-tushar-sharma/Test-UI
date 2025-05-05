@@ -1,0 +1,134 @@
+.data-collection {
+  display: grid;
+  gap: 30px;
+
+  .grid-input-wrapper {
+    align-items: center;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row !important;
+    height: 36px;
+    position: relative;
+    width: 100%;
+
+    .fa-times {
+      color: #121212;
+      cursor: pointer;
+      font-size: 12px;
+      position: absolute;
+      right: 10px;
+    }
+  }
+
+  #grid-input {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    height: 36px;
+    outline: none;
+    padding-inline: 10px;
+    width: 100%;
+  }
+
+  .required {
+    border-color: #cc0000 !important;
+  }
+
+  // form grid
+  .form-grid {
+    color: #121212;
+    display: grid !important;
+    font-size: 14px;
+    gap: 20px;
+    grid-template-columns: repeat(2, 1fr);
+    line-height: 18px;
+
+    div {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+
+      #grid-label {
+        color: #121212;
+        font-size: 14px;
+        font-weight: 500;
+        margin: 0px;
+        text-transform: capitalize;
+      }
+
+      .sub-label {
+        font-size: 14px;
+        font-weight: 400;
+
+        &.icon {
+          color: #cc0000;
+        }
+      }
+
+      ul {
+        margin: 0px;
+        padding-inline-start: 20px;
+
+        li ul {
+          margin: 0px;
+          padding-inline-start: 20px;
+        }
+      }
+
+      &.case-row {
+        align-items: center;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        display: grid;
+        gap: 10px;
+        grid-template-columns:150px repeat(2, minmax(100px, auto)) 200px 10px;
+        justify-content: space-between;
+        padding: 10px 15px;
+
+        span {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        .delete-row-cta {
+          width: 10px;
+          background: none;
+          border: none;
+          color: #121212;
+          margin: 0px;
+          outline: none;
+          padding: 0px;
+        }
+      }
+    }
+  }
+
+  // submitter details
+  .registration-details-table {
+    background-color: #f7f9ff;
+    border-radius: 4px;
+    margin: 0px;
+
+    td {
+      border: none;
+      color: #616568;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 18px;
+      padding: 10px 20px;
+
+      #label {
+        font-weight: 500;
+        margin-right: 4px;
+      }
+    }
+  }
+}
+
+.form-grid .estimated-start-date .grid-input-wrapper,
+.form-grid .estimated-start-date .grid-input-wrapper span {
+  text-align: left !important;
+  display: block !important;
+  width: 100% !important;
+}

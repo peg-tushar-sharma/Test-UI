@@ -1,0 +1,103 @@
+@import "../../../../../styles/abstract/variables.scss";
+
+.modal-header {
+  color: $bain-red !important;
+}
+
+.box-color {
+  height: 50px;
+  width: 50px;
+}
+
+.box-blue {
+  background: #8cd8f8;
+}
+
+.box-orange {
+  background: #f1d66a;
+}
+
+.box-green {
+  background: #69dfb1;
+}
+
+/*** save button ***/
+.button-footer {
+  text-align: center;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 3px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.modal-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.modal-dialog {
+  overflow-y: initial !important
+}
+
+.modal-body {
+  max-height: calc(80vh - 200px);
+  overflow-y: auto;
+}
+
+.modal-backdrop {
+  z-index: 2 !important;
+}
+
+pre {
+  white-space: pre-wrap;
+  font: 12px sans-serif, Graphik;
+}
+
+.resource-table td {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.resource-table th {
+  vertical-align: middle;
+  text-align:center;
+  text-decoration: underline;
+}
+
+.resource-table {
+  font-size: 14px;
+  width: 100%;
+  min-height: 50px;
+  color: black;
+}
+
+.resource-table th, .resource-table td { 
+  padding:3px  
+}
+
+.resource-table .thead-grey {
+  background-color: #ececec;
+}
+
+.resource-table-title {
+  font-weight: bold;
+  font-size: 18px;
+  color: black;
+}

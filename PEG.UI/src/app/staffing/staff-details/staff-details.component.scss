@@ -1,0 +1,179 @@
+::ng-deep #masterContainer {
+    padding-top: 0px !important;
+}
+
+::ng-deep .navbar {
+    display: none !important;
+}
+.loading-center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+#staffDetailsWrap {
+    .flex-container{
+        display: flex;
+        justify-content: flex-end;
+        padding: 10px;
+
+    }
+    .flex-container button{
+        margin-left: 10px;
+    }
+    color: #121212;
+    font-family: "Graphik";
+    padding: 20px;
+
+    .row-one-wrapper {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+
+    // Ag grid
+    .row-two-wrapper {
+        .conflicts-header {
+            align-items: center;
+            display: flex;
+            gap: 4px;
+            margin-bottom: 10px;
+
+
+            .conflicts-icon {
+                color: #121212;
+                font-size: 16px;
+               
+                &.red-color {
+                    color: #cc0000;
+                }
+
+                &.blue-color {
+                    color: #284ce0;
+                }
+
+                &.gray-color {
+                    color: #616568;
+                }
+            }
+
+            .fas {
+                 color: #cc0000;
+                font-size: 16px;
+                line-height: 20px;
+                transform: rotate(180deg);
+            }
+
+            h4 {
+                margin-bottom: 0px;
+            }
+        }
+
+        .ag-theme-alpine {
+            border: 1px solid #f0f2f3;
+            height: 160px;
+            width: 100%;
+        }
+    }
+
+    h3,
+    h4 {
+        font-weight: 500;
+    }
+
+    h3 {
+        font-size: 20px;
+    }
+
+    h4 {
+        font-size: 16px;
+        line-height: 20px;
+    }
+
+    table {
+        margin-bottom: 15px;
+        table-layout: fixed;
+        width: 100%;
+
+        th {
+            color: #616568;
+            background: #f7f9ff;
+            font-weight: 500;
+            width: 40%;
+        }
+
+        td {
+            width: 60%;
+
+            &.non-editable {
+                background: #f8f6f8;
+                color: #616568;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+        }
+
+        td,
+        th {
+            padding: 5px 10px;
+            border: 1px solid #e0e4e8;
+            font-size: 12px;
+            line-height: 15px;
+        }
+
+        .fas {
+            cursor: pointer;
+        }
+    }
+
+    .btn-calendar {
+        border: none;
+        background: none;
+        padding-left: 0;
+        padding-right: 0;
+        margin-right: 15px;
+    }
+
+    input.datepicker {
+        border: none;
+    }
+
+    .staffDetailButtons {
+        display: flex;
+        justify-content: flex-end;
+
+        button {
+            font-size: 16px;
+            line-height: 20px;
+            padding: 10px 20px;
+            border: 1px solid #284ce0;
+            border-radius: 4px;
+            margin-left: 15px;
+
+            &#staffDetailCancel {
+                background: none;
+                color: #284ce0;
+            }
+
+            &#staffDetailSave {
+                background: #284ce0;
+                color: #fff;
+            }
+        }
+    }
+
+    .staffing-button{
+        background: #ECF0FF;
+        border: 1px solid #ecf0ff;
+        box-sizing: border-box;
+        border-radius: 2px;
+        padding: 0px 10px;
+        color: #284CE0;
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 12px;
+        min-height: 20px;
+        min-width: 80px;
+    }
+}

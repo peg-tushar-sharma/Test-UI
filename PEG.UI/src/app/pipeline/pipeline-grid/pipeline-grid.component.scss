@@ -1,0 +1,926 @@
+@import "../pipeline_styles";
+
+.ag-theme-balham .ag-menu-option-part,
+.ag-theme-balham .ag-compact-menu-option-part {
+    line-height: 26px !important;
+}
+
+#pipelineGrid {
+    .ag-theme-balham {
+        /* bright green, 10% opacity */
+        --ag-selected-row-background-color: #ffff4d;
+    }
+}
+
+#pipelineGrid .ag-theme-bootstrap {
+    background-color: #ffffff !important;
+
+    .ag-theme-balham .ag-row-selected {
+        background-color: #2cb364 !important;
+        // .ag-theme-balham {
+        /* bright green, 10% opacity */
+        // --ag-selected-row-background-color: rgba(5, 167, 5, 0.1);
+        // }
+    }
+
+    .ag-body-viewport {
+        background: #ffffff !important;
+    }
+
+    .ag-header {
+        background: #eaebec !important;
+        border: 1px solid #dddddd !important;
+        box-shadow: 0px 2px 2px rgba(151, 151, 151, 0.15) !important;
+        font-weight: 580 !important;
+        font-size: 12px !important;
+        color: #333333 !important;
+        height: 30px !important;
+        min-height: 30px !important;
+        margin-bottom: 0px !important;
+    }
+
+    .ag-header-cell {
+        border-right: 0.5px solid #dadada !important;
+        padding-left: 2px;
+    }
+
+    .ag-header-group-cell {
+        padding-left: 2px;
+        padding-right: 12px;
+    }
+
+    .ag-header-cell-contents {
+        display: flex;
+        margin-top: 0px;
+    }
+
+    .ag-row {
+        background-color: #ffffff;
+        color: #000000;
+        border: none;
+        height: 25px;
+    }
+
+    .ag-row-selected {
+        // background-color: #E5E5E5 !important;
+        background: #e9f0fb;
+    }
+
+    .ag-row:hover {
+        background: #eaebec;
+    }
+
+    .ag-ltr .ag-cell {
+        height: 25px !important;
+        // line-height: 32px !important;
+        border: 1px solid #e4e4e4;
+        /* border-right: 0.5px solid #DADADA !important; */
+        /* border-bottom: 0.5px solid #DADADA; */
+        font-size: 12px !important;
+        padding-left: 4px;
+
+        .ag-cell-wrapper {
+            .ag-cell-value {
+                width: 100%;
+            }
+        }
+    }
+
+    .ag-cell-inline-editing {
+        height: 25px !important;
+    }
+
+    .ag-tooltip {
+        color: #000000 !important;
+        font-size: 12px !important;
+        line-height: 17px !important;
+        padding: 5px !important;
+
+        background: #ffffff !important;
+        border: 0.5px solid #c4c4c4 !important;
+        box-sizing: border-box !important;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15) !important;
+        border-radius: 2px !important;
+    }
+}
+
+
+
+.partner-edit-flagged {
+    font-weight: bold;
+    font-style: italic;
+}
+
+.exportSection {
+    display: block;
+    min-height: 10vh;
+    max-height: 40vh;
+    background: #ffffff;
+    border: 1px solid #c4c4c4;
+    // padding: 10px;
+    margin-top: 23px;
+    margin-left: 15px;
+    margin-bottom: 50px;
+}
+
+.allOppExport {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #000000;
+    padding: 1.5rem 0.8rem 0 0.8rem;
+}
+
+.selOppExport {
+    display: block;
+    color: #000000;
+    padding: 10px;
+}
+
+.selectedOppExport {
+    display: flex;
+    flex: 50% 50%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.expBtn {
+    outline: none !important;
+    background: #ffffff;
+    border: 1px solid #cc0000;
+    box-sizing: border-box;
+    border-radius: 4px;
+    color: #cc0000;
+    margin-right: 15px;
+    height: 24px;
+    font-size: 12px;
+    line-height: 12px;
+}
+
+.closeIcon {
+    font-size: 1rem;
+    margin-left: 15px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.selCheckbox {
+    width: 16px;
+    height: 16px;
+    border-radius: 3px;
+}
+
+.checkBoxSelect {
+    display: flex;
+    margin-left: 40px;
+    font-size: 12px;
+    font-weight: 500;
+    margin-top: 4px;
+}
+
+.exportGrid .ag-theme-bootstrap {
+    .ag-header {
+        display: none;
+    }
+
+    .ag-ltr .ag-cell {
+        font-size: 13.5px !important; // changed the font size of text in ag-cell as per prototype
+        line-height: 2;
+        border-width: 1px;
+        padding-left: 4px;
+        border-left: none; // for reducing border thickness of ag-cell
+        border-right: none; // for reducing border thickness of ag-cell
+        color: #000000; //added color to text in the cells
+    }
+
+    .ag-row {
+        border: 1px solid lightgray;
+        background-color: #fff;
+    }
+
+    .ag-row-selected {
+        background-color: #ffffff;
+    }
+
+    .ag-row:hover {
+        background-color: #e5e5e5;
+    }
+
+    .ag-checkbox-input {
+        background-color: #cc0000 !important;
+        color: #ffffff !important;
+    }
+}
+
+/* Checkbox START */
+/* The checkContainer */
+.checkContainer {
+    display: block;
+    position: relative;
+    padding-left: 25px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    font-size: 12px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.checkContainer input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 18px;
+    width: 18px;
+    background-color: #fff;
+    border: 1px solid #0091ea;
+    box-sizing: border-box;
+    border-radius: 3px;
+}
+
+/* On mouse-over, add a grey background color */
+.checkContainer:hover input~.checkmark {
+    background-color: #0091ea;
+}
+
+/* When the checkbox is checked, add a blue background */
+.checkContainer input:checked~.checkmark {
+    background-color: #0091ea;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.nav-link {
+    color: #7d7b7b;
+}
+
+/* Show the checkmark when checked */
+.checkContainer input:checked~.checkmark:after {
+    display: block;
+}
+
+/* Style the checkmark/indicator */
+.checkContainer .checkmark:after {
+    left: 5px;
+    top: 0px;
+    width: 5px;
+    height: 11px;
+    border: 1px solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+/* Checkbox END */
+
+@import "ag-grid-community/src/styles/ag-grid.scss";
+@import "ag-grid-community/src/styles/ag-theme-bootstrap/sass/ag-theme-bootstrap.scss";
+
+.ag-theme-bootstrap .ag-menu-option-part {
+    padding-top: 6px !important;
+    padding-bottom: 6px !important;
+    padding-left: 8px !important;
+}
+
+.ag-theme-bootstrap .ag-menu-option-text,
+.ag-theme-bootstrap .ag-compact-menu-option-text {
+    padding-left: 16px !important;
+    padding-right: 8px !important;
+}
+
+.row-opp-selected {
+    outline: 2px auto #CC0000 !important;
+    z-index: 1;
+}
+
+.filtersApplied {
+    margin-left: 5px;
+    padding: 4px;
+    border-radius: 4px;
+    background-color: #f3edf1;
+}
+
+.tabs {
+    border: solid 1px #e4dede;
+}
+
+.row2 {
+    height: 100%;
+    width: 100%;
+    padding-right: 0px;
+    margin-right: 0px;
+    display: flex;
+}
+
+.botton-grid-padding {
+    padding-bottom: 40px !important;
+}
+
+.ag-popup-editor.ag-ltr.ag-popup-child {
+    min-width: unset !important;
+    width: auto;
+}
+
+#pipelineGrid .ag-theme-bootstrap .ag-menu-list.ag-focus-managed {
+    // background-color: red;
+    // transform: perspective(300px);
+    // transform: translate3d(10px, 0px, 10px);
+}
+
+#pipelineGrid .ag-theme-bootstrap .ag-menu.ag-ltr.ag-popup-child {
+    transform: perspective(300px);
+    // transform: translate3d(1px, 9px, 18px);
+    transform: translate3d(1px, 3px, 18px);
+    // left: 248.391px;
+    // left: 300px;
+    top: 94px;
+}
+
+#pipelineGrid .ag-theme-bootstrap .ag-root-wrapper {
+    overflow: initial;
+}
+
+#pipelineGrid .ag-theme-bootstrap .ag-header {
+    z-index: 1;
+}
+
+.marginT {
+    margin-top: 5px;
+}
+
+.marginxl {
+    margin-left: 30px;
+}
+
+// .bucketGroupContainer {
+//     width: calc(100% - 60px);
+//     -webkit-transition: all 0.25s ease-out;
+//     -moz-transition: all 0.25s ease-out;
+//     -o-transition: all 0.25s ease-out;
+//     transition: all 0.25s ease-out;
+// }
+
+.ag-group-child-count,
+.ag-group-value,
+.ag-group-contracted {
+    // height: 33px !important;
+    font-size: 14px !important;
+}
+
+.ag-group-expanded {
+    // height: 33px !important;
+    font-size: 14px !important;
+}
+
+.ag-row-group.ag-row-level-0 {
+    background-color: $neutralBlue !important;
+    color: $textNearBlack !important;
+}
+
+.ag-row-group.ag-row-level-1 {
+    background-color: $headerLightBlue !important;
+    color: $textNearBlack !important;
+    border: 1px solid $inputBorderColor !important;
+}
+
+
+.ag-icon-tree-open,
+.ag-icon-tree-closed {
+    color: $textNearBlack !important;
+}
+
+.ag-row-group.ag-row-level-2 {
+    background-color: #eaeaea !important;
+    color: $textNearBlack !important;
+    border: 1px solid $inputBorderColor !important;
+}
+
+.ag-row-level-2 .ag-icon-tree-open,
+.ag-row-level-2 .ag-icon-tree-closed {
+    color: $textNearBlack !important;
+}
+
+.ag-row-group>.ag-cell {
+    border-left: none !important;
+}
+
+.ag-column-drop-cell {
+    background-color: $headerLightBlue !important;
+}
+
+.split-area-pane {
+    position: fixed;
+    top: 57px;
+    width: 100%;
+    height: calc(100% - 85px);
+}
+
+.pipelineTableContainer {
+    padding: 10px;
+    width: 100%;
+    height: calc(100% - 40px);
+}
+
+#capacitySplitArea {
+    transition: all 150ms;
+    background: $backgroundOffWhite;
+    overflow-y: hidden;
+
+    .ng-dropdown-panel .scroll-host {
+        position: relative;
+        background: #fff;
+    }
+
+    &.full-screen {
+        flex: 0 0 100% !important;
+    }
+
+    &.min-screen {
+        flex: 0 0 0% !important;
+    }
+}
+
+#opportunitySplitArea {
+    position: relative;
+    overflow: initial;
+
+    &.full-screen {
+        flex: 0 0 99% !important;
+    }
+}
+
+.week-offset-btn {
+    background: none;
+    outline: none;
+    border: none;
+    color: #616568;
+    font-size: 12px;
+    font-weight: 500;
+    font-family: "Graphik";
+    height: fit-content;
+    line-height: 24px;
+
+    &:disabled{
+        opacity: 0.4;
+    }
+}
+
+.pipeline-bucket-control-bar {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: $backgroundOffWhite;
+    border-bottom: 1px solid #e0e4e8;
+    margin-bottom: 10px;
+    height: 50px;
+    padding-inline: 20px;
+}
+
+.main {
+    height: 100%;
+}
+
+.container-fluid {
+    height: calc(100% - 55px);
+    padding: 0px !important;
+}
+
+// Bucket Row
+.bucket-row {
+    display: grid;
+    gap: 10px;
+    grid-auto-flow: column;
+    grid-template-columns: repeat(4, auto);
+    height: 100%;
+    min-height: 250px;
+    overflow-x: auto;
+    padding: 1px 20px 200px 20px;
+    white-space: nowrap;
+
+    .bucket-column {
+        height: 100%;
+        grid-column: auto;
+    }
+}
+
+.pipeline-filter-modal {
+    h3 {
+        font-size: 20px;
+        font-weight: bold;
+        color: #000;
+    }
+
+    p {
+        font-size: 14px;
+        color: #616568;
+    }
+
+    label {
+        font-size: 12px;
+        font-weight: bold;
+        color: #121212;
+
+        span {
+            color: #cc0000;
+        }
+
+        &.block {
+            display: block;
+        }
+
+        &.radio-label {
+            margin-left: 15px;
+            margin-bottom: 0;
+            font-size: 16px;
+            font-weight: bold;
+            color: #121212;
+
+            p {
+                font-size: 14px;
+                font-weight: normal;
+            }
+        }
+    }
+
+    button {
+        color: #284ce0 !important;
+        border: 1px solid #284ce0 !important;
+        background: none !important;
+
+        &.btn-highlighted {
+            background: #284ce0 !important;
+            color: #fff !important;
+        }
+    }
+
+    input[type="text"] {
+        display: block;
+        border: 1px solid #e0e4e8;
+        border-radius: 4px;
+        width: 100%;
+        padding: 5px 10px;
+    }
+
+    input[type="radio"] {
+        max-height: 25px;
+    }
+
+    modal-footer {
+        border-top: none;
+    }
+
+    #requiredText {
+        color: #cc0000;
+        margin-bottom: 0;
+        margin-top: 5px;
+        font-size: 14px;
+    }
+}
+
+.left-pipeline-buttons {
+    align-items: center;
+    display: flex;
+}
+
+.pipeline-search {
+    color: #121212;
+    align-items: center;
+    display: flex;
+    position: relative;
+    font-family: "Graphik";
+    font-size: 12px;
+
+    .fa-search {
+        position: absolute;
+        z-index: 2;
+        line-height: 25px;
+        pointer-events: none;
+        left: 10px;
+    }
+
+    .cross_icon {
+        cursor: pointer;
+        position: absolute;
+        right: 10px;
+    }
+
+    #searchManagerBox {
+        min-width: 400px;
+        padding-left: 30px;
+        padding-right: 30px;
+        color: #121212;
+        height: 32px;
+        font-size: 13px;
+        border-color: #e0e4e8;
+        outline: none;
+
+        &::placeholder {
+            color: #616568;
+        }
+
+        &:focus,
+        &:hover {
+            border-color: #284ce0;
+        }
+    }
+}
+
+.ng-dropdown-panel-items {
+    width: 100% !important;
+}
+
+.ag-filter-toolpanel .ag-icon {
+    color: #000 !important;
+}
+
+.ag-filter-toolpanel .ag-group-title-bar .ag-group-title {
+    cursor: default;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    color: black !important;
+}
+
+.ag-filter-toolpanel .ag-filter-toolpanel-instance-filter {
+    border: none !important;
+}
+
+.flex-parent {
+    display: inline-flex;
+    flex: 1 1 0px;
+    color: #000000;
+    flex-wrap: wrap;
+}
+
+.flex-item {
+    flex: 1 1 0px;
+    border: 1px solid #c4c4c4;
+}
+
+.flex-item-filterName {
+    flex: 1 1 40px;
+    min-width: 120px;
+    max-width: 120px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.flex-item-icon {
+    flex: 1;
+    min-width: 20px;
+    max-width: 20px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: normal;
+}
+
+.active-user {
+    height: 25px;
+    width: 25px;
+    background-color: #98d8aa;
+    border-radius: 50%;
+    display: inline-block;
+    padding-left: 2px;
+    padding-top: 3px;
+    font-weight: 400;
+    color: black;
+    border: 1px solid grey;
+    margin-top: 4px;
+    margin-left: 6px;
+}
+
+#snackbar {
+    visibility: hidden;
+    min-width: 250px;
+    margin-left: -125px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 2px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1;
+    left: 50%;
+    bottom: 30px;
+    font-size: 17px;
+}
+
+#snackbar.show {
+    visibility: visible;
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+@-webkit-keyframes fadein {
+    from {
+        bottom: 0;
+        opacity: 0;
+    }
+
+    to {
+        bottom: 30px;
+        opacity: 1;
+    }
+}
+
+@keyframes fadein {
+    from {
+        bottom: 0;
+        opacity: 0;
+    }
+
+    to {
+        bottom: 30px;
+        opacity: 1;
+    }
+}
+
+@-webkit-keyframes fadeout {
+    from {
+        bottom: 30px;
+        opacity: 1;
+    }
+
+    to {
+        bottom: 0;
+        opacity: 0;
+    }
+}
+
+@keyframes fadeout {
+    from {
+        bottom: 30px;
+        opacity: 1;
+    }
+
+    to {
+        bottom: 0;
+        opacity: 0;
+    }
+}
+
+
+$colors: #800000, #2cb364, #1c3597, purple;
+$repeat: 20; // How often you want the pattern to repeat.
+
+// Warning: a higher number outputs more CSS.
+#activeUserList {
+    @for $i from 1 through $repeat {
+        li.user-placeholder.userInitials:nth-child(#{length($colors)}n + #{$i}) {
+            background: lighten(nth($colors, random(length($colors))), 20%);
+        }
+    }
+
+    .user-placeholder {
+        height: 31px;
+        width: 31px;
+        // background-color: purple;
+        border-radius: 50%;
+        display: inline-block;
+        padding: 5px;
+        font-size: 14px;
+        // font-weight: 600;
+        color: #fff;
+        margin-left: 5px;
+        text-align: center;
+    }
+
+    .user-image {
+        border-radius: 50%;
+        border: 1px solid #f3edf1;
+    }
+
+}
+
+.display-none {
+    display: none;
+}
+
+.assignOppToolbar {
+    position: fixed;
+    display: flex;
+    color: #000;
+    background: #fff;
+    box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.45);
+    font-family: "Graphik";
+    padding: 2px;
+    z-index: 10;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    line-height: 20px;
+    max-width: 620px;
+    bottom: -30px;
+    left: calc(50% - 310px);
+    opacity: 0;
+    transition: all 500ms;
+
+    &.active {
+        opacity: 1;
+        bottom: 45px;
+        transition-delay: 50ms;
+    }
+
+    .assignOppLabel {
+        display: flex;
+        align-items: center;
+
+        .oppName {
+            font-weight: 500;
+            max-width: 300px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            margin-top: 1px;
+        }
+
+    }
+
+    button {
+        background: none;
+        color: #000;
+        border: none;
+        margin: 0 0 0 0;
+        padding: 4px 14px;
+    }
+}
+
+
+.gridCollapse {
+    width: auto;
+    height: 30px;
+    background: #CC0000;
+    border: 1px solid #c4c4c4;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 13px;
+    line-height: 1.25;
+    padding: 6px 10px 6px 10px;
+    margin: 0 5px;
+    outline: none;
+    cursor: pointer;
+    position: absolute;
+    right: 8px;
+    bottom: 0px;
+    z-index: 3;
+
+    &.expand {
+        right: 50px;
+    }
+}
+
+// grid context menu
+// colors for opp status options
+.fa-minus {
+    transform: rotate(90deg);
+
+    &.staffed {
+        color: rgb(106, 207, 188);
+    }
+
+    &.to-be-staffed {
+        color: rgb(64, 175, 253);
+    }
+
+    &.capacity-allows {
+        color: rgb(186, 227, 255);
+    }
+
+    &.nearly-confirmed {
+        color: rgb(251, 228, 184);
+    }
+
+    &.likely {
+        color: rgb(193, 193, 193);
+    }
+}
+
+.flex{
+    display: flex;
+
+    &.align-items-center{
+        align-items: center;
+    }
+}

@@ -1,0 +1,25 @@
+<div class="strategy-clients-popup">
+    <!-- Header -->
+    <div class="strategy-clients-popup__header-wrapper d-flex align-items-center justify-content-between">
+        <h2 class="header">Clients</h2>
+
+        <button class="btn-class" (click)="closeModal()">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <!-- Body -->
+    <button class="btn mt-2" (click)="copyGridToClipboard()"><i class="fas fa-clone"></i> Copy All</button>
+    <div class="strategy-clients-popup__body-wrapper">
+        <ag-grid-angular
+            class="ag-theme-alpine"
+            [columnDefs]="columnDefs"
+            [defaultColDef]="defaultColDef"
+            [animateRows]="true"
+            [gridOptions]="gridOptions"
+            [enableBrowserTooltips]="true"
+            [rowData]="rowData"
+            (gridReady)="onGridReady($event)"
+        ></ag-grid-angular>
+    </div>
+</div>

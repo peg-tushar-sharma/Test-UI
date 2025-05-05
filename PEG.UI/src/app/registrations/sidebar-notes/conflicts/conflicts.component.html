@@ -1,0 +1,43 @@
+<div id="tab-content-conflicts" class="tab-content">
+  <div class="tab-details">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th width="150px">Client</th>
+          <th>Opportunity Stage</th>
+          <th width="104px">Case Code</th>
+          <th width="130px">Case Start Date</th>
+          <th width="130px">Case End Date</th>
+          <th>Managing Office</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <!-- if not conflicts -->
+        <tr *ngIf="!conflictsData.length">
+          <td colspan="6" style="text-align: center">No conflicts</td>
+        </tr>
+
+        <tr *ngFor="let conflict of conflictsData" id="conflict+{{ conflict.id }}">
+          <!-- ..client -->
+          <td>{{ conflict.clientName ? conflict.clientName : "-" }}</td>
+
+          <!-- ..stage -->
+          <td>{{ conflict.stageTypeName ? conflict.stageTypeName : "-" }}</td>
+
+          <!-- ..case code -->
+          <td style="color: #284c30; font-weight: 500;">{{ conflict.caseCode ? conflict.caseCode : "-" }}</td>
+
+          <!-- ..start date -->
+          <td>{{ conflict.caseStartDate | date : "dd-MMM-yyyy" }}</td>
+
+          <!-- ..end date -->
+          <td>{{ conflict.caseEndDate | date : "dd-MMM-yyyy" }}</td>
+
+          <!-- ..office -->
+          <td>{{ conflict.officeName ? conflict.officeName : "-" }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

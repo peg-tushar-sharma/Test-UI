@@ -1,0 +1,26 @@
+.stage-cell-renderer {
+    height: 100%;
+    position: relative;
+
+    // Dropdown Button
+    .stage-dropdown {
+        font-weight: 400;
+        gap: 10px;
+        height: 100%;
+        justify-content: space-between;
+        padding: 0px 18px;
+        width: 100%;
+
+        &.active {
+            border: 1px solid #284ce0;
+        }
+
+        i {
+            color: #616568;
+
+            &.open {
+                transform: rotate(-180deg);
+            }
+        }
+    }
+}

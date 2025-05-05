@@ -1,0 +1,258 @@
+<div style="height: 100%;">
+  <div class=" form-row" style="background-color:#ffffff!important;margin-top:2px; height: 100%;">
+    <div class="list-group expertList" #expertHead style="height:100%; font-size: 13px; flex: 0 0 400px;">
+      <div>
+        <div href="javascript:void(0);" #poolHead class="item new-expert grp-name">
+          <div class="row">
+            <div class="col-11" style="text-decoration: none!important;">Expert Pool</div>
+            <span *ngIf="!isTabReadOnly" class="col-1">
+              <div *ngIf="!addPool" style="cursor:pointer">
+                <a href="javascript:void(0);"></a><i (click)="setNewPool();" class="fas fa-plus"></i>
+              </div>
+            </span>
+          </div>
+        </div>
+      </div>         
+      <div *ngIf="deal.expertGroup" style="overflow-y: auto;"
+           [style.height.px]="expertHead.offsetHeight - poolHead.offsetHeight" class="tile-container">
+        <div *ngFor="let group of deal.expertGroup; let i = index" id="{{i}}" [ngClass]=" (group?.isRowSelected ==true)?'poolBoreder':''">
+          <a href="javascript:void(0);" *ngIf="group.expertGroupId>0" class="item"
+             [ngClass]="(currentExpertGroupId ==group.expertGroupId)?'active-pool':''"
+             style="background-color:#ffffff;color:#6D6D6D;  cursor: pointer;" (mouseenter)="draggedOnGroup(i)">
+            <div class="row"  (click)="clickOnPool($event,group,group.expertGroupId,i,deal)">
+              <div id="expert-pool-name" class="col-7" 
+                   [class.col-9]="isTabReadOnly">
+                <span
+                      [style.background-color]="group.expertPoolColor!=undefined && group.expertPoolColor.colorCode!=undefined?group.expertPoolColor.colorCode:'#BEBEBE'"
+                      class="poolColorBlock"></span>
+                <div [title]="group.expertGroupName" [attr.data-group-id]="group.expertGroupId"
+                     [ngClass]="(currentExpertGroupId ==group.expertGroupId)?'active':''"
+                     style="text-decoration: none;overflow: hidden; text-overflow: ellipsis; padding-left: 10px; margin-top: -21px; width: 210px;">
+                  {{group.expertGroupName}}
+                </div>
+              </div>
+              <!-- <div class="col-2"><i class="fa fa-edit"></i></div> -->
+              <div class="col-2 ">
+                <span *ngIf="group.expertGroupCategory"
+                      class="abb-tag">{{group?.expertGroupCategory?.abbreviation}}</span>
+              </div>
+
+              <div class="col-1 ">
+                <app-info-icon [name]="expertNote" [infoText]=getInfoText(group)></app-info-icon>
+              </div>
+              <div class="col-1" (click)="editExpertPool(group)" id="btnEditGroup" *ngIf="!isTabReadOnly">
+                <i class="fas fa-edit"></i>
+              </div>
+              <div class="col-1" (click)="addPool!=true?delete(group.expertGroupId,'pool'):''" *ngIf="!isTabReadOnly">
+                <i class="fas fa-trash"></i>
+              </div>                          
+            </div>          
+          </a>
+        </div>        
+      </div>
+
+    </div>  
+    <div class="" style="flex: 1; height: 100%; padding-left: 0px!important; padding-right: 0px!important;">
+      <div class="col-12" style="padding-left: 0px!important; padding-right: 0px!important; height: 100%;"
+        *ngIf="deal.expertGroup && deal.expertGroup.length>0" #expertHeader>
+
+        <div class="list-group col-12 expertList"
+          style="font-size: 13px; background-color:#FFFFFF!important;padding:0; height: 45px;">
+          <a href="javascript:void(0);" class="item" style="color:#707070 !important;">
+            <div class="row">
+              <div class="col-11" style="text-decoration: none;">Expert</div>
+              <div *ngIf="!isTabReadOnly" class="col-1">
+                <div *ngIf="isExpertEnabled">
+                  <a href="javascript:void(0);" style="float: right;color:#707070 !important;"><i
+                      (click)="addNewExpert();" class="fas fa-plus"></i></a>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div class="grid-container row no-gutters" [style.height.px]="expertHeader.offsetHeight - 45">
+          <div class="col grid-column" id="expertsGrid" style="height: 100%;">
+            <ag-grid-angular style="height:100%; overflow:auto" [editType]="fullRow" [popupParent]="popupParent"
+              *ngIf="rowData && rowData.length>0" [gridOptions]="gridOptions" class="ag-theme-custom-angular"
+              [rowData]="rowData" [columnDefs]="columnDefs" (cellValueChanged)="onCellValueChanged($event)"
+              [defaultColDef]="defaultColDef" rowSelection="single" [rowDragEntireRow]="true"
+              (gridReady)="onGridReady($event)" [rowDragManaged]="true">
+            </ag-grid-angular>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="!isTabReadOnly" class="new-expert-group col-7" [ngClass]="(addPool==true)?'show':'hide'" style="left: 410px; top: 90px; border: 1px solid gray; background-color: white;padding-left: 20px;margin-top:-15px;
+  padding-top: 15px;padding-right: 20px; padding-bottom: 10px;;position: absolute; box-shadow: 5px 5px 5px grey;">
+      <form #form="ngForm" class="needs-validation data-collection" [class.submitted]="form.submitted" novalidate>
+        <div *ngIf="enableImport">
+          <div class="row col-12">
+            <h2> Import Expert Pool</h2>
+          </div>
+          <hr />
+          <div class="no-gutters">
+            <div class="form-row">
+              <div class="col-4 invalid mb-3 bottom">
+                <label>Tracker ID/Name:</label>
+                <!-- <input type="text" class="form-control inputTag" autocomplete="off"  [disabled]="importPool"
+                     name="importTargetID" required (keyup)="changeDetected()"
+                     [(ngModel)]="importTargetID" id="importTargetID" /> -->
+                <ng-select id="importTargetID" name="trackerName" [items]="dealList" bindLabel="targetName" required
+                  (keyup)="setCotrolAccess();" [disabled]="disableImportPool" [typeahead]="dealTypeAhead"
+                  [(ngModel)]="selectedImportDeal" [multiple]="false" [hideSelected]="false"
+                  (change)="onTrackerSelectionChanged($event)" [selectOnTab]="true" (close)="clearItems();"
+                  [loading]="dealload" typeToSearchText="Please type Target Name or ID">
+
+                  <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                    <div>
+                      <div>
+                        <div [ngStyle]="{'background-color':item.isMasked?'#bdbdbd':null}" [disabled]='deal.isMasked'>
+                          {{ item.targetName}}
+                        </div>
+                        <div class="col-info-subText"> <b>Status:</b> {{item.dealStatusName}}, <b>Submitted On:</b>
+                          {{item.submissionDate | date :'dd-MMM-yyyy'}}
+                          <span *ngIf="item.appSessionId" style="float:right"><i class="fa fa-lock mr-1"
+                              aria-hidden="true" style="font-size: 12px;"></i></span> <br>
+                          <label style="color:red" *ngIf="item.appSessionId"><span style="font-weight: 600;">
+                              {{item.lastName}}, {{item.firstName}} ({{item.officeAbbreviation}}) </span>is
+                            editing</label>
+                        </div>
+
+                      </div>
+
+                    </div>
+                  </ng-template>
+                </ng-select>
+              </div>
+              <div class="col-4 mb-3 bottom">
+                <label>Pool Name:</label>
+                <ng-select id="poolName" [disabled]="importPool" style="outline: none;" name="poolName"
+                  [items]="(selectedImportDeal)?selectedImportDeal.expertGroups:[]" bindLabel="expertGroupName" required
+                  [(ngModel)]="selectedImportExpertGroup" [multiple]="false" [hideSelected]="false"
+                  (keyup)="setCotrolAccess();" [disabled]="disableImportPool" [selectOnTab]="true"
+                  (change)="expertGroupChange($event)">
+
+                  <ng-template ng-option-tmp let-item="item" let-clear="clear" let-index="index"
+                    let-search="searchTerm">
+                    <div>
+                      <div class="dropdownOptions">
+                        <div>
+                          {{ item.expertGroupName}}
+                        </div>
+                        <div [ngClass]="{'location':item.expertGroupCategory?.abbreviation}">
+                          {{item.expertGroupCategory?.abbreviation}}
+                        </div>
+                        <div class="col-1">
+                          <app-info-icon [name]="importexpertNote" [infoText]=getInfoText(item.expertGroupNote)>
+                          </app-info-icon>
+                        </div>
+                      </div>
+
+                    </div>
+                  </ng-template>
+                </ng-select>
+              </div>
+              <div class="col-4 mb-3 bottom">
+                <label>Color:</label>
+                <ng-select [items]="lstColors" [disabled]="importPool" bindLabel="colorName"
+                  [(ngModel)]="selectedImportExpertPoolcolor" (change)="onImportPoolColorChange($event);"
+                  [disabled]="disableImportPool" name="poolColor1" ngDefaultControl>
+                  <ng-template ng-label-tmp let-item="item" let-clear="clear">
+                    <div class="outer">
+                      <div class="one" style="width: 25px;height: 25px;" [style.background-color]="item.colorCode">
+                      </div>
+                      <div class="two">{{item.colorName}}</div>
+                    </div>
+                  </ng-template>
+
+                  <ng-template ng-option-tmp let-item="item">
+
+                    <div class="outer">
+                      <div class="one" style="width: 25px;height: 25px;" [style.background-color]="item.colorCode">
+                      </div>
+                      <div class="two">{{item.colorName}}</div>
+                    </div>
+
+                  </ng-template>
+                </ng-select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-12 invalid mb-3">
+                <label>Note:</label>
+                <textarea style="height:50px" [disabled]="disableImportPool" class="form-control" name="GroupNote1"
+                  (keyup)="setCotrolAccess();" [(ngModel)]="selectedImportNotes" [disabled]="active=='new'"
+                  class="form-control"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row col-12">
+          <h2> New Expert Pool</h2>
+        </div>
+        <hr />
+        <div class="no-gutters">
+          <div class="form-row">
+            <div class="col-4 invalid mb-3">
+              <label>Name:</label>
+              <input type="text" class="form-control inputTag" autocomplete="off"
+                (ngModelChange)="expertGroupNameChange($event);" name="GroupName" required (keyup)="setCotrolAccess();"
+                [disabled]="disableNew" [(ngModel)]="expertGroup.expertGroupName" id="txtExpertGroupName" />
+            </div>
+            <div class="col-4 mb-3">
+              <label>Category:</label>
+              <ng-select [items]="lstExpertGroupCategory" bindLabel="categoryName" (change)="setCotrolAccess();"
+                (keyup)="setCotrolAccess();" [disabled]="disableNew" [(ngModel)]="expertGroup.expertGroupCategory"
+                name="expertGroupCategory" #expertGroupCategory="ngModel" ngDefaultControl>
+              </ng-select>
+            </div>
+            <div class="col-4 mb-3">
+              <label>Color:</label>
+              <ng-select [items]="lstColors" bindLabel="colorName" [(ngModel)]="expertGroup.expertPoolColor"
+                (change)="setCotrolAccess();" (keyup)="setCotrolAccess();" [disabled]="disableNew" name="poolColor"
+                #poolColor="ngModel" ngDefaultControl>
+                <ng-template ng-label-tmp let-item="item" let-clear="clear">
+                  <div class="outer">
+                    <div class="one" style="width: 25px;height: 25px;" [style.background-color]="item.colorCode"></div>
+                    <div class="two">{{item.colorName}}</div>
+                  </div>
+                </ng-template>
+
+                <ng-template ng-option-tmp let-item="item">
+
+                  <div class="outer">
+                    <div class="one" style="width: 25px;height: 25px;" [style.background-color]="item.colorCode"></div>
+                    <div class="two">{{item.colorName}}</div>
+                  </div>
+
+                </ng-template>
+              </ng-select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="col-12 invalid mb-3">
+              <label>Note:</label>
+              <textarea style="height:50px" class="form-control" name="GroupNote"
+                [(ngModel)]="expertGroup.expertGroupNote" name="note" [disabled]="disableNew"
+                (keyup)="setCotrolAccess();" class="form-control"></textarea>
+            </div>
+          </div>
+          <div class="form-row" style="padding-top: 30px !important;">
+            <div class="col-12 col-md-12 col-sm-12">
+              <label style="color:#CC0000" *ngIf="isDuplicateName">{{errorMessage}}</label>
+              <button type="button" class="btn btn-tertiary ml-3" id="btnPoolCancel" (click)="cancel()"
+                style="float: right;">
+                Cancel
+              </button>
+              <button type="button" style="float: right;" id="btnSaveExpertPool" class="btn btn-primary ml-3 "
+                (click)="form.valid && !isDuplicateName ? save() : null" [disabled]="form && form.invalid ">
+                {{poolEdit}}
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>  
+  </div>
+
+</div>

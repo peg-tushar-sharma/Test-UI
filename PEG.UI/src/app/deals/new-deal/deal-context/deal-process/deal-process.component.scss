@@ -1,0 +1,94 @@
+@import '../../../../../styles/layout/deal.scss';
+@import '../../../../../styles/layout/util.scss';
+@import '../../../../../styles/abstract/variables.scss';
+
+#impDates {
+    width: 100%;
+}
+
+#impDates td{
+    padding: 5px 10px;
+}
+#impDates tr{
+    background-color: white;
+
+}
+
+#impDates .fas,#impDates .far{
+    color: #C9C9C9;
+}
+
+
+#impDates .fas:hover,#impDates .far:hover{
+    color:black;
+    cursor: pointer;
+}
+
+
+.requiredDate {
+    border: solid 1px #cc0000 !important;   
+    color: red !important;
+  }
+
+  .borderRow{
+      border: 1px solid #eee;
+  }
+
+  
+.formattedInput {
+    border: none;
+    border-bottom: 1px solid #C4C4C4;
+    border-radius: 0px;
+    height: 30px;
+}
+
+#formattedTextarea {
+    border: none;
+    border-bottom: 1px solid #C4C4C4;
+    border-radius: 0px;
+    min-height: 50px;
+}
+
+::ng-deep .important-dates {
+    .mydp {
+        border: none !important;
+        border-bottom: 1px solid #c4c4c4 !important;
+        border-radius: 0px !important;
+        margin-top: -5px;
+    }
+
+    .mydp .selection {
+        height: 30px !important;
+        padding-top: 10px;
+    }
+}
+
+.impDatesBlock {
+    border: 1px solid #BEBEBE;
+    padding: 10px;
+    height: 200px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.saveBtn {
+    background: #CC0000;
+    height: 30px;
+    line-height: 1;
+    text-align: center;
+    border-radius: 0px;
+    outline: none !important;
+    color: #FFFFFF;
+    font-size: 12px;
+    font-family: 'Graphik';
+
+}
+
+::-webkit-scrollbar {
+    width: 8px;    
+}
+
+.disabled
+{
+    pointer-events: none;
+}

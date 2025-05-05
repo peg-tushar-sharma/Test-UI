@@ -1,0 +1,19 @@
+.log-item {
+  .dot-separator {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: rgba(153, 153, 153, 1);
+    
+  }
+
+  .info {
+    color: rgba(153, 153, 153, 1);
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+  }
+  .log-content{
+    font-size: 14px !important;
+  }
+}

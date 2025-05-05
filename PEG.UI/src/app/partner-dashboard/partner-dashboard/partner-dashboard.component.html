@@ -1,0 +1,62 @@
+<!-- Page div will have blue-ish bg color -->
+<div class="dashboard-page d-flex">
+  <!-- Left Side Navigation -->
+  <div class="left-side-menu-wrapper d-flex">
+      <!-- Buttons -->
+      <button class="btn-class" *ngFor="let item of menuButtons" (click)="openLink(item)">
+          <div class="icon-wrapper d-flex align-items-center justify-content-center"
+              [ngClass]="item.icon ? 'with-icon' : ''">
+              <i class="fas fa-{{ item.icon }}" *ngIf="item.icon !== null"></i>
+              <img src="./../../../assets/img/{{item.image}}" alt="{{item.label}}" *ngIf="item.image !== null"
+                  height="{{item.height}}">
+
+          </div>
+          <span>{{ item.label }}</span>
+      </button>
+  </div>
+
+  <!-- Wrapper will have white bg -->
+  <div class="right-side-wrapper">
+      <div class="content-wrapper">
+          <!-- Header Wrapper -->
+          <div class="header-wrapper">
+              <h5 style="grid-area: header1;" (click)="onRegistrationTypeclick(false)"
+                  [ngClass]="!isActiveRegistration ? 'activeHeader' : ''">Active Opportunities <span
+                      *ngIf="!isActiveRegistration">({{displayCount}})</span></h5>
+
+              <h5 style="grid-area: header2;" (click)="onRegistrationTypeclick(true)"
+                  [ngClass]="isActiveRegistration ? 'activeHeader' : 'archiveHeader'">Archived Opportunities <span
+                      *ngIf="isActiveRegistration">({{displayCount}})</span></h5>
+
+              <div style="grid-area: search;" class="search-input-wrapper d-flex align-items-center">
+                  <i class="fas fa-search"></i>
+                  <input class="inpt" id="filter-text-box" type="text" placeholder="Search by target & client" [(ngModel)]="quickFilterText"
+                      (keyup)="onFilterTextBoxChanged($event)" />
+              </div>
+              <!-- <a class=" full primary d-flex align-items-center">
+                  <i class="fas fa-filter mr-2"></i>
+              </a> -->
+              <a style="grid-area: cta1;" class="color-lav full  primary d-flex align-items-center" title="Reset filters" (click)="onResetFilter($event)">
+                  <i class="fa fa-filter"></i>
+              </a>
+
+              <a style="grid-area: cta2;" class="btn-class full primary d-flex align-items-center" routerLink="/opportunity/newopportunity">
+                  <i class="fas fa-plus mr-2"></i>
+                  <span>New Opportunity</span>
+              </a>
+          </div>
+
+          <!-- Table Wrapper -->
+          <div class="table-wrapper">
+              <ag-grid-angular class="ag-theme-alpine" style="flex: 1; width: 100%"
+                  [rowData]="rowData" [columnDefs]="columnDefs" [defaultColDef]="defaultColDef" [animateRows]="true"
+                  [gridOptions]="gridOptions" (gridReady)="onGridReady($event)"></ag-grid-angular>
+          </div>
+      </div>
+  </div>
+</div>
+
+<!--  -->
+<!--  -->
+<!-- Create New Opportunity Slideout -->
+<app-create-opp-slideout></app-create-opp-slideout>

@@ -1,0 +1,41 @@
+<div class="custom-tooltip-conflicts" *ngIf="tooltipValue" style="max-width: 1000px;">
+    <!-- <label   class="flex wraptext" [innerHTML]="tooltipValue" [delay]="500"></label>     -->
+    <div id="conflictsIconWrapper-conflicts">
+       
+        <div class="table-wrapper-conflicts">
+          <div class="conflicts-header">
+            <div class="truncate">
+                <span *ngIf="activeOffice || priorOffice || conflictedOffice">Conflicted offices :</span><span *ngIf="activeOffice"> <b> Active- </b>{{activeOffice}} </span>
+              <span *ngIf="priorOffice"><span *ngIf="activeOffice">,</span><b> Prior- </b>  {{priorOffice}} </span>
+              <span *ngIf="conflictedOffice"><span *ngIf="activeOffice || priorOffice">,</span><b> Other- </b>  {{conflictedOffice}} </span>
+            </div>
+          </div>
+            <table class="fl-table-conflicts">
+                <thead>
+                    <tr>
+                        <th>Client</th>
+                        <th>Stage</th>
+                        <th>End Date</th>
+                        <th>Managing Office</th>
+                        <th>Case Manager</th>
+                        <th>Case Code</th>
+                        <th>Retainer</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let element of tooltipValue">
+                        <td> <span  [ngClass]="getHighlightClass(element)" >{{element.clientName ? element.clientName : ""}}</span></td>
+                        <td>{{element.stageTypeName ? element.stageTypeName : ""}}</td>
+                        <td>{{element.caseEndDate | date:'dd-MMM-yyyy'}}</td>
+                        <td>{{element.officeName ? element.officeName : ""}}</td>
+                        <td>{{element.caseManager ? element.caseManager : ""}}</td>
+                        <td><a [href]="" rel="noopener noreferrer" target="_blank">{{element.caseCode ?
+                                element.caseCode : ""}}</a></td>
+                        <td>{{element.isRetainer !=null ? element.isRetainer :"" }} {{element.retainerNotes?'; '+
+                            element.retainerNotes:""}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

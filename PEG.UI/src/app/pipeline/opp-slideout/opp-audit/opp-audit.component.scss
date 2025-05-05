@@ -1,0 +1,35 @@
+@import '../../pipeline_styles';
+
+#audit-table {
+    background: #fff;
+    color: $textGray;
+    font-size: 12px;
+    width: 100%;
+
+    thead {
+        font-weight: bold;
+    }
+
+    tbody {
+        tr:nth-child(odd) {
+            background: $backgroundOffWhite;
+        }
+    }
+
+    td,
+    th {
+        vertical-align: top;
+        padding: 10px;
+    }
+}
+
+.audit-log {
+    color: $textNearBlack;
+    padding: 4px;
+}
+
+.audit-log-info {
+    color: $textGray;
+    padding: 4px;
+    float: right;
+}

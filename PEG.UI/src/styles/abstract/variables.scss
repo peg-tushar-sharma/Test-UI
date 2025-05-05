@@ -1,0 +1,66 @@
+//colors
+$bain-red:#CC0000;
+$text-regular: #949494;
+$text-dark: #3C3C3C;
+$white: #FFF;
+$grey-extra-light:#F7F7F7;
+$grey-lighter:#f2f2f2;
+$grey-light:#E4E4E4;
+$grey-medium-light:#EEE;
+$grey-medium:#CCC;
+$grey-medium-dark:#D7D7D7;
+$grey-dark:#AEAEAE;
+$grey-darker:#999;
+$grey-darkest:#6D6D6D;
+$grey-alt-1:#EAEAEA;
+$grey-alt-2:#E2E2E2;
+$grey-alt-3:#424242;
+$grey-alt-4:#767676;
+$grey-alt-5: #f9f9f9;
+$grey-alt-6: #E0E0E0;
+$grey-alt-7: #A1A1A1;
+$grey-alt-8: #C4C4C4;
+
+$sky:#005999;
+$forest: #DCE2D6;
+
+$accent-1:#fae62a;
+$accent-2:#f9a740;
+$accent-3:#4cb6fb;
+$accent-4:#3cca7a;
+$accent-5:#9f5dd8;
+
+$black: #000;
+
+$tag-1:#f7a64b;
+$tag-2:#9f5dd8;
+$tag-3:#52b7f8;
+
+$active-button:#51b7f8;
+
+//fonts
+$brand-font-size:30px;
+$nav-item-font-size:16px;
+$breadcrumb-header-font-size:28px;
+$sidebar-nav-font-size: 17px;
+
+//measurements
+$header-height:33px;
+$nav-item-height:40px;
+$breadcrumb-height:75px;
+$sidebar-width:260px;
+$logo-width:43px;
+$logo-height:41px;
+$base-padding:16px;
+
+//animations
+@mixin color-fade {
+  transition: color 1s;
+}
+
+@mixin color-fade-fast {
+  transition: color .5s;
+}
+$dropdown-color:#212529!important;
+// $card-spacer-y:0px; 
+// $card-spacer-x:0px  ;

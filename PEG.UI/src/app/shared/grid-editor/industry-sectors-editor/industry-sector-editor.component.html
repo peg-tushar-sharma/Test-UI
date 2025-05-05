@@ -1,0 +1,41 @@
+<div class="industry-cell">
+    <div class="location-edit1">
+        <span style="margin-top:5px"> Industry - </span>
+        <span style="margin-top:5px">{{params.data.industries[0] ? params.data.industries[0]?.industryName : ''}} </span>
+
+    </div>
+    <div class="location-edit1">
+        <span style="margin-top:5px"> Sector - </span>
+        <ng-select id="sectors" class="compWidth" name="sectors" #sectors style="width: 100%;"
+            bindLabel="sectorName" [multiple]="true" [items]="sectorsList" [(ngModel)]="selectedSectors"
+            (change)="onSectorChange($event)" (remove)="onSectorRemove($event)" (clear)="onSectorClear($event)">
+            <ng-template ng-multi-label-tmp let-items="items" let-clear="clear" style="width: 95%;">
+                <div class="ng-value" *ngFor="let item of items | slice:0:1">
+                    <span class="ng-value-icon left" (click)="clear(item)" aria-hidden="true">×</span>
+                    <span class="ng-value-label"> {{item.sectorName}}</span>
+                </div>
+                <div class="ng-value" *ngIf="items.length > 1">
+                    <span class="ng-value-label">+{{items.length - 1}}</span>
+                </div>
+            </ng-template>
+        </ng-select>
+    </div>
+    <div class="location-edit1">
+        <span style="margin-top:5px"> SubSector - </span>
+        <ng-select id="subSectors" class="compWidth" name="subSectors" #subSectors="ngModel" style="width: 100%;"
+            bindLabel="subSectorName" [multiple]="true" [items]="subSectorsList" [(ngModel)]="selectedSubSectors">
+            <ng-template ng-multi-label-tmp let-items="items" let-clear="clear" style="width: 95%;">
+                <div class="ng-value" *ngFor="let item of items | slice:0:1">
+                    <span class="ng-value-icon left" (click)="clear(item)" aria-hidden="true">×</span>
+
+                    <span class="ng-value-label"> {{item.subSectorName}}</span>
+                </div>
+                <div class="ng-value" *ngIf="items.length > 1">
+                    <span class="ng-value-label">+{{items.length - 1}}</span>
+                </div>
+            </ng-template>
+        </ng-select>
+    </div>
+</div>
+
+

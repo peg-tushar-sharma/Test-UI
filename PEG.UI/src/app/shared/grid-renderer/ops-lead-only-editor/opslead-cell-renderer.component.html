@@ -1,0 +1,8 @@
+<div style="text-align: center;">
+  <span>
+    <input type="checkbox" id="toggle{{params.data?.pipelineId}}" class="checkbox"  (change)="toggleEvent($event)"
+        [(ngModel)]="isChecked" />
+    <label for="toggle{{params.data?.pipelineId}}" class="switch"></label>
+  </span>
+</div>
+

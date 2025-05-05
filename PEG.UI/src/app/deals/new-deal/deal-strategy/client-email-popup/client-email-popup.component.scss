@@ -1,0 +1,136 @@
+#clientEmailPopupWrapper {
+  color: #121212;
+
+  .modal-header {
+    padding: 10px 20px;
+    background: #efeef0;
+    .modal-title {
+      font-size: 20px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: 24px;
+    }
+  }
+
+  .close-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  h2,
+  #modal-close {
+    color: #121212;
+    font-size: 24px;
+    line-height: 28px;
+  }
+
+  #modal-close {
+    border: none;
+    background: none;
+  }
+
+  table {
+    width: 100%;
+    min-width: 800px;
+    border: 1px gray;
+    font-size: 13px;
+
+    thead th {
+      width: 220px;
+      font-weight: 770;
+      background-color: #f6f6f6;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    tbody {
+      max-height: 150px;
+      overflow-y: scroll;
+    }
+
+    th, td {
+      padding: 8px;
+      border: 1px solid #ddd;
+    }
+
+    .w-30 {
+      width: 30px !important;
+    }
+  }
+
+  .regular-text {
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+  }
+
+  .row-label {
+    display: block;
+    color: rgba(18, 18, 18, 1);
+    margin: 0;
+    padding: 3px 0;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 16px;
+    text-align: left;
+  }
+
+  .editable-content {
+    background-color: #fff;
+    border: 1px solid #e0e4e8;
+    border-radius: 4px;
+    color: #121212;
+    outline: none;
+    padding: 10px;
+    resize: none;
+    height: 248px;
+    width: 100%;
+  }
+
+  .textareaReadonly {
+    background-color: #fff;
+    color: #121212;
+    outline: none;
+    padding: 16px 0;
+    resize: none;
+    height: auto;
+    width: 100%;
+  }
+
+  .textarea {
+    background-color: #fff;
+    border: 1px solid #e0e4e8;
+    border-radius: 4px;
+    color: #121212;
+    outline: none;
+    padding: 8px 10px;
+    resize: none;
+    min-height: 150px;
+    height: auto;
+    width: 100%;
+}
+}
+
+.table-wrap{
+  overflow-y:auto;
+  max-height: 400px;
+}
+
+::ng-deep {
+
+  .hide-input .ng-input{
+    display: none !important;
+  }
+
+  .ng-arrow-wrapper {
+    display: none !important;
+
+    .ng-arrow {
+      display: none !important;
+    }
+  }
+}

@@ -1,0 +1,15 @@
+<table id='audit-table'>
+
+  <tbody class="tbody">
+    <tr *ngFor="let audit of $auditLogs | async" style="border-bottom: #d5d5d5 1px solid">
+
+      <div *ngIf ="audit.fieldName !='Delete Opp'" class="audit-log"> {{audit.fieldName}} has been set to {{ displayAuditValue(audit) }}
+        <span class="audit-log-info">{{audit.submittedByName}} {{audit.submissionDate | formatTimeZone : true }}</span>
+      </div>
+      <div *ngIf ="audit.fieldName =='Delete Opp'" class="audit-log">  {{ displayAuditValue(audit) }}
+        <span class="audit-log-info">{{audit.submittedByName}} {{audit.submissionDate | formatTimeZone : true }}</span>
+      </div>
+    </tr>
+  </tbody>
+
+</table>

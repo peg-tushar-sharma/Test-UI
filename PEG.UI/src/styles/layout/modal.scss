@@ -1,0 +1,25 @@
+.modal{
+  .modal-dialog{
+    max-width:872px;
+    &.modal-md{
+      max-width: 630px;
+    }
+
+    .modal-header{
+      color: $text-dark;
+      font-size: 20px;
+      border-bottom-color: $grey-medium;
+    }
+
+    .modal-body{
+      p.message{
+        margin:0;
+        color: $text-dark;
+      }
+    }
+
+    .modal-footer{
+      border-top-color: $grey-medium;     
+    }
+  }
+}

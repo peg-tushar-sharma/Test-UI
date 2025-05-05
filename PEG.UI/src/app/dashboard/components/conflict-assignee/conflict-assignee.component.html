@@ -1,0 +1,13 @@
+<div class="conflict-assignee-wrapper d-flex align-items-center">
+  <img *ngIf="employee?.employeeCode" loading="lazy"
+    src="https://employeephotos.bain.com/photos/{{ employee.employeeCode }}.jpg" alt="" />
+  <div class="unassigned" *ngIf="!employee?.employeeCode"><img loading="lazy"
+      src="../../../../assets/img/defaultUser.png" width="50" height="50" alt="avatar" /></div>
+  <div class="assigment-info d-flex flex-column">
+    <label for="">Assignment</label>
+    <ng-select size="sm" style="width: 180px" [items]="employeesList" [searchable]="false" placeholder="Unassigned" bindLabel="searchableName"
+      (change)="onAssigneeChanges($event)" [(ngModel)]="employee" [clearable]="employee?.searchableName" (clear)="clearItems($event);">
+    </ng-select>
+    <button class="btn btn-link btn-sm" (click)="assignToMe()">Assign to me</button>
+  </div>
+</div>

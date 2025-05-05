@@ -1,0 +1,225 @@
+<main>
+  <div class="pipelineContainer">
+    <div class="navigationFirstRow">
+      <div class="colcontainer2">
+        <div class="searchContainer has-search pipeline-filter-nav" style="display: flex; gap: 20px">
+          <!-- search.. -->
+          <div class="search-wrapper">
+            <!-- ..icon -->
+            <i class="fas fa-search"></i>
+            <!-- ..input -->
+            <input type="text" placeholder="Add to pipeline (client / target)" name="filterValue" autocomplete="off"
+              [(ngModel)]="searchRegValue" (ngModelChange)="searchGlobalFilter()">
+            <!-- clear input btn -->
+            <button *ngIf="searchRegValue" class="btn" (click)="onClearAllFilters()">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+
+          <!-- filter dropdown -->
+
+          <div class="filter-wrapper d-flex align-items-center">
+            <p>Include in results</p>
+            <div class="dropdown custom-dropdown"#filterOptionsDropdown>
+              <button class="btn btn-secondary dropdown-toggle" type="button" (click)="toggleFilterDropdown()">
+                <span class="dropdown-text">{{filterDropdownText}}</span>
+                <span class="dropdown-arrow"></span>
+              </button>
+              <div class="dropdown-menu" [class.show]="isFilterDropdownOpen">
+                <app-tree [treeData]="filterOptions"
+                          [searchDisabled]="true"
+                          [defaultSelectedNodes]="defaultSelectedOptions"
+                          (selectionChanged)="onFilterChanged($event)">
+                </app-tree>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+
+
+        <div class="searcableArea" *ngIf="showSearchableDiv" #regSearchSpace id="regSearchSpace">
+          <div *ngIf="(activeregistration.length==0 && wonregistration.length==0 && archivedRegistrations.length==0)"
+            style="text-align: center;" class="regMatchParent">
+            <h6 class="regMatch">No Records Found</h6>
+          </div>
+
+          <div *ngIf="activeregistration.length > 0">
+            <div class="regMatchParent">
+              <h6 class="regMatch">Active Opportunities</h6>
+
+              <app-checkbox-select [isEditable]="true" [labelText]="'Show Closed Opportunities'"
+                [uniqueId]="'showClosedOpps'" [name]="'showClosedOpps'" [modelValue]="showArchiveRegistrations"
+                (outModelChange)="showArchiveRegistrations = $event"></app-checkbox-select>
+            </div>
+
+            <span *ngFor="let item of activeregistration">
+              <div class="flex-parent blue-left-border">
+                <div class="flex-item">{{item.client.clientName}}</div>
+                <div class="flex-item">{{item.target?.targetName}}</div>
+
+                <div class="flex-item">
+                  <b id="bolded">Submitted By:</b>
+                  <span>{{item.submittedBy.searchableName}}</span>
+                </div>
+
+                <div class="flex-item flex-date-width">
+                  <b id="bolded">Submitted Date:</b>
+                  <span>{{item.submissionDate | date:'dd-MMM-yyyy'}}</span>
+                </div>
+
+                <div *ngIf="!item.isPipeline" class="flex-item-fixed addIcon"><i id="addToPipeline"
+                    (click)="addToPipeline(item)" class="  fas fa-plus-square"></i>
+                </div>
+
+                <div *ngIf="item.isPipeline" class="flex-item-fixed addIcon" (click)="showRegistration(item)">Show</div>
+
+                <div class="flex-item-fixed openIcon">
+                  <i *ngIf="item.isPipeline" class="fas fa-caret-right" title="Open Flyout"
+                    (click)="handleOpenFlyout(item)"></i>
+                </div>
+              </div>
+            </span>
+          </div>
+
+          <div *ngIf="wonregistration.length>0">
+            <div class="regMatchParent">
+              <h6 class="regMatch">Won Opportunities</h6>
+            </div>
+
+            <span *ngFor="let item of wonregistration">
+              <div class="flex-parent green-left-border">
+                <div class="flex-item ">{{item.client.clientName}}</div>
+                <div class="flex-item ">{{item.target?.targetName}}</div>
+
+                <div class="flex-item">
+                  <b id="bolded">Submitted By:</b>
+                  <span>{{item.submittedBy.searchableName}}</span>
+                </div>
+
+                <div class="flex-item flex-date-width">
+                  <b id="bolded">Submitted Date:</b>
+                  <span>{{item.submissionDate | date:'dd-MMM-yyyy'}}</span>
+                </div>
+
+                <div *ngIf="item.isPipeline" class="flex-item-fixed addIcon" (click)="showRegistration(item)">Show</div>
+
+                <div *ngIf="!item.isPipeline" class="flex-item-fixed addIcon"><i id="addToPipeline"
+                    (click)="addToPipeline(item)" class="  fas fa-plus-square"></i>
+                </div>
+
+                <div class="flex-item-fixed openIcon">
+                  <i *ngIf="item.isPipeline" class="fas fa-caret-right" title="Open Flyout"
+                    (click)="handleOpenFlyout(item)"></i>
+                </div>
+              </div>
+            </span>
+          </div>
+
+          <div *ngIf="showArchiveRegistrations && archivedRegistrations.length>0">
+            <div class="regMatchParent">
+              <h6 class="regMatch">Closed Opportunities</h6>
+            </div>
+
+            <span *ngFor="let item of archivedRegistrations">
+              <div class="flex-parent red-left-border">
+                <div class="flex-item ">{{item.client.clientName}}</div>
+                <div class="flex-item ">{{item.target?.targetName}}</div>
+
+                <div class="flex-item">
+                  <b id="bolded">Submitted By:</b>
+                  <span>{{item.submittedBy.searchableName}}</span>
+                </div>
+
+                <div class="flex-item flex-date-width">
+                  <b id="bolded">Submitted Date:</b>
+                  <span>{{item.submissionDate | date:'dd-MMM-yyyy'}}</span>
+                </div>
+
+                <div *ngIf="!item.isPipeline" class="flex-item-fixed addIcon"><i id="addToPipeline"
+                    (click)="addToPipelineArchive(item)" class="  fas fa-plus-square"></i>
+                </div>
+
+                <div *ngIf="item.isPipeline" class="flex-item-fixed addIcon" (click)="showRegistration(item)">Show</div>
+
+                <div class="flex-item-fixed openIcon">
+                  <i *ngIf="item.isPipeline" class="fas fa-caret-right" title="Open Flyout"
+                    (click)="handleOpenFlyout(item)"></i>
+                </div>
+              </div>
+            </span>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="colContainer">
+        <div class="utilityContainer">
+
+          <div class="default filterDiv savedFiltersContainer">
+            <ng-select id="selectedFilter" style="width: 225px; margin-left: 20.25rem !important" class="selector ml-1"
+              [items]="savedFilters" bindLabel="filterTemplateName" [(ngModel)]="selectedFilter"
+              (change)="onSavedFilterChange.emit($event)" (clear)="clearSelectedFilter($event)"
+              (remove)="clearSelectedFilter($event)" [clearable]="true" placeholder="Saved Views">
+              <ng-template ng-option-tmp let-item="item">
+                <div class="flex-parent">
+                  <div class="flex-item-filterName" title="{{ item.filterTemplateName }}">
+                    {{ item.filterTemplateName }}
+                  </div>
+                  <div (click)="deleteFilter(item)" class="flex-item-icon">
+                    <i class="fa fa-trash" aria-hidden="true"></i>
+                  </div>
+                  <div (click)="openSaveFilterModal(item)" class="flex-item-icon">
+                    <i class="fas fa-edit"></i>
+                  </div>
+                  <span *ngIf="item.isDefault"
+                    style="border: 1px solid; border-radius: 5px; padding: 0.5px">Default</span>
+                </div>
+              </ng-template>
+            </ng-select>
+            <button id="filterSaveNew" class="btn text-right" (click)="openSaveFilterModal($event)">
+              <i class="fas fa-plus"></i>Save New
+            </button>
+            <button id="filterSaveChanges" class="btn text-right" [disabled]="hasUnsavedFilterChanges() ? false : true"
+              (click)="saveChanges(selectedFilter)">
+              <i class="fas fa-save"></i>Save Changes
+            </button>
+            <button id="filterShare" [disabled]="selectedFilter == undefined" class="btn text-right"
+              (click)="openShareViewModal($event)">
+              <i class="fas fa-share-alt"></i>Share
+            </button>
+          </div>
+
+
+          <div class="default">
+            <button class="defaultBlock" (click)="toggleGroups()"
+              [title]="!isGroupExpand?'Expand all groups':'Collapse all groups'">
+              <span><i class="fa" [ngClass]="!isGroupExpand ? 'fa-expand' : 'fa-compress'"
+                  aria-hidden="true"></i></span>
+            </button>
+          </div>
+
+
+          <!-- expand curtain -->
+          <div class="default">
+            <button class="defaultBlock" [title]="!isCurtainExpanded?'Click to expand grid':'Click to collapse grid'"
+              (click)="onCurtainExpand()">
+              <span *ngIf="!isCurtainExpanded"><i class="fa fa-chevron-up" aria-hidden="true"></i></span>
+              <span *ngIf="isCurtainExpanded"><i class="fas fa-window-minimize" aria-hidden="true"></i></span>
+            </button>
+          </div>
+
+          <!-- minimize curtain -->
+          <div class="default">
+            <button class="defaultBlock" title="Click to collapse grid" (click)="onCurtainCollapse()">
+              <span><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</main>

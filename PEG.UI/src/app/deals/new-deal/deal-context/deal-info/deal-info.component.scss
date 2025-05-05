@@ -1,0 +1,48 @@
+@import '../../../../../styles/layout/deal.scss';
+@import "../../../../../styles/abstract/variables.scss";
+@import "../../../../../styles/layout/modal.scss";
+@import "../../../../../styles/layout/form";
+@import "../../../../../styles/layout/deal.scss";
+@import "../../../../../styles/layout/util.scss";
+
+
+.needs-validation.submitted {
+  div.invalid > label {
+    color: #cc0000 !important;
+  }
+}
+
+.needs-validation {
+  div.touched.invalid > label {
+    color: #cc0000 !important;
+  }
+}
+
+.formattedInput {
+  border: none;
+  border-bottom: 1px solid #C4C4C4;
+  border-radius: 0px;
+  height: 30px;
+}
+
+
+.formattedTextarea {
+  border: none;
+  border-bottom: 1px solid #C4C4C4;
+  border-radius: 0px;
+  min-height: 35px !important;
+}
+
+
+::ng-deep #context-screen .ng-select {
+  .ng-select-container {
+    border: none !important;
+    border-bottom: 1px solid #C4C4C4 !important;
+    border-radius: 0px !important;
+    min-height: 30px !important;
+  }
+}
+
+::ng-deep .ng-select.ng-select-single .ng-select-container {
+  height: 30px !important;
+}

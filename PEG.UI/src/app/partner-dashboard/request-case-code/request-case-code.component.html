@@ -1,0 +1,513 @@
+<section class="request-case-code" *ngIf="caseData">
+  <form class="request-case-code-wrapper" (ngSubmit)="submitRequest(form)" [formGroup]="requestForm" #form="ngForm">
+    <!-- header -->
+    <div class="request-case-code-wrapper__header">
+      <div>
+        <h2 class="request-case-code-wrapper__header__title">Request a Case Code for {{opportunity?.client?.clientName}} ({{
+          caseData?.target?.targetName }}) - {{ opportunity?.industry?.abbreviation }}</h2>
+      </div>
+
+      <button type="button" class="request-case-code-wrapper__header__close" (click)="closeModal()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <!-- form -->
+    <div class="request-case-code-wrapper__form">
+      <!-- section 1 - case details -->
+      <div class="request-case-code-wrapper__form-group" [formGroup]="caseDetailsForm">
+        <h3 class="request-case-code-wrapper__form-group__group-title">Case Details</h3>
+
+        <!-- capability & fund type -->
+        <!-- <div  class="request-case-code-wrapper__form-row">
+          <div class="request-case-code-wrapper__form-column">
+            <label>What capability best describes the work we are delivering on this case?
+              <span class="required">*</span></label>
+            <ng-select required [clearable]="true" id="capability" bindLabel="capabilityName" [items]="capabilityList"
+              formControlName="capability"
+              [class.invalid]="caseDetailsForm.controls['capability'].status == 'INVALID' && form.submitted"></ng-select>
+          </div>
+
+          <div class="request-case-code-wrapper__form-column">
+            <label>Which fund type best describes the client you are working with on this case?
+              <span class="required">*</span></label>
+            <ng-select [clearable]="true" id="fundType" bindLabel="fundName" [items]="fundTypeList"
+              formControlName="fundType"
+              [class.invalid]="caseDetailsForm.controls['fundType'].status == 'INVALID' && form.submitted"></ng-select>
+          </div>
+        </div> -->
+
+        <!-- duration -->
+        <div class="request-case-code-wrapper__form-row">
+          <div class="request-case-code-wrapper__form-column">
+            <label>What is the project duration (in weeks)? <span class="required">* </span><app-info-icon
+                *ngIf="infoText" name="duration" [infoText]="infoText.CaseCodeDuration" placement="top">
+              </app-info-icon></label>
+            <input type="text" autocomplete="off" formControlName="duration" maxlength="4"
+              (keypress)="validateDurationKeys($event)" (focusout)="durationChanged()"
+              [class.invalid]="caseDetailsForm.controls['duration'].status == 'INVALID' && form.submitted" />
+          </div>
+
+          <div class="request-case-code-wrapper__form-row">
+            <div class="request-case-code-wrapper__form-column">
+              <label>Start Date <span class="required">*</span></label>
+              <div class="date-picker-wrapper"
+                [class.invalid]="caseDetailsForm.controls['expectedStartDate'].status == 'INVALID' && form.submitted">
+                <input type="text" autocomplete="off" placeholder="Select date" bsDatepicker [bsConfig]="bsConfig"
+                  #startDatePicker="bsDatepicker" (bsValueChange)="startDateChanged($event)"
+                  formControlName="expectedStartDate" />
+
+                <i class="far fa-calendar" style="cursor: pointer;" (click)="startDatePicker.toggle()"></i>
+              </div>
+            </div>
+
+            <div class="request-case-code-wrapper__form-column">
+              <label>End Date <span class="required">*</span></label>
+              <div class="date-picker-wrapper"
+                [class.invalid]="caseDetailsForm.controls['endDate'].status == 'INVALID' && form.submitted">
+                <input type="text" autocomplete="off" bsDatepicker [bsConfig]="bsEndDateConfig"
+                  formControlName="endDate" #endDatePicker="bsDatepicker" (bsValueChange)="endDateChanged($event)"
+                  [disabled]="true" />
+                <i class="far fa-calendar" style="cursor: pointer;" (click)="endDatePicker.toggle()"></i>
+              </div>
+            </div>
+
+          </div>
+          <div class="request-case-code-wrapper__form-column">
+            <span id="noteDueToDuration" class="inline-note"><b>Note:</b> RPL approval required for team sizes smaller
+              than M+3 and/or case durations less than two weeks</span>
+
+          </div>
+          <div class="request-case-code-wrapper__form-column">
+            <span id="endDateNote" class="inline-note"><b>Note:</b> Start and end dates do not match case duration.
+              Please input non-billable days or holidays to the notes section below</span>
+
+
+          </div>
+        </div>
+
+        <!-- start & end dates -->
+        <div class="request-case-code-wrapper__form-row"
+          style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr))"></div>
+
+        <!-- project name & team size -->
+        <div class="request-case-code-wrapper__form-row">
+          <div class="request-case-code-wrapper__form-column">
+            <label>Project Name
+              <span id="sub-label">(Do not include target name)</span> <span class="required">*</span></label>
+            <input type="text" autocomplete="off" formControlName="expectedProjectName"
+              [class.invalid]="caseDetailsForm.controls['expectedProjectName'].status == 'INVALID' && form.submitted" />
+          </div>
+          <div class="request-case-code-wrapper__form-column">
+            <label>Opportunity Type Details<span class="required">*</span></label>
+            <span *ngIf="!isFormSubmitted">
+              <app-opportunity-type-details [submitted]="isFormSubmitted"
+                [isRequired]="caseDetailsForm.controls['opportunityTypeDetails'].status == 'INVALID' && form.submitted"
+                (opportunityTypeDetailsClick)="onDropdownClickHandler()" [buttonType]="'caseCodeDropdown'"
+                [inputOpportunityTypeDetails]="opportunityTypeDetails"
+                (opportunityTypeDetailsChange)="onOpportunityTypeDetailsChange($event)"></app-opportunity-type-details>
+            </span>
+            <span *ngIf="isFormSubmitted">
+
+              <input type="text" class="text-sm" formControlName="opportunityTypeDetailsreadonly" />
+
+            </span>
+          </div>
+
+
+
+          <div class="request-case-code-wrapper__form-column">
+            <label>Rate Card Currency <span class="required">*</span></label>
+            <ng-select name="revenue-currency" [items]="currencyList" bindLabel="searchableName"
+              formControlName="revenueCurrency" id="revenue-currency" (change)="onChangeCurrency($event)"
+              [clearable]="true"
+              [class.invalid]="caseDetailsForm.controls['revenueCurrency'].status == 'INVALID' && form.submitted">
+              <ng-template ng-option-tmp let-item="item" let-index="index">
+                <div class="option-container" style="display: flex;">
+                  <div class="currency-name">
+                    {{item.serviceCode}} - {{ item.currencyName }}
+                  </div>
+                  <div class="currency-symbol">
+                    (<span [innerHTML]="item.currencySymbol"></span>)
+                  </div>
+                </div>
+                <div *ngIf="index === 2" class="line-break"></div>
+              </ng-template>
+              <ng-template ng-label-tmp let-item="item">
+                <div class="option-container">
+                  <div class="currency-name">
+                    {{item.serviceCode}} - {{ item.currencyName }}
+                  </div>
+
+                </div>
+              </ng-template>
+            </ng-select>
+
+
+          </div>
+
+
+
+          <div class="request-case-code-wrapper__form-column">
+            <label>Rates Priced at? <span class="required">*</span></label>
+
+            <div class="custom-radio-button-wrapper">
+              <label class="container"
+                [class.invalid]="caseDetailsForm.controls['ratePricedAt'].status == 'INVALID' && form.submitted"
+                *ngFor="let item of ratePriced">
+                <span>{{ item.ratePricedName }}</span>
+
+                <input type="radio" [value]="item.ratePricedId" name="ratePricedAt" id="ratePricedAt"
+                  formControlName="ratePricedAt" />
+                <span class="checkmark"
+                  [class.invalid]="caseDetailsForm.controls['ratePricedAt'].status == 'INVALID' && form.submitted"></span>
+              </label>
+            </div>
+          </div>
+
+
+
+          <div class="request-case-code-wrapper__form-column">
+            <div class="request-case-code-wrapper__form-row">
+              <div class="request-case-code-wrapper__form-column">
+                <label>Billable Team Size <span class="required">*</span></label>
+
+                <ng-select [clearable]="true" id="teamSize" bindLabel="teamSize" [items]="teamSizeList"
+                  formControlName="teamSize"
+                  [class.invalid]="caseDetailsForm.controls['teamSize'].status == 'INVALID' && form.submitted"></ng-select>
+
+              </div>
+              <div class="request-case-code-wrapper__form-column">
+                <label>Weekly Rack Rate </label>
+                <input type="text" autocomplete="off" class="text-sm" formControlName="weeklyRackRate" />
+              </div>
+            </div>
+            <div class="request-case-code-wrapper__form-column">
+              <span id="noteDueToTeamSize" class="inline-note"><b>Note:</b> RPL approval required for team sizes smaller
+                than M+3 and/or case durations less than two weeks</span>
+            </div>
+          </div>
+          <div class="request-case-code-wrapper__form-column">
+            <label>Comments on team size including NWOW usage (ie FRWD, TIG, AAG, ESG etc) or change in team size
+              mid-case</label>
+            <input type="text" autocomplete="off" class="text-sm" formControlName="teamComments" 
+            [class.invalid]="caseDetailsForm.controls['teamComments'].status == 'INVALID'" />
+          </div>
+        </div>
+
+        <!-- weekly rack rate & discounted -->
+        <div class="request-case-code-wrapper__form-row">
+          <div class="request-case-code-wrapper__form-column">
+            <label>Is it Discounted? <span class="required">*</span></label>
+
+            <div class="custom-radio-button-wrapper">
+              <label class="container"
+                [class.invalid]="caseDetailsForm.controls['isDiscounted'].status == 'INVALID' && form.submitted"
+                *ngFor="let item of isDiscountedOptions">
+                <span>{{ item.label }}</span>
+
+                <input type="radio" [value]="item.value" name="isDiscounted" id="isDiscounted"
+                  formControlName="isDiscounted" (change)="handleIsDiscounted(item.value)" />
+                <span class="checkmark"
+                  [class.invalid]="caseDetailsForm.controls['isDiscounted'].status == 'INVALID' && form.submitted"></span>
+              </label>
+            </div>
+          </div>
+
+          <ng-container *ngIf="isDiscounted">
+            <div class="request-case-code-wrapper__form-column">
+              <label>Discount Notes <span class="required">* </span><app-info-icon *ngIf="infoText" name="discount"
+                  [infoText]="infoText.CaseCodeDiscountNotes" placement="top">
+                </app-info-icon></label>
+              <input type="text" autocomplete="off" formControlName="discountNotes"
+                [class.invalid]="caseDetailsForm.controls['discountNotes'].status == 'INVALID' && form.submitted" />
+            </div>
+            <!-- file upload  comment below code temporary -->
+            <div class="request-case-code-wrapper__form-column">
+                <label>Discount Approval <span class="required">*</span></label>
+                <div class="file-block">
+                  <ul>
+                    <li *ngFor="let discountDoc of opportunity?.discountApprovalDocuments"><a (click)="downloadDocument(discountDoc)" class="file-label" tooltip="Click to download"> <i class="far fa-file mr-1"></i>{{discountDoc?.fileName}}</a></li>
+                  </ul>
+                </div>
+               
+                <div
+                  *ngIf="!isFormSubmitted && discountFiles && !discountFiles.length"
+                  class="csv-file-upload-wrapper"
+                  [class.invalid]="caseDetailsForm.controls['discountApproval'].status == 'INVALID' && form.submitted"
+                >
+                  <div class="d-flex align-items-center">
+                    <i class="fas fa-file-upload mr-1"></i>
+                    <span class="csv-file-upload-wrapper-label">Select Discount Approval to Upload</span>
+                  </div>
+                  <span class="csv-file-upload-wrapper-label subheader">or drag and drop it here</span>
+  
+                  <input
+                    class="file-input"
+                    type="file"
+                    accept="{{contentTypeLabel}}"
+                    (change)="handleFileInput($event, 'discount')"
+                  />
+                </div>
+  
+                
+                <div class="selected-files-wrapper" *ngIf="discountFiles && discountFiles.length">
+                  <div
+                    class="file-row d-flex align-items-center"
+                    *ngFor="let file of discountFiles; let fileIndex = index"
+                  >
+                    <i class="far fa-file"></i>
+                    <span>{{ file.name }}</span>
+  
+                    <i class="fas fa-times ml-auto" role="button" (click)="handleFileDelete(fileIndex, 'discount')"></i>
+                  </div>
+                </div>
+              </div>
+          </ng-container>
+          <!-- file upload  comment below code temporary -->
+          <div class="request-case-code-wrapper__form-column">
+              <label>Scope of Work Document <span class="required">*</span></label>
+              <div class="file-block">
+                <ul>
+                  <li *ngFor="let scopeDoc of opportunity?.scopeOfWorkDocuments"><a (click)="downloadDocument(scopeDoc)" class="file-label" tooltip="Click to download"> <i class="far fa-file mr-1"></i>{{scopeDoc?.fileName}}</a></li>
+                </ul>
+              </div>
+            
+              <div
+                *ngIf="!isFormSubmitted && scopeOfWorkFiles && !scopeOfWorkFiles.length"
+                class="csv-file-upload-wrapper"
+                [class.invalid]="caseDetailsForm.controls['scopeOfWork'].status == 'INVALID' && form.submitted"
+              >
+                <div class="d-flex align-items-center">
+                  <i class="fas fa-file-upload mr-1"></i>
+                  <span class="csv-file-upload-wrapper-label">Select Scope of Work (SOW) to Upload</span>
+                </div>
+                <span class="csv-file-upload-wrapper-label subheader">or drag and drop it here</span>
+  
+                
+                <input
+                  class="file-input"
+                  type="file"
+                  accept="{{contentTypeLabel}}"
+                  (change)="handleFileInput($event, 'scopeOfWork')"
+                />
+              </div>
+  
+           
+              <div class="selected-files-wrapper" *ngIf="scopeOfWorkFiles && scopeOfWorkFiles.length">
+                <div class="file-row d-flex align-items-center" *ngFor="let file of scopeOfWorkFiles; let fileIndex = index">
+                  <i class="far fa-file"></i>
+                  <span>{{ file.name }}</span>
+  
+                  <i class="fas fa-times ml-auto" role="button" (click)="handleFileDelete(fileIndex, 'scopeOfWork')"></i>
+                </div>
+              </div>
+            </div>
+        </div>
+        <div class="request-case-code-wrapper__form-row single-column">
+          <div class="request-case-code-wrapper__form-column">
+            <label>Notes for Finance</label>
+            <input type="text" autocomplete="off" formControlName="financeNotes"             
+            [class.invalid]="caseDetailsForm.controls['financeNotes'].status == 'INVALID' " />
+          </div>
+        </div>
+
+        <h3 class="request-case-code-wrapper__form-group__group-title">Billing Details</h3>
+        <!-- billing details -->
+        <div class="request-case-code-wrapper__form-row">
+          <div class="request-case-code-wrapper__form-column">
+            <label>Billing Partner <span class="required">*</span></label>
+            <ng-select [clearable]="true" id="billingPartner" (open)="roleFocused = 'Billing Partner'" [items]="employeeList" [selectOnTab]="true"
+              bindLabel="searchableName" [clearSearchOnAdd]="true" [addTag]="false" [loading]="isEmployeeLoading && roleFocused == 'Billing Partner'"
+              (blur)="isEmployeeLoading = false" [typeahead]="employeesTypeAhead" formControlName="billingPartner"
+              [hideSelected]="true" (change)="onChangeBillingPartner($event)"
+              [class.invalid]="caseDetailsForm.controls['billingPartner'].status == 'INVALID' && form.submitted">
+              <ng-template ng-label-tmp let-item="item" let-clear="clear">
+                <span class="ng-value-icon left" (click)="clear(item)">×</span>
+                {{
+                item.lastName +
+                ', ' +
+                (item.familiarName != null ? item.familiarName : item.firstName) +
+                ' (' +
+                item.officeAbbreviation +
+                ')'
+                }}
+              </ng-template>
+            </ng-select>
+          </div>
+
+          <div class="request-case-code-wrapper__form-column">
+            <label>Billing Office <span class="required">* </span><app-info-icon *ngIf="infoText" name="bOffice"
+                [infoText]="infoText.CaseCodeBillingOffice" placement="top">
+              </app-info-icon></label>
+            <ng-select [clearable]="true" id="billingOffice" [items]="officeList" [selectOnTab]="true"
+              bindLabel="officeName" [clearSearchOnAdd]="true" [addTag]="false" formControlName="billingOffice"
+              [hideSelected]="true"
+              [class.invalid]="caseDetailsForm.controls['billingOffice'].status == 'INVALID' && form.submitted"></ng-select>
+          </div>
+          <div class="request-case-code-wrapper__form-column">
+            <label> Client Billing Contact </label>
+            <input type="text" autocomplete="off" formControlName="billingContact"
+              [class.invalid]="caseDetailsForm.controls['billingContact'].status == 'INVALID'" />
+          </div>
+
+          <div class="request-case-code-wrapper__form-column">
+            <label>Client Billing Email </label>
+            <input type="text" autocomplete="off" formControlName="billingEmail"
+              [class.invalid]="caseDetailsForm.controls['billingEmail'].status == 'INVALID' && form.submitted" />
+          </div>
+        </div>
+      </div>
+
+      <!-- section 2 - resource -->
+      <div class="request-case-code-wrapper__form-group" [formGroup]="resourceDetailsForm">
+        <h3 class="request-case-code-wrapper__form-group__group-title">Resource Details</h3>
+
+        <!-- office -->
+
+        <!-- matching grid -->
+        <div class="request-case-code-wrapper__matching-grid-wrapper">
+          <div class="request-case-code-wrapper__matching-grid-row">
+            <label>Serving Roles</label>
+            <label>Partner Name(s)</label>
+          </div>
+          <div class="request-case-code-wrapper__matching-grid-row"
+            *ngFor="let role of serviceRolesList | slice: 0 : 5">
+            <div class="grid-box">
+              {{ role.servingRole }} <span *ngIf="role.formControlName== 'ovp' 
+              || role.formControlName== 'svp' 
+              || role.formControlName== 'manager'"
+                class="required">* </span>
+            </div>
+                 
+            <ng-select class="grid-selection" (open)="roleFocused = role.servingRole"
+              [clearable]="role.formControlName=='manager'? true : false" [id]="role.formControlName"
+              [name]="role.formControlName" [items]="employeeList" [selectOnTab]="true" bindLabel="searchableName"
+              [clearSearchOnAdd]="true" [addTag]="false" 
+              [loading]="isEmployeeLoading && roleFocused == role.servingRole" (blur)="isEmployeeLoading = false"
+              loadingText="loading..." [hideSelected]="true" [multiple]="role.formControlName=='manager'? false : true"
+              [typeahead]="employeesTypeAhead" [formControlName]="role.formControlName"
+              [class.invalid]="resourceDetailsForm.get(role.formControlName).status == 'INVALID' && form.submitted"   >
+              <ng-template ng-label-tmp let-item="item" let-clear="clear">
+                 <span class="ng-value-icon left"  (click)="removeSelection(item,role.formControlName)">×</span>
+                {{
+                item.lastName +
+                ', ' +
+                (item.familiarName != null ? item.familiarName : item.firstName) +
+                ' (' +
+                item.officeAbbreviation +
+                ')'
+                }}
+              </ng-template>
+            </ng-select>
+          </div>
+        </div>
+
+        <div class="request-case-code-wrapper__matching-grid-wrapper">
+          <div class="request-case-code-wrapper__matching-grid-row">
+            <label>Selling Roles</label>
+            <label>Partner Name(s)</label>
+          </div>
+
+          <div class="request-case-code-wrapper__matching-grid-row" *ngFor="let role of serviceRolesList | slice: 7">
+            <div class="grid-box">
+              {{ role.servingRole }} <span *ngIf="role.formControlName=='qtr'"
+                class="required">* </span><app-info-icon *ngIf="infoText && role.tooltipName"
+                [name]="role.formControlName" [infoText]="getTooltipText(role.tooltipName)" placement="top">
+              </app-info-icon>
+            </div>
+
+            <ng-select class="grid-selection" (open)="roleFocused = role.servingRole" [clearable]="false"
+              [id]="role.formControlName" [name]="role.formControlName" [items]="employeeList" [selectOnTab]="true"
+              bindLabel="searchableName" [clearSearchOnAdd]="true" [addTag]="false"
+              [loading]="isEmployeeLoading && roleFocused == role.servingRole" (blur)="isEmployeeLoading = false"
+              loadingText="loading..." [hideSelected]="true" [multiple]="true" [typeahead]="employeesTypeAhead"
+              [formControlName]="role.formControlName"
+              [class.invalid]="resourceDetailsForm.get(role.formControlName).status == 'INVALID' && form.submitted">
+              <ng-template ng-label-tmp let-item="item" let-clear="clear">
+                <span class="ng-value-icon left" (click)="removeSelection(item,role.formControlName)">×</span>
+                {{
+                item.lastName +
+                ', ' +
+                (item.familiarName != null ? item.familiarName : item.firstName) +
+                ' (' +
+                item.officeAbbreviation +
+                ')'
+                }}
+              </ng-template>
+            </ng-select>
+          </div>
+        </div>
+      </div>
+
+      <!-- section 3 - email -->
+      <div class="request-case-code-wrapper__form-group" [formGroup]="emailDetailsForm">
+        <h3 class="request-case-code-wrapper__form-group__group-title">Email Recipients</h3>
+
+        <div class="content-column__row">
+          <div class="request-case-note">
+            <span class="note"><b>Note: </b>This request will be sent to the relevant finance team.</span>
+          </div>
+
+          <div class="request-case-code-wrapper__form-column">
+            <label class="row-label">Other recipients to be CC'd </label>
+            <ng-select class="grid-selection" (open)="roleFocused = 'recipients'" [clearable]="false" id="recipients" name="recipients"
+                       [items]="employeeList" [selectOnTab]="true" bindLabel="searchableName" [clearSearchOnAdd]="true"
+                       [addTag]="false" [loading]="isEmployeeLoading && roleFocused == 'recipients'" (blur)="isEmployeeLoading = false" loadingText="loading..."
+                       [hideSelected]="true" [multiple]="true" [typeahead]="employeesTypeAhead" formControlName="recipients"
+                       appendTo="body"
+                       [class.invalid]="emailDetailsForm.controls['recipients'].status == 'INVALID' && form.submitted">
+              <ng-template ng-label-tmp let-item="item" let-clear="clear">
+                <span class="ng-value-icon left" (click)="removeRecipientSelection(item)">×</span>
+                {{
+                item.lastName +
+                ', ' +
+                (item.familiarName != null ? item.familiarName : item.firstName) +
+                ' (' +
+                item.officeAbbreviation +
+                ')'
+                }}
+              </ng-template>
+            </ng-select>
+          </div>
+        </div>
+      
+
+  <div class="content-column__row">
+    <div class="request-case-code-wrapper__form-column">
+      <label class="row-label">Additional context for other partners and finance (ie &#64;Joe will provide more details on
+        advisors) </label>
+      <span><app-mention-partners
+        formControlName="partnerNotes"
+        [isFormSubmitted]="isFormSubmitted"
+        [mentionControl]="emailDetailsForm.get('mentionControl')"
+        (mentionRecipientsChanged)="onRecipientsUpdate($event)"
+        (onBlurPartnerNotes)="onBlurPartnerNotes($event)"></app-mention-partners></span>
+      
+      </div>
+   </div>
+  </div>
+</div>
+
+   <!-- footer -->
+        <div class="request-case-code-wrapper__footer">
+          <span class="request-case-code-wrapper__footer__error-message"
+                *ngIf="invalidFormMessage && invalidFormMessage.length">{{ invalidFormMessage }}</span>
+
+          <button class="request-case-code-wrapper__footer__cta secondary" type="button" (click)="closeModal()">
+            {{ isFormSubmitted ? 'Close' : 'Discard & Close' }}
+          </button>
+
+          <button *ngIf="!isFormSubmitted" class="request-case-code-wrapper__footer__cta primary" type="submit">
+            Submit
+          </button>
+        </div>
+</form>
+</section>
+<section class="content-section" *ngIf="isSubmissionInProgress">
+  <div class="section-loader">
+    <i class="fas fa-spinner fa-spin"></i>
+    <br>
+    <div class="loading-test">Submitting your request, Please Wait...</div>
+  </div>
+</section>

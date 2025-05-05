@@ -1,0 +1,47 @@
+@import "../abstract/variables.scss";
+
+$target-sidebar-column-width: 900px;
+
+body.targets{
+  .grid-container{
+    max-height: calc(100vh - 170px);
+    overflow: hidden;
+  }
+
+  #targets-grid{
+    height: calc(100vh - 170px);
+
+    .ag-cell{
+      cursor: pointer;
+    }
+  }
+
+  .grid-container{
+    .grid-column{
+      transition: all .3s;
+      width: 100%;
+      min-width: 100%;
+    }
+
+    .sidebar-column{
+      width: 0;
+      min-width: 0;
+      max-width: 0;
+      transition: all .3s;
+    }
+
+    &.sidebar-visible{
+      .grid-column{
+        width: calc(100% - #{$target-sidebar-column-width});
+        min-width: calc(100% - #{$target-sidebar-column-width});
+        max-width: calc(100% - #{$target-sidebar-column-width});
+      }
+
+      .target-sidebar-column{
+        width: $target-sidebar-column-width;
+        min-width: $target-sidebar-column-width;
+        max-width: $target-sidebar-column-width;
+      }
+    }
+  }
+}

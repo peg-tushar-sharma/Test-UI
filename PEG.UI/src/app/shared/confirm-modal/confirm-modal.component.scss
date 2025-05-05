@@ -1,0 +1,39 @@
+:host::ng-deep .modal-dialog {
+  padding-top: 60px !important;
+}
+
+// Modal
+.confirm-modal-wrapper {
+  color: #121212;
+  font-family: "Graphik";
+
+  // header
+  .modal-header h4 {
+    font-weight: 500;
+  }
+
+  // body
+  .modal-body p {
+    font-size: 16px;
+    line-height: 20px;
+    margin: 0px;
+  }
+
+  // footer
+  .modal-footer .btn {
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 16px;
+    padding: 10px 20px;
+
+    &.primary {
+      background-color: #284ce0 !important;
+      color: #fff !important;
+
+      &:hover {
+        background-color: #1d3fca !important;
+      }
+    }
+  }
+}

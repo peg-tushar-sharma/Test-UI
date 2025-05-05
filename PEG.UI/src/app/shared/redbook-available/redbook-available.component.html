@@ -1,0 +1,19 @@
+<div class="d-flex align-items-center">
+    <label for="rebookYes" [ngClass]="containerName=='redbookAvailableContext'?'radioContainer':''">Yes
+    <input type="radio" [value]="1"  (change)="redbookClick(1)"
+      [(ngModel)]="redbookAvailable" id="rebookYes">
+      <span  [ngClass]="containerName=='redbookAvailableContext'?'radioMark':''"></span>
+    </label>
+  
+    <label for="rebookNo" [ngClass]="containerName=='redbookAvailableContext'?'radioContainer':''" class="ml-2">No
+    <input type="radio" [value]="0" (change)="redbookClick(0)"
+      [(ngModel)]="redbookAvailable" id="rebookNo">
+      <span [ngClass]="containerName=='redbookAvailableContext'?'radioMark':''"></span>
+    </label>
+  
+    <label for="inProgress" [ngClass]="containerName=='redbookAvailableContext'?'radioContainer':''" class="ml-2">In Progress
+    <input type="radio" [value]="2"  (change)="redbookClick(2)"
+      [(ngModel)]="redbookAvailable" id="inProgress">
+      <span [ngClass]="containerName=='redbookAvailableContext'?'radioMark':''"></span>
+    </label>
+  </div>

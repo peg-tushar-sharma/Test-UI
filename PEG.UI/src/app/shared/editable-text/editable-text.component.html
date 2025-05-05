@@ -1,0 +1,22 @@
+<div id="{{labelValue}}" class="form-row mb-2" *ngIf="isVisible">
+   <div class="col-3">
+      <label for="target" class="label control-label">{{labelText}}:</label>
+   </div>
+   <div *ngIf="!(isRowMasked && isMasked)" class="col">
+      <label *ngIf="isEditable" title="{{finalValue}}" class="value control-label inline-editable">
+         <span [ngClass]="{'d-none': showTextBox}" (click)="toggleTextBoxVisibility()">{{finalValue}}</span>
+
+         <div *ngIf="showTextBox">
+            <input maxlength="100" type="text" id="editableText" name="labelText" (focusout)="updateValue();"
+               style="position: relative;" class="form-control form-control-sm " [ngClass]="{'d-none': !showTextBox}"
+               [(ngModel)]="finalValue">
+         </div>
+      </label>
+
+      <span [title]="finalValue" *ngIf="!isEditable">{{finalValue | truncate : maxChar : false : '...' }}</span>
+   </div>
+   <div *ngIf="isRowMasked && isMasked" [tooltip]="finalValue"
+      style="background-color: #bdbdbd;min-width: 120px;height: 20px;">
+
+   </div>
+</div>

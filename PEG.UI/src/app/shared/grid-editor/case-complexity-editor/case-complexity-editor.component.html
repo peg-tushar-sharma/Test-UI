@@ -1,0 +1,17 @@
+
+<div class="grid-case-editor">
+<ng-select #caseComplexityComp
+[items]="caseComplexity"
+[multiple]="true"
+bindLabel="caseComplexityName"
+[closeOnSelect]="false"
+[clearable]="false"
+[(ngModel)]="selectedCaseComplexity"
+>
+<ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+    <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected"/> 
+    <span style="white-space: pre-wrap;"> {{item.caseComplexityName}}</span>
+</ng-template>
+</ng-select>
+</div>
+

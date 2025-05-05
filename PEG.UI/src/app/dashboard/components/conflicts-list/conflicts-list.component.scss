@@ -1,0 +1,91 @@
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10%;
+  text-align: center;
+}
+
+.loading-text {
+  font-size: 16px;
+  color: #333; /* Customize the color if needed */
+}
+.custom-card {
+  border: 0 !important;
+
+  .card-body {
+    padding: 1px 0px 0px 0px !important;
+    background: #fff;
+    // overflow-y: auto;
+    // height: 85vh;
+  }
+  .card-height {
+    height: 77vh;
+    padding: 0 !important;
+    background: #fff;
+    overflow-y: auto;
+  }
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+
+.separator {
+  width: 1px;
+  height: 14px;
+  margin: 0 16px;
+  background: #ccc;
+}
+
+.custom-nav {
+  .nav-item {
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+  }
+
+  .nav-link {
+    background: rgba(236, 240, 255, 1) !important;
+    display: flex;
+    align-items: center;
+    height: 40px;
+    color: rgba(40, 76, 224, 1);
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 20px;
+    text-align: left;
+    padding: 5px 20px;
+    border: 0;
+
+    span {
+      margin-left: 4px;
+      font-weight: 400;
+    }
+
+    &.active {
+      background: #fff !important;
+      box-shadow: 0 2px 9px 0 rgba(0, 0, 0, 0.06);
+    }
+  }
+}
+
+.search-input-wrapper {
+  width: 320px;
+  position: relative;
+  margin: 16px;
+
+  i {
+    color: #121212;
+    font-size: 12px;
+    left: 10px;
+    position: absolute;
+  }
+
+  input {
+    padding-left: 30px;
+    width: 100%;
+  }
+}

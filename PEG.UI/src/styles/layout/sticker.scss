@@ -1,0 +1,29 @@
+.sticker{
+  display: inline-block;
+  width:14px;
+  height:14px;
+  border-radius: 8px;
+
+  &.sticker-grey{
+    background-color: $grey-light;
+  }
+
+  &.sticker-yellow{
+    background-color: $accent-1;
+  }
+
+  &.sticker-orange{
+    background-color: $accent-2;
+  }
+
+  &.sticker-green{
+    background-color: $accent-4;
+  }
+  
+  &.sticker-red{        
+    color : $bain-red;
+    position: relative;
+    left:-2px;
+    border-radius: 0;
+  }
+}

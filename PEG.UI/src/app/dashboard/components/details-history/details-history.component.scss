@@ -1,0 +1,32 @@
+.sidebar-title {
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 24px;
+}
+.loading{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  top: 25%;
+}
+
+.log-area{
+  height: 80vh;
+  overflow-y: scroll;
+
+}
+.log-area-notes{
+  height: 40vh;
+  overflow-y: scroll;
+}
+
+.add-note-form {
+  padding: 16px;
+  background: rgba(250, 250, 250, 1);
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 450px;
+}

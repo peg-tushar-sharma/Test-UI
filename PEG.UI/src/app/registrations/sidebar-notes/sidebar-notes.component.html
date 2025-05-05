@@ -1,0 +1,108 @@
+<div class="sidebar-tabs-container">
+  <!-- tab header -->
+  <div class="tabs-header">
+    <div id="tab-registration-details" [ngClass]="{ active: regDetails }" class="tab">
+      <a (click)="toggleSection('RegDetails')" href="javascript:void(0)">Registration</a>
+    </div>
+    <div id="tab-reviewers" [ngClass]="{ active: reviewers }" style="display: none" class="tab">
+      <a (click)="toggleSection('Reviewers')" href="javascript:void(0)">Reviewers</a>
+    </div>
+    <div id="tab-tags" [ngClass]="{ active: tags }" style="display: none" class="tab">
+      <a (click)="toggleSection('Tags')" href="javascript:void(0)">Tags</a>
+    </div>
+    <div *ngIf="fieldAuthConfig == undefined ? false : fieldAuthConfig.auditLog.isVisible" id="tab-audit-log"
+      [ngClass]="{ active: auditLog }" class="tab">
+      <a name="auditLog" (click)="toggleSection('AuditLog')" href="javascript:void(0)">Audit Log</a>
+    </div>
+  </div>
+
+  <!-- tab content -->
+  <div class="tabs-content">
+    <!-- ..registration -->
+    <div class="content-row" [hidden]="!regDetails">
+      <!-- ..header -->
+      <div class="content-row__header">
+        <span>Registration Information</span>
+        <button class="btn" (click)="expandReg = !expandReg">
+          <i class="fas fa-{{ expandReg ? 'minus' : 'plus' }}"></i>
+        </button>
+      </div>
+
+      <app-reg-details [hidden]="!expandReg" [fieldAuthConfig]="fieldAuthConfig"  [isRegRefresh]="isRegRefresh"
+        (emitRegistrationValue)="registrationDetailsChanged($event)" (workTypeEmitter)="workTypeChanged($event)"
+        [sgTI]="sgTI" [completionDate]="completionDate"
+        [registrationId]="registrationId"></app-reg-details>
+    </div>
+
+    <!-- ..notes -->
+    <div class="content-row" [hidden]="!regDetails">
+      <!-- ..header -->
+      <div class="content-row__header">
+        <span>Notes</span>
+        <button class="btn" (click)="expandNotes = !expandNotes">
+          <i class="fas fa-{{ expandNotes ? 'minus' : 'plus' }}"></i>
+        </button>
+      </div>
+
+      <app-general-notes [hidden]="!expandNotes" (emitUpdatedNote)="updatedNotes($event)" [isMasked]="isMasked"
+        [registrationId]="registrationId"></app-general-notes>
+    </div>
+
+    <!-- ..conflicts -->
+    <!-- <div class="content-row" [hidden]="!regDetails"> -->
+      <!-- ..header -->
+      <!-- <div class="content-row__header">
+        <div class="d-flex align-items-center">
+          <i class="fas fa-exclamation-circle conflicts-icon mr-1"></i>
+          <span>Conflicts</span>
+        </div>
+
+        <button class="btn" (click)="expandConflicts = !expandConflicts">
+          <i class="fas fa-{{ expandConflicts ? 'minus' : 'plus' }} ml-auto"></i>
+        </button>
+      </div> -->
+
+      <!-- <app-conflicts [hidden]="!expandConflicts" [registrationId]="registrationId"></app-conflicts>
+    </div> -->
+
+    <!-- ..reviewers -->
+    <div class="content-row" *ngIf="reviewers">
+      <!-- ..header -->
+      <div class="content-row__header">
+        <span>Reviewers</span>
+        <button class="btn" (click)="expandReviewers = !expandReviewers">
+          <i class="fas fa-{{ expandReviewers ? 'minus' : 'plus' }}"></i>
+        </button>
+      </div>
+
+      <app-reviewers [hidden]="!expandReviewers" [registrationId]="registrationId"></app-reviewers>
+    </div>
+
+    <!-- ..tags -->
+    <div class="content-row" *ngIf="tags">
+      <!-- ..header -->
+      <div class="content-row__header">
+        <span>Tags</span>
+        <button class="btn" (click)="expandTags = !expandTags">
+          <i class="fas fa-{{ expandTags ? 'minus' : 'plus' }}"></i>
+        </button>
+      </div>
+
+      <app-tags [hidden]="!expandTags"></app-tags>
+    </div>
+
+    <!-- ..audit logs -->
+    <div class="content-row" *ngIf="auditLog">
+      <!-- ..header -->
+      <div class="content-row__header">
+        <span>Audit Logs</span>
+        <button class="btn" (click)="expandAudits = !expandAudits">
+          <i class="fas fa-{{ expandAudits ? 'minus' : 'plus' }}"></i>
+        </button>
+      </div>
+
+      <app-audit-log [hidden]="!expandAudits" [registrationId]="registrationId"
+        [isRowMasked]="isMasked"></app-audit-log>
+    </div>
+  </div>
+</div>

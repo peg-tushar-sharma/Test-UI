@@ -1,0 +1,24 @@
+.cell-width{
+    width:255px;
+    height: 100px;
+    color: grey;
+    padding: 8px;
+    background-color: white;
+    border: 1px solid #cdcccc;
+}
+.custom{
+    display: grid;
+    /* margin-top: 10px; */
+    grid-template-columns: 25% 75%;
+}
+.input{
+    outline: none;
+    border: 0.8px solid grey;
+    border-radius: 4px;
+}
+.hide{
+    outline: none;
+    border: 0.8px solid grey;
+    border-radius: 4px;
+    background-color: #e1e1e1;
+}

@@ -1,0 +1,35 @@
+@use "sass:math";
+
+#sidebar {
+  // height: calc(100vh - (#{$header-height + $breadcrumb-height +$base-padding+31px}));
+  height: 83.5vh;
+  overflow-y: overlay;
+  flex: 0 0 $sidebar-width;
+  padding: 0 $base-padding * 1.5;
+  background-color: $grey-extra-light;
+
+  ul.list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    li {
+      display: block;
+      padding: math.div($base-padding, 0.67);
+      a {
+        font-size: $sidebar-nav-font-size;
+        color: $black;
+        &:hover {
+          color: $bain-red;
+          text-decoration: none;
+          cursor: pointer;
+        }
+
+        @include color-fade-fast;
+      }
+
+      &.active {
+        background-color: $grey-alt-1;
+      }
+    }
+  }
+}

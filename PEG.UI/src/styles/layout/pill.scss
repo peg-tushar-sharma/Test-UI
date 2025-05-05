@@ -1,0 +1,19 @@
+.pill{
+    display: inline-block;  
+    color: $white;
+    font-size:12px;
+    padding:2px 10px!important;
+    line-height: 24px;
+  
+    &.pill-orange{
+      background-color: orange;
+    }
+  
+    &.pill-purple{
+      background-color: purple;
+    }
+  
+    &.pill-blue{
+      background-color: $accent-3;
+    }  
+  }

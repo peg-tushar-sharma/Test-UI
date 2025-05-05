@@ -1,0 +1,16 @@
+.grid-office-editor{
+    min-width: 400px;
+  }
+  .flex-parent {
+    display: inline-flex;
+    flex: 1 1 0px;
+    color: #000000;
+    flex-wrap: wrap;
+  }
+  .flex-item-officecode{
+    flex: 1;
+    min-width: 400px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }

@@ -1,0 +1,5 @@
+
+<ng-select [items]="teamSize" class="slectComponent" bindLabel="teamSize" (add)="onTeamSizeChange( $event)" (remove)="onRemoveTeamSize($event)"
+ bindValue="teamSizeId" [hideSelected]="true" [multiple]="true" id="teamSize" #teamsS   [maxSelectedItems]="5" (clear)="onClearAll($event)"
+  [(ngModel)]="teams">
+</ng-select>

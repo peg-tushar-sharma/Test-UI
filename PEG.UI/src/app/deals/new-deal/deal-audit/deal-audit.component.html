@@ -1,0 +1,24 @@
+<div id="tab-content-audit-log" class="tab-content">
+  <header class="d-flex">
+    Event
+  </header>
+  <div class="tab-details">
+    <table class="table table-striped">
+      <tbody>
+
+        <tr *ngFor="let auditLog of $auditLogs | async">
+          <td id="AuditLog+{{auditLog.id}}">
+            <ng-container >
+              <div *ngIf="auditLog.oldValue && auditLog.newValue" class="content">{{auditLog.oldValue}} {{auditLog.newValue}}
+              </div>
+
+              <div class="details">
+                {{auditLog.submittedByName}} {{auditLog.submissionDate | formatTimeZone : 'EDT' }}
+              </div>
+            </ng-container>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

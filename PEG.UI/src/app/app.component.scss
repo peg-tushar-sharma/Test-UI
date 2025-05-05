@@ -1,0 +1,48 @@
+@import "abstract/variables.scss";
+@import "./../styles/abstract/variables.scss";
+@import "./../styles/layout/modal.scss";
+@import "./../styles/layout/form";
+
+
+.masterContainer {
+  position: relative;
+  right: 0;
+  transition: all 0.15s ease-out;
+  padding-top: 57px;
+}
+
+
+
+::ng-deep .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-marked {
+  background-color: #3390ff !important;
+  color: white !important;
+}
+
+// Fix for ng-select combobox input width
+::ng-deep .ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-input {
+  flex-basis: 33% !important;
+}
+
+
+
+:host::ng-deep .inline-edit-grid {
+  display: none;
+}
+
+:host::ng-deep .inline-edit-grid :hover {
+  display: inline;
+}
+
+:host::ng-deep #selectAll {
+  margin-right: 18px;
+}
+
+:host::ng-deep .ag-filter-value {
+  margin-left: 18px;
+}
+
+.c-p {
+  cursor: pointer;
+}
+
+

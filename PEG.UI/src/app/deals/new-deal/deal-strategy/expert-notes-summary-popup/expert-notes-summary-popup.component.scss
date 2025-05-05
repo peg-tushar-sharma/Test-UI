@@ -1,0 +1,47 @@
+.expert-notes-summary-popup {
+    font-family: "Graphik";
+    padding: 20px;
+    width: 100%;
+
+    // Header
+    &__header-wrapper {
+
+        .header,
+        .btn-class {
+            color: #121212;
+            font-size: 24px;
+            line-height: 28px;
+            margin: 0px;
+        }
+    }
+
+    // Body
+    &__body-wrapper {
+
+        // Copy all
+        .copy-all-btn {
+            align-items: center;
+            background: #fff;
+            border: 1px solid #284ce0;
+            border-radius: 4px;
+            color: #284ce0;
+            display: flex;
+            font-size: 12px;
+            font-weight: 500;
+            gap: 7px;
+            padding: 6px 10px;
+
+            &:hover {
+                background: #284ce0;
+                color: #fff;
+            }
+        }
+
+        // Grid
+        .ag-theme-alpine {
+            border: 1px solid #f0f2f3;
+            height: 75vh;
+            width: 100%;
+        }
+    }
+}

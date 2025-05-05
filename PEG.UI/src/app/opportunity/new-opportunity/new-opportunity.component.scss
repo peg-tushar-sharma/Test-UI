@@ -1,0 +1,643 @@
+$newOppBorder: #ecedf0;
+$newOppBlue: #284CE0;
+$newOppGray: #616568;
+$disabledColor: rgba(31, 31, 31, 0.12);
+$disabledTextColor: #949499;
+
+
+.ng-submitted .ng-invalid:not(form) {
+  border: 1px solid #cc0000 !important;
+  border-radius: 4px;
+
+  &.col-6,
+  &.col-12 {
+    border: none !important;
+  }
+}
+
+.inValidLabel {
+  font-size: 12px;
+  color: #cc0000 !important;
+}
+
+.datCtrlWidth {
+  width: 85% !important;
+  display: inline-block !important;
+}
+
+.crossIcon:hover {
+  color: #cc0000;
+  cursor: pointer;
+}
+
+#newOppPageContainer {
+  background: #f7f9ff;
+  font-family: "Graphik", sans-serif;
+  padding: 20px;
+
+  .option-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .currency-name {
+    flex: 0 0 70%;
+  }
+
+  .currency-symbol {
+    flex: 0 0 30%;
+    text-align: right;
+  }
+
+  #revenue-currency {
+
+    ::ng-deep .ng-value {
+      overflow: unset !important;
+    }
+  }
+
+  // progress & form wrapper
+  #newOppContentWrapper {
+    display: flex;
+    gap: 45px;
+    margin: 0 auto;
+    max-width: 1500px;
+    position: relative;
+
+    #newOppSidebar {
+      // position: fixed;
+      height: fit-content;
+      position: sticky;
+      top: 80px;
+
+      h2 {
+        font-size: 24px;
+        margin-bottom: 34px;
+      }
+    }
+  }
+
+  .titleCol {
+    min-width: 250px;
+    padding-right: 60px;
+  }
+
+  h2 {
+    color: #121212;
+    font-size: 20px;
+  }
+
+  .sectionScrollNav {
+    max-width: 300px;
+
+    a {
+      display: block;
+      color: $newOppGray;
+      cursor: pointer;
+
+      &::after {
+        content: "";
+        display: block;
+        width: 1px;
+        height: 24px;
+        background: $newOppBlue;
+        margin: -1px 0 -1px 12px;
+      }
+
+      &:last-of-type::after {
+        display: none;
+      }
+
+      .circleNumber {
+        display: inline-block;
+        border: 1px solid $newOppBlue;
+        color: $newOppBlue;
+        border-radius: 24px;
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 22px;
+        width: 24px;
+        height: 24px;
+        margin-right: 10px;
+        text-align: center;
+      }
+
+      &:hover {
+        text-decoration: none;
+      }
+
+      &.active {
+        color: #121212;
+        font-weight: 500;
+
+        .circleNumber {
+          color: #fff;
+          background: $newOppBlue;
+        }
+      }
+    }
+  }
+
+  #newOppFormContainer {
+    flex: 1;
+    padding-bottom: 84px;
+    // margin-left: 350px;
+
+    .newOppFormCard {
+      display: flex;
+      background: #fff;
+      border: 1px solid $newOppBorder;
+      border-radius: 4px;
+      padding: 30px 40px;
+      margin-bottom: 20px;
+    }
+
+    /* Chrome, Safari, Edge, Opera */
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    /* Firefox */
+    input[type=number] {
+      -moz-appearance: textfield;
+    }
+
+    .formContainerCol {
+      flex: 1;
+    }
+
+    .oppFormRow {
+      display: flex;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .oppLabel {
+      font-size: 12px;
+      color: #121212;
+      font-weight: 500;
+
+      span.required {
+        color: #cc0000;
+      }
+    }
+    
+    .oppLabelRisk {
+      font-size: 13px !important;
+      color: #121212;
+
+      span.spanFontWeight {
+        font-weight: 500 !important;
+      }
+    }
+
+    input[type="text"],
+    textarea {
+      display: block;
+      width: 100%;
+      padding: 6px 14px;
+      border: 1px solid #E0E4E8;
+      border-radius: 4px;
+
+      &.invalid {
+        border-color: #cc0000;
+      }
+    }
+
+    input[type="radio"] {
+      margin-right: 10px;
+    }
+
+    input[type="checkbox"]+label,
+    input[type="radio"]+label {
+      display: inline;
+      font-size: 14px;
+      color: #121212;
+      margin-right: 10px;
+    }
+
+    .toggle-section input[type="radio"] {
+      margin-right: 5px;
+    }
+
+    input+.crossIcon {
+      position: relative;
+      left: -20px;
+    }
+
+    textarea {
+      resize: none;
+      min-height: 75px;
+    }
+
+    p.info {
+      font-size: 12px;
+      margin-bottom: 0;
+    }
+
+    .clientHeadName {
+      font-size: 16px;
+      color: #121212;
+      margin-bottom: 10px;
+    }
+
+    span.description {
+      color: $newOppGray;
+      font-weight: normal;
+    }
+
+    .checkbox-flex {
+      display: flex;
+      align-items: flex-start;
+
+      input[type="checkbox"] {
+        margin-top: 3px;
+      }
+    }
+  }
+}
+
+
+#riskDescription {
+
+  p,
+  ul {
+    color: #121212;
+  }
+
+  p {
+    font-size: 12px;
+    font-weight: bold;
+  }
+
+  .abrrClass {
+    color: black !important;
+    font-size: 12px !important;
+    font-weight: bold !important;
+    margin-bottom: 0px !important;
+  }
+
+}
+
+#newOppFooter {
+  display: flex;
+  position: fixed;
+  bottom: 25px;
+  justify-content: flex-end;
+  align-items: center;
+  background: #fff;
+  border-top: 1px solid $newOppBorder;
+  width: 100%;
+  height: 80px;
+  padding: 20px 30px;
+}
+
+#newOppFooter button,
+#newOppFormContainer button {
+  font-size: 12px;
+  padding: 10px 30px;
+  border-radius: 4px;
+  background: #fff;
+  border: none;
+  outline: none;
+  margin-left: 15px;
+  font-family: 'Graphik', sans-serif;
+  font-weight: 500;
+
+  &#btnOppDiscard {
+    color: $newOppGray;
+  }
+
+  &#btnOppDraft {
+    box-sizing: border-box;
+    border: 1px solid $newOppBlue;
+    color: $newOppBlue;
+  }
+
+  &#btnOppSubmit,
+  &#showExperts {
+    background: $newOppBlue;
+    color: #fff;
+  }
+
+  &#showExperts {
+    margin-left: 0;
+
+    &[disabled] {
+      background: $disabledColor;
+      color: $disabledTextColor;
+    }
+  }
+
+  &#hideExperts {
+    color: $newOppBlue;
+    background: none;
+  }
+}
+
+.expert-buttons {
+  margin-bottom: 20px;
+
+  button {
+    font-weight: bold;
+  }
+}
+
+.toggle-section-buttons {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+
+  a {
+    color: $newOppBlue;
+    font-weight: bold;
+    text-decoration: none;
+    padding-right: 10px;
+  }
+
+  hr {
+    flex-grow: 1;
+  }
+}
+
+.caret-blue {
+  width: 12px;
+  height: 8px;
+  display: inline-block;
+  background-image: url(../../../assets/img/caret_blue.png);
+  background-repeat: no-repeat;
+  background-position: 0 center;
+  background-size: contain;
+  margin-right: 5px;
+  margin-bottom: 2px;
+
+  &.caret-down {
+    transform: rotate(-180deg);
+  }
+}
+
+.optional-datepicker-row {
+
+  .col-12 {
+    min-height: 46px;
+    display: flex;
+  }
+
+  label {
+    margin-bottom: 0;
+    margin-right: 10px;
+  }
+}
+
+.optional-datepicker-container {
+
+  input[type="text"] {
+    flex-grow: 1;
+  }
+}
+
+::ng-deep ng-select:not(.ng-select-focused) .ng-spinner-loader {
+  display: none !important;
+}
+
+.workTypeWrapper ::ng-deep .ng-dropdown-panel .ng-dropdown-panel-items {
+  max-height: 400px;
+}
+
+// salesforce message
+.salesforce-custom-message {
+  background-color: #ff8d5f;
+  border-radius: 10px;
+  cursor: pointer;
+  display: none;
+  font-family: "Graphik", sans-serif;
+  right: 20px;
+  padding: 15px;
+  position: fixed;
+  top: 70px;
+  width: 250px;
+
+  h2 {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 5px;
+  }
+
+  &>* {
+    color: #fff;
+    font-size: 14px;
+    margin: 0px;
+  }
+
+  @media only screen and (max-width: 600px) {
+    display: block;
+  }
+}
+
+// media queries
+@media only screen and (max-width: 1280px) {
+
+  .col-6,
+  .col-12 {
+    flex: auto;
+    max-width: 100%;
+    padding-inline: 0px;
+  }
+
+  #newOppContentWrapper {
+    gap: 20px;
+
+    #newOppSidebar {
+      max-width: 180px;
+    }
+  }
+
+  .newOppFormCard {
+    flex-direction: column;
+
+    .oppFormRow {
+      display: grid !important;
+      gap: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  #newOppPageContainer {
+    padding: 0px 20px 20px;
+
+    #newOppContentWrapper {
+      flex-direction: column;
+      gap: 20px;
+
+      #newOppSidebar {
+        background-color: #f7f9ff;
+        border-bottom: 1px solid #e0e4e8;
+        max-width: 100%;
+        padding: 20px 0px;
+        top: 55px;
+        z-index: 99;
+
+        h2 {
+          margin-bottom: 15px !important;
+        }
+
+        .sectionScrollNav {
+          display: flex;
+          justify-content: space-between;
+          max-width: 100%;
+
+          a {
+            align-items: center;
+            display: flex;
+            flex-direction: column-reverse;
+            font-size: 12px;
+            gap: 5px;
+            line-height: 16px;
+            position: relative;
+            white-space: nowrap;
+            width: 24px;
+
+            .circleNumber {
+              margin-right: 0px;
+            }
+
+            &::after {
+              height: 1px;
+              margin: 0px 0px 12px 0px;
+              left: 100%;
+              position: absolute;
+              width: calc((100vw / 3) - 44px);
+            }
+
+            &:first-of-type {
+              align-items: flex-start;
+            }
+
+            &:last-of-type {
+              align-items: flex-end;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Custom radio buttons styling
+.custom-radio-button-wrapper {
+
+  /* The container */
+  .container {
+    display: block;
+    position: relative;
+    padding-left: 28px;
+    margin-bottom: 0px;
+    cursor: pointer;
+    font-family: "Graphik", sans-serif;
+    font-size: 14px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    color: #121212;
+    line-height: 18px;
+
+    .bold {
+      font-weight: 500;
+    }
+
+    &.invalid {
+      color: #cc0000;
+    }
+  }
+
+  /* Hide the browser's default radio button */
+  .container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  /* Create a custom radio button */
+  .checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 18px;
+    width: 18px;
+    background-color: #fff;
+    border-radius: 50%;
+    border: 1px solid #e0e4e8;
+
+    &.invalid {
+      border-color: #cc0000;
+    }
+  }
+
+  /* On mouse-over, add a grey background color */
+  .container:hover input~.checkmark {
+    background-color: #ccc;
+  }
+
+  /* Create the indicator (the dot/circle - hidden when not checked) */
+  .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+
+  /* Show the indicator (dot/circle) when checked */
+  .container input:checked~.checkmark:after {
+    display: block;
+  }
+}
+
+/* Style the indicator (dot/circle) */
+.team-size{
+  white-space: nowrap;
+  color:#121212;
+
+  &-clear{
+    cursor: pointer;
+    font-size: 0.85rem;
+    padding: 0 0.25rem;
+    border-right: 2px solid #cfddeb;
+  }
+  &-clear:hover{
+    background-color: #c2dbfe;
+  }
+  &-text{
+    align-items: center;
+    padding: 0 0.25rem;
+    font: 500 14px Arial, sans-serif;
+    color: #2c3e50;
+   
+  }
+}
+
+.invalidDropdown {
+  border: 1px solid red;
+  color: #cc0000;
+}
+
+.oppFormRow {
+  .col-12{
+    .form-row {
+      .col-12{
+        padding: 0px;
+
+      }
+    }
+  }
+} 
+
+.sectionScrollNav a.NavBarDisabled {
+  pointer-events: none; 
+  opacity: 0.5; 
+  cursor: not-allowed;
+}

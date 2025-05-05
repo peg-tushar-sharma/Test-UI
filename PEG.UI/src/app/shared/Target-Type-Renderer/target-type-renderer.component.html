@@ -1,0 +1,6 @@
+<div *ngIf="targetType">
+  <span  *ngIf="targetType && targetType?.isPubliclyTradedEquity" class="content">PTE</span>
+  <span  *ngIf="targetType && targetType?.isPubliclyTradedDebt" class="content">PTD</span>
+  <span  *ngIf="targetType && targetType?.isOpenMarketPurchase" class="content">OMP</span>
+  <span  *ngIf="targetType && targetType?.carveOut" class="content">CO</span>
+</div>

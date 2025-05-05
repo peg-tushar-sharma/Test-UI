@@ -1,0 +1,59 @@
+::ng-deep .bs-popover-bottom {
+    margin-top: -1.7em !important;
+  }
+  .outer > * {
+    display:inline-block;
+    vertical-align:middle;
+  }
+  
+  .two {padding-left: 0px;}
+  .notes{
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical !important;
+  }
+  .expertProfile {
+    padding: 10px;
+    font-weight: 400;
+    border-radius: 3px;
+    border: 1px solid #d7d7d7 !important;
+    font-size: 13px;
+    color: #6d6d6d;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    max-height: 307px;
+    overflow-y: auto;
+  }
+  .expertProfileHead {
+    color: #005999 !important;
+    font-size: 14px;
+  }
+  .expertProfileTitle{
+    font-size: 12px;
+
+  }
+  .infoIcon {
+    float: right;
+    margin-top: 4px;
+    color: #6d6d6d;
+    height: 14px;
+    cursor: pointer !important;
+  }
+  
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+  }
+   
+  ::-webkit-scrollbar-thumb {
+    background: #888; 
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+  }

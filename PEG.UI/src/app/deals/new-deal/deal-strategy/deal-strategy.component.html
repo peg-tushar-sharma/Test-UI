@@ -1,0 +1,1025 @@
+<div *ngIf="isEnabled" style="height: 100%">
+    <div class="row" [class.panelCollapsed]="isPanelCollapsed" cdkDropListGroup style="background: #fff; height: 100%">
+        <div class="allocation-expert-container">
+            <div id="allocation-expert-group">
+                <div class="expertTabHeaderContainer">
+                    <ng-select (clear)="filterClose()" id="ddlfilter" [items]="dealExpertsGroups" *ngIf="isFilterHidden"
+                        placeholder="Search Expert Groups" bindLabel="expertGroupName" bindValue="expertGroupId"
+                        (change)="filterExperts($event)">
+                    </ng-select>
+
+                    <span class="strategyTabHeader" *ngIf="!isFilterHidden">Experts</span>
+
+                    <div class="expertBtnContainer">
+                        <button *ngIf="!addPool" class="btn btn-secondary toggleOpacity" id="btnAdd"
+                            (click)="setNewPool($event)">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                        <button class="btn btn-secondary toggleOpacity" id="btnFilter" (click)="toggelFilter()">
+                            <i class="fas fa-filter"></i>
+                        </button>
+                        <button class="btn btn-secondary" id="btnCollapse" (click)="togglePanelCollapsed($event)">
+                            <i class="fas fa-arrow-right" *ngIf="isPanelCollapsed"></i>
+                            <i class="fas fa-arrow-left" *ngIf="!isPanelCollapsed"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="expertTabHeaderContainer closeHeaderContainer" *ngIf="dealTracker?.expertGroup?.length > 0">
+                    <div class="expertBtnContainer">
+                        <!-- Toggle Expert Notes Summary CTA -->
+                        <button class="btn btn-secondary toggleOpacity" (click)="openExpertNotesPopup()">
+                            <i class="fas fa-expand"></i>
+                            <span class="ml-1">Expert Notes Summary</span>
+                        </button>
+
+                        <!-- Toggle All CTA -->
+                        <button class="btn btn-secondary toggleOpacity collapsed" id="btnToggleAll"
+                            (click)="toggleAllGroups()">
+                            <i class="fas fa-times"></i>
+                            <span class="ml-1"></span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="toggleOpacity" *ngFor="let group of dealTracker.expertGroup; let i = index"
+                    [cdkContextMenuTriggerFor]="dealContextMenu"
+                    [ngClass]="group?.isRowSelected == true ? 'poolBorder' : ''">
+                    <div class="expertGroup outer" [hidden]="group.filterState == 1"
+                        (click)="clickOnPool($event, group)">
+                        <div class="one" [style.background-color]="
+                                group.expertPoolColor != undefined && group.expertPoolColor.colorCode != undefined
+                                    ? group.expertPoolColor.colorCode
+                                    : ''
+                            " style="height: 12px; width: 12px; border-radius: 50%"></div>
+                        <div class="expertGroupName" title="{{ group.expertGroupName }}">
+                            {{ group.expertGroupName }}
+                        </div>
+
+                        <!-- Expand or collapse all experts -->
+                        <button class="btn btn-secondary collapsed expertGroup-{{ i }}" id="btnToggleExperts"
+                            [attr.data-target]="'.expert-row-' + i" (click)="toggleAllExperts(i)">
+                            <i class="fas fa-compress"></i>
+                        </button>
+
+                        <button class="btn btn-secondary" id="btnAddExpert" (click)="addNewExpert(group)">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                        <button class="btn btn-secondary" id="btnInfo" [ngbTooltip]="getInfoText(group)">
+                            <i class="fas fa-info-circle"></i>
+                        </button>
+                        <button class="btn btn-secondary" id="btnEdit" (click)="updateExpertGroup(group)">
+                            <i class="fas fa-pen"></i>
+                        </button>
+                        <button class="btn btn-secondary" id="btnDelete"
+                            (click)="deleteExpertGroup(group.expertGroupId)">
+                            <i class="fas fa-trash"></i>
+                        </button>
+
+                        <!-- Collapse or expand expert group -->
+                        <button class="btn btn-secondary" id="btnCollapse" data-toggle="collapse"
+                            [attr.data-target]="'#expertGroupList' + i">
+                            <i class="fas fa-angle-up"></i>
+                        </button>
+                    </div>
+
+                    <div *ngIf="group.experts.length <= 0" class="blankPlaceholder elementHide"
+                        id="expertGroupList{{ i }}" cdkDropList [cdkDropListData]="group.experts"
+                        [attr.bucketvalue]="group.expertGroupId" (cdkDropListDropped)="drop($event, i)"
+                        cdkDropListSortingDisabled>
+                        Drop here
+                    </div>
+
+                    <div cdkDropList id="expertGroupList{{ i }}" class="expertGrouping collapse show"
+                        [cdkDropListData]="group.experts" [cdkDropListConnectedTo]="listClientAccess"
+                        (cdkDropListDropped)="drop($event, i)">
+                        <div [hidden]="item.filterState == 1" class="expert-pool-box" [class.disbaledColor]="
+                                item.expertState == 1 ||
+                                hasNACategory(item) ||
+                                (item.expertState == 2 && item.isAllocationActive)
+                            " *ngFor="let item of sortBy(group.experts,group); let itemIndex = index"
+                            [class.active]="active && i == categoryGrouping && item.expertName == categoryName"
+                            [cdkDragData]="item" cdkDrag [cdkDragDisabled]="
+                                item.expertState == 1 ||
+                                hasNACategory(item) ||
+                                (item.expertState == 2 && item.isAllocationActive) ||
+                                isTabReadOnly || ! allowExpertDragging
+                            " (cdkDragStarted)="dragStarted($event)" (cdkDragEnded)="dragEnded($event)">
+                            <span *ngIf="item.expertState == 2" style="color: #c9c9c9"></span>
+
+                            <div class="row no-gutters" [class.justify-left]="item.isEditing">
+                                <!-- Check these INITIALS as per Depth of Expertise -->
+                                <div id="button-expertGrade-picker" style="text-align: center" class="col-1 btn-group"
+                                    dropdown>
+                                    <button id="btnExpertCategoryPicker" style=" background: none !important;border: none !important;
+                                    outline: none !important;" dropdownToggle
+                                        aria-controls="dropdown-expertGrade-picker">
+                                        {{
+                                        !item.expertCategory && item.expertCategory != undefined
+                                        ? "-"
+                                        : item.expertCategory?.expertCategoryName == "Not Available"
+                                        ? "NA"
+                                        : item?.expertCategory?.expertCategoryName
+                                        }}
+                                    </button>
+
+                                    <div class="dropdown-menu" aria-labelledby="button-expertGrade-picker" role="menu"
+                                        *dropdownMenu>
+                                        <button class="dropdown-item" role="menuitem"
+                                            *ngFor="let category of expertCategories" [class.active]="
+                                                category.expertCategoryName == item?.expertCategory?.expertCategoryName
+                                            " (click)="saveCategory(category, item, i)">
+                                            {{ category.expertCategoryName }}
+                                        </button>
+
+                                        <button class="dropdown-item" role="menuitem"
+                                            (click)="saveCategory(undefined, item, i)">
+                                            -
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div *ngIf="!item.isEditing" class="col d-flex align-items-center" id="expert-name"
+                                    (dblclick)="editExpert(item)">
+                                    <span class="add-ellipsis"
+                                        [title]="!item.isExternalEmployee ? item.employeeCode : ''">
+                                        {{ item.expertNameWithoutAbbreviation }}
+                                    </span>
+
+                                    <div *ngIf="!item.expertNameWithoutAbbreviation"
+                                        style="display: block; width: 100%; cursor: text">
+                                        &nbsp;
+                                    </div>
+                                    {{
+                                    item.statusCode == "L" || item.statusCode == "T"
+                                    ? "(" + item.statusCode + ")"
+                                    : ""
+                                    }}
+                                </div>
+
+                                <div *ngIf="item.isEditing">
+                                    <ng-select autofocus class="expert-select" id="dealExpert" #expertSelect
+                                        name="dealExpert" [items]="typeaheadEmployeeList" [selectOnTab]="true"
+                                        bindLabel="searchableName" [clearable]="true"
+                                        (change)="onSelectionChange($event, item, group)" loadingText="loading..."
+                                        [hideSelected]="true" [typeahead]="selectEmployeeTypeAhead"
+                                        [(ngModel)]="selectedExpert" [addTag]="isAddItem"
+                                        (blur)="item.isEditing = false">
+                                        <ng-template ng-option-tmp let-item="item">
+                                            <div [title]="item.employeeStatusCode != 'EX' ? item.employeeCode : ''">
+                                                {{ item.searchableName }}
+                                                <span *ngIf="item.employeeStatusCode == 'EX'"
+                                                    style="font-size: 10px; padding: 0px 2px !important"
+                                                    class="tag tag-gray ng-star-inserted">BAN</span>
+                                            </div>
+                                        </ng-template>
+                                    </ng-select>
+                                </div>
+
+                                <!-- personnel leave -->
+                                <div id="personnel-leave" *ngIf="!item.isEditing && item?.empAlertStatus" class="col-1">
+                                    <i class="fas fa-exclamation-triangle" (click)="seeItem(group)"
+                                        [ngClass]="getAlertIconClass(item?.empAlertStatus)"
+                                        [ngbTooltip]="empToolTipContent" tooltipClass="employeeAlertTooltip"
+                                        triggers="mouseenter:mouseleave"
+                                        placement="bottom bottom-left bottom-right top-left top-right"
+                                        container="body"></i>
+
+                                    <!-- Popover content -->
+                                    <ng-template #empToolTipContent>
+                                        <div class="notes">
+                                            <div class="note-wrapper">
+                                                <p><i>In next 6 weeks…</i></p>
+                                                <ng-container *ngFor="let item of getdata(item?.empAlertStatus)">
+                                                    <div><b>{{ item.alertType }}:&nbsp;</b>{{ item.startDate }} to {{
+                                                        item.endDate }}</div>
+                                                </ng-container>
+
+                                            </div>
+                                        </div>
+                                    </ng-template>
+                                </div>
+
+                                <div id="expert-abbreviation" *ngIf="!item.isEditing" class="col-1">
+                                    {{ item.abbreviation }}
+                                </div>
+
+                                <!-- Bain office short form should come here -->
+
+                                <div id="office-abbreviation" *ngIf="!item.isEditing" class="col-1">
+                                    {{ item.officeAbbreviation }}
+                                </div>
+
+                                <div *ngIf="!item.isEditing" class="expert-button-wrap"
+                                    [ngClass]="item.isExternalEmployee ? 'col-3' : 'col-3'">
+                                    <!-- Note popover icon -->
+                                    <i *ngIf="item?.expertPoolColor && item?.expertPoolColor?.length"
+                                        class="fas fa-file-alt" [ngbPopover]="popoverContent"
+                                        [style]="item?.note == '' ? 'pointer-events: none;' : ''"
+                                        popoverClass="note-popover-wrapper" triggers="mouseenter:mouseleave"
+                                        placement="bottom-left bottom-right top-left top-right" container="body"
+                                        [ngStyle]="{ 'color': (item?.note) !== '' ? '#284ce0' : '#616568' }"></i>
+
+                                    <!-- Popover content -->
+                                    <ng-template #popoverContent>
+                                        <div class="notes">
+                                            <div class="note-wrapper" *ngFor="let itemColor of item?.expertPoolColor">
+                                                <p *ngIf="itemColor.expertGroupId == group.expertGroupId">
+                                                    {{ itemColor.poolExpertNotes ? itemColor.poolExpertNotes : "-"
+                                                    }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </ng-template>
+
+                                    <!-- Lock & Unlock -->
+                                    <i *ngIf="!hasNACategory(item)"
+                                        class="fas fa-{{ item.isAllocationActive ? 'lock' : 'lock-open' }}"></i>
+
+                                    <!--  -->
+                                    <i *ngIf="hasNACategory(item)" id="expert-group-na"
+                                        class="fas fa-minus-square  activeIcon"
+                                        style="padding: 0px;color:#cc0000 !important"></i>
+
+                                    <span *ngIf="item.isExternalEmployee" class="tag-small-copy">B</span>
+
+                                    <!-- Delete -->
+                                    <i id="expert-delete" class="fas fa-times"
+                                        (click)="deleteExpert(item.expertId, group.expertGroupId)"></i>
+
+                                    <!-- Collapse or expand expert -->
+                                    <button class="btn btn-secondary collapsed d-flex align-items-center expertGroup-{{
+                                            i
+                                        }}" id="btnCollapse" data-toggle="collapse" style="padding: 0px 5px;
+                                        border-radius: 2px;background: #f7f9ff !important;color: #284ce0 !important;font-size: 12px;
+                                        height: 18px;border: none;"
+                                        [attr.data-target]="'#group-' + i + '-expert-' + itemIndex">
+                                        <i class="fas fa-angle-up"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Note -->
+                            <div class="row note-wrapper flex-column align-items-start py-2 mb-1 mr-1 pl-1 pr-1 collapse expert-row-{{
+                                    i
+                                }}" id="group-{{ i }}-expert-{{ itemIndex }}">
+                                <label class="note-header" style="font-weight: 500; margin-bottom: 2px">Notes</label>
+
+                                <ng-container
+                                    *ngFor="let itemColor of item.expertPoolColor; let itemColorIndex = index">
+                                    <textarea *ngIf="itemColor.expertGroupId == group.expertGroupId"
+                                        class="note-content" [(ngModel)]="itemColor.poolExpertNotes"
+                                        (focusout)="saveExpertNote(itemColor, item); onExpertPopupHide();"
+                                        (mouseover)="allowExpertDragging = false;"
+                                        (mouseout)="allowExpertDragging = true;"
+                                        (keydown.enter)="onEnterKeyPress($event)"></textarea>
+                                </ng-container>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <ng-template #dealContextMenu>
+                        <div class="cdk-context-menu" cdkMenu>
+                            <div id="contextMenuTitle">
+                                Actions:
+                            </div>
+                            <button class="cdk-context-menu-bar-item" cdkMenuItem (click)="openInOutlook($event)">
+                                <i class="fa fa-envelope mr-1" aria-hidden="true"></i> Send email</button>
+                            <button class="cdk-context-menu-bar-item" cdkMenuItem (click)="requestExpertiseEmail(group)"
+                                [disabled]="!canRequestExpertise(group)">
+                                <i class="fa fa-reply-all mr-1" aria-hidden="true"></i> Request expertise</button>
+
+                        </div>
+                    </ng-template>
+                </div>
+
+                <div *ngIf="!(dealTracker?.expertGroup && dealTracker?.expertGroup.length > 0)"
+                    style="text-align: center; padding-top: 125px">
+                    No expert found
+                </div>
+            </div>
+        </div>
+
+        <div class="client-container">
+            <div class="strategyTabHeader clientHeader" *ngIf="!isFilterHidden">
+                <div class="d-flex align-items-center">
+                    <span>Clients</span>
+                </div>
+
+                <div class="client-header-buttons">
+                    <!-- Open Clients Popup -->
+                    <button *ngIf="dealTracker?.clients?.length > 0" class="btn btn-secondary"
+                        (click)="openClientsPopup()">
+                        <i class="fas fa-expand mr-1"></i>
+                        <span>Client Overview</span>
+                    </button>
+
+                    <button *ngIf="dealTracker?.clients?.length > 0 && isClientEmailSend" class="btn btn-secondary"
+                        title="Send Info Request Email" (click)="openInfoEmailModal($event)">
+                        <i id="sendInfoRequestEmail" class="fas fa-envelope"></i>
+                    </button>
+
+                    <button class="btn btn-secondary" title="Add Client" (click)="addNewClient($event)">
+                        <i id="addClient" class="fas fa-plus"></i>
+                    </button>
+
+                    <button class="btn btn-secondary" title="Toggle Details"
+                        (click)="hideDetailsColumn = !hideDetailsColumn">
+                        <i id="toggleDetails" class="fas fa-arrow-right" *ngIf="!hideDetailsColumn"></i>
+                        <i id="toggleDetails" class="fas fa-arrow-left" *ngIf="hideDetailsColumn"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="table-scroll">
+                <table id="client-allocation" [class.details-hidden]="hideDetailsColumn">
+                    <thead>
+                        <tr>
+                            <th style="font-weight: 700 !important">Client</th>
+                            <th>Allocated</th>
+                            <th>Hypothesis</th>
+                            <th>Expert calls</th>
+                            <th>Notes</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+
+                    <tbody class="tbody" style="height: 90%">
+                        <ng-container *ngFor="let client of uniqueClients(); let i = index">
+                            <tr>
+                                <th id="clientInfo{{ client.registrationId }}" [ngClass]="
+                                        client.registrationStatus?.registrationStatusId == duplicateStatusID ||
+                                        client.registrationStatus?.registrationStatusId == conflictedStatusID ||
+                                        client.registrationStage?.registrationStageId == this.terminatedStageID ||
+                                        client.registrationStage?.registrationStageId == this.closedLostStageID ||
+                                        client.registrationStage?.registrationStageId == this.closedDroppedStageID ||
+                                        client.registrationStage?.registrationStageId == this.closedBainTurnedDownStageID
+                                            ? 'highlight-duplicate'
+                                            : ''
+                                    ">
+                                    <div>
+                                        <span class="clientName float-left">
+                                            <b class="text-ellipsis" [title]="client.client.clientName">
+                                                <div *ngIf="
+                                                        client.opportunityTypeId == 3 ;
+                                                        then thenEditName;
+                                                        else elseDontEditName
+                                                    "></div>
+                                                <ng-template #thenEditName>
+                                                    <a href="javascript:void(0);" (click)="editClient(client)">{{
+                                                        client.client.clientName }}</a>
+                                                </ng-template>
+                                                <ng-template #elseDontEditName>
+                                                    <span>{{ client.client.clientName }}</span>
+                                                </ng-template>
+                                            </b>
+                                            <span style="font-size: 12px" *ngIf="!(client.priority == null)">
+                                                {{
+                                                client.priority != null &&
+                                                client.priority != undefined &&
+                                                client.priority.priorityName &&
+                                                client.priority.priorityName != ""
+                                                ? "(" + client.priority.priorityName + ")"
+                                                : ""
+                                                }}
+                                            </span>
+                                        </span>
+                                        <span class="subLables case-office" *ngIf="client.caseOffice">{{
+                                            client.caseOffice.officeAbbr }}</span>
+
+
+
+
+
+                                        <i id="delete-client" class="fas fa-times colorGray activeIcon"
+                                            (click)="deleteClientConfirm(client)"></i>
+                                        <i class="fa fa-map-marker placeholderIcon"
+                                            *ngIf="client?.opportunityTypeId == 3"></i>
+                                        <app-opportunity-type-details [buttonType]="'edit-icon'"    [hideHeader]="true"
+                                        *ngIf="!(client.opportunityTypeDetails.isNextPhase || client.opportunityTypeDetails.isAdditionalTeam || client.opportunityTypeDetails.isRestart || client.opportunityTypeDetails.isContinuation)"
+                                            [inputOpportunityTypeDetails]="client.tempOpportunityTypeDetails"
+                                            (opportunityTypeDetailsChange)="updateOpportunityTypeDetails($event,client)"></app-opportunity-type-details>
+                                        <div class="clearfix"></div>
+
+                                    </div>
+                                    <!-- Span to add case info -->
+                                    <div style="display: inline-flex;" *ngIf="client.opportunityTypeDetails.isNextPhase || client.opportunityTypeDetails.isAdditionalTeam || client.opportunityTypeDetails.isRestart || client.opportunityTypeDetails.isContinuation">
+                                        <div class="opportunityType-btn mr-1" >
+                                            {{client.opportunityTypeDetails | opportunityTypeDetailsPipe }}
+                                        </div>
+                                        <app-opportunity-type-details [buttonType]="'edit-icon'" [hideHeader]="true"
+                                            [inputOpportunityTypeDetails]="client.tempOpportunityTypeDetails"
+                                            (opportunityTypeDetailsChange)="updateOpportunityTypeDetails($event,client)"></app-opportunity-type-details>
+                                    </div>
+                                    <div *ngIf="
+                                            client?.caseInfo?.caseCode == '' ||
+                                            client?.caseInfo?.caseCode == null ||
+                                            client?.caseInfo?.caseCode == undefined
+                                        ">
+                                        <a href="javascript:void(0);" (click)="openCaseEditor($event, true, client)">+
+                                            Case</a>
+                                    </div>
+                                    <app-case-editor [dropdownPosition]="caseDropdownPosition(i)"
+                                        [dropdownParent]="'#client-allocation'" (click)="$event.stopPropagation()"
+                                        (caseDataChanges)="updateCaseData($event, 'caseCode')"
+                                        *ngIf="isCaseEditor && client.registrationId == openedCaseEditorClient"></app-case-editor>
+
+                                    <!-- Other details to show of client -->
+                                    <div>
+                                        <div>
+                                            <b class="bold-color">Submitted by:</b>
+                                            <span class="client-detail">
+                                                <span>
+                                                    {{client?.registrationSubmittedBy}}
+                                                </span>
+
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <b class="bold-color">Client Head(s):</b><span class="client-detail"> {{
+                                                client?.clientHeadsName
+                                                }}</span>
+                                        </div>
+                                        <div>
+                                            <b class="bold-color">Stage:</b>
+                                            <button type="button" class="client-detail ml-1" id="stage-button"
+                                                (click)="selectStage($event, client)"
+                                                [disabled]="(client?.registrationStage?.stageTypeName === 'Work Started' || client?.registrationStage?.stageTypeName === 'Work Completed') && ! canEditAnyStage">
+                                                {{
+                                                client?.registrationStage?.stageTypeName ??
+                                                client?.registrationStage?.stageTypeName ??
+                                                "Select Stage"
+                                                }}
+                                            </button>
+                                        </div>
+                                        <div>
+                                            <b class="bold-color">Submitted Date:</b><span class="client-detail">
+                                                <span>{{client?.registrationSubmissionDate
+                                                    | date : "dd-MMM-yyyy"}}</span>
+
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <!-- Changing fontColor to red if status != "Cleared" -->
+                                            <b class="bold-color">Legal Status:</b><span class="client-detail"
+                                                [ngStyle]="{ 'color': (client?.registrationStatus?.statusTypeName) == 'Cleared' ? '#313131' : '#cc0000' }">
+                                                {{
+                                                client?.registrationStatus?.statusTypeName }}</span>
+                                        </div>
+                                        <div *ngIf="
+                                                client?.caseInfo?.caseCode != '' &&
+                                                client?.caseInfo?.caseCode != null &&
+                                                client?.caseInfo?.caseCode != undefined
+                                            ">
+                                            <b class="bold-color">Case:</b>
+                                            <span><a class="resourceAllocationCaseCode">
+                                                    {{ client?.caseInfo?.caseCode }} |
+                                                    {{ client?.caseInfo?.caseName }} |
+                                                    {{ client?.caseInfo?.caseOfficeName }} |
+                                                    {{ client?.caseInfo?.caseStartDate | date : "dd-MMM-yyyy" }} |
+                                                    {{ client?.caseInfo?.caseEndDate | date : "dd-MMM-yyyy" }}
+                                                </a></span>
+                                            <span class="fas fa-times" style="cursor: pointer" title="Remove case code"
+                                                (click)="removeCase(client)"></span>
+                                        </div>
+                                        <div *ngIf="client?.caseStartDate && client?.caseInfo?.caseEndDate">
+                                            <b class="bold-color">Case Date:</b>
+                                            <span class="client-detail">
+                                                {{ client?.caseInfo?.caseStartDate | date : "dd-MMM-yyyy" }} -
+                                                {{ client?.caseInfo?.caseEndDate | date : "dd-MMM-yyyy" }}</span>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <div *ngIf="client.seekingExpertise"
+                                            style="display: inline-block; line-height: 1.3">
+                                            <span class="subLables"><b>Expertise Needs:</b></span>&nbsp;
+                                            <span class="subLables"><span>{{ client.seekingExpertise | slice : 0 : 100
+                                                    }}</span>
+                                                <span style="display: none"
+                                                    id="extraExpertiesNotes{{ client.registrationId }}">{{
+                                                    client.seekingExpertise | slice : 101 : 10000 }}</span>
+                                                <a id="currentReadButton{{ client.registrationId }}"
+                                                    (click)="toggleExpertNotes(client, this)"
+                                                    style="cursor: pointer; color: #007dc4"
+                                                    *ngIf="client.seekingExpertise.length > 100">
+                                                    Read more</a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </th>
+
+                                <td cdkDropList id="comittedList{{ i }}" [cdkDropListData]="client.committed"
+                                    [cdkDropListConnectedTo]="listClientAccess"
+                                    (cdkDropListDropped)="drop($event, i, client)" [class.dragging]="isDraggingExpert">
+                                    <div>
+                                        <div class="example-box expert iconVisiblity"
+                                            *ngFor="let item of sortByPoolColor(client.committed)"
+                                            [cdkDragDisabled]="true" [class.disbaledColor]="
+                                                item && item.expertPoolColor?.length > 0 && hasNACategory(item)
+                                            " [cdkDragData]="item" cdkDrag>
+                                            <ng-container *ngIf="item.expertPoolColor.length >= 1">
+                                                <div class="row no-gutters">
+                                                    <div id="expert-allocated-expertname" class="col-6 add-ellipsis">
+                                                        <span
+                                                            [title]="!item.isExternalEmployee ? item.employeeCode : ''">
+                                                            {{ item.expertNameWithoutAbbreviation }}
+                                                            {{
+                                                            item.statusCode == "L" || item.statusCode == "T"
+                                                            ? "(" + item.statusCode + ")"
+                                                            : ""
+                                                            }} </span>&nbsp;
+                                                    </div>
+                                                    <div class="col-2 remove-padding"
+                                                        id="expert-allocated-abbreviation">
+                                                        <span *ngIf="item.abbreviation"> {{ item.abbreviation }} </span>
+                                                    </div>
+                                                    <div class="col-4 remove-padding">
+                                                        <i *ngIf="!isTabReadOnly" (click)="
+                                                                item.isAllocationActive
+                                                                    ? removeItemShowConfirm(item, i)
+                                                                    : removeItem(client, 'Committed', item, i)
+                                                            " class="fas fa-times infoIcon itemVisible ml-2"></i><i
+                                                            class="fas fa-info-circle infoIcon"
+                                                            [class.colorblue]="isNoteAvailable(item)"
+                                                            [popover]="popTemplate" [containerClass]="tooltip"
+                                                            (onHidden)="onExpertPopupHide()" placement="auto"
+                                                            triggers="click" [outsideClick]="true"></i>
+                                                        <ng-template #popTemplate>
+                                                            <app-user-profile-tooltip [item]="item"
+                                                                (saveExpert)="saveExpert(item)"
+                                                                (saveExpertNote)="saveExpertNote($event, item)"></app-user-profile-tooltip>
+                                                        </ng-template>
+
+                                                        <span *ngIf="!hasNACategory(item)">
+                                                            <i id="expert-allocated-unlock"
+                                                                *ngIf="!item.isAllocationActive" (click)="
+                                                                    !isTabReadOnly
+                                                                        ? toggleAllocationActiveState(item, i, client)
+                                                                        : return
+                                                                "
+                                                                class="fas fa-lock-open colorGray activeIcon lock-unlock"></i>
+                                                            <i id="expert-allocated-lock"
+                                                                *ngIf="item.isAllocationActive" (click)="
+                                                                    !isTabReadOnly
+                                                                        ? allocationActiveConfirm(item, i)
+                                                                        : return
+                                                                "
+                                                                class="fas fa-lock colorBlack activeIcon lock-unlock"></i>
+                                                        </span>
+                                                        <i id="expert-allocated-na"
+                                                            class="fas fa-minus-square colorRed activeIcon"
+                                                            *ngIf="hasNACategory(item)"></i>
+                                                        <span *ngIf="item.isExternalEmployee" class="tag-small"
+                                                            style="float: right; margin-right: 3px"
+                                                            title="BAN Expert">B</span>
+
+                                                        <!-- Bain office short form should come here -->
+                                                        <span id="expert-allocated-office-abbreviation">{{
+                                                            item.officeAbbreviation
+                                                            }}</span>
+                                                    </div>
+                                                    <div id="aa_comittedList_{{ i + '_' + item.employeeCode }}"
+                                                        class="overlay">
+                                                        <div class="innerContent row">
+                                                            <div class="col-12 innerContentTitle">
+                                                                <span>Has client released expert?</span>
+                                                            </div>
+                                                            <div class="col-12">
+                                                                <button class="overlayButton"
+                                                                    (click)="cancelAllocationActiveConfirm(item, i)">
+                                                                    No
+                                                                </button>
+                                                                <button class="overlayButton ml-1"
+                                                                    (click)="toggleAllocationActiveState(item, i, client)">
+                                                                    Yes
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div id="removeItem_comittedList_{{ i + '_' + item.employeeCode }}"
+                                                        class="overlay">
+                                                        <div class="innerContent row">
+                                                            <div class="col-12 innerContentTitle">
+                                                                <span>Remove expert allocation?</span>
+                                                            </div>
+                                                            <div class="col-12">
+                                                                <button class="overlayButton"
+                                                                    (click)="removeItemCancelConfirm(item, i)">
+                                                                    No
+                                                                </button>
+                                                                <button class="overlayButton ml-1"
+                                                                    (click)="removeItem(client, 'Committed', item, i)">
+                                                                    Yes
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row no-gutters">
+                                                    <div class="pr-1" style="width: max-content"
+                                                        *ngFor="let itemColor of item.expertPoolColor">
+                                                        <div class="mulPoolContainer">
+                                                            <span class="roundedPoolColor" [style.background-color]="
+                                                                    itemColor.expertPoolColor
+                                                                        ? itemColor.expertPoolColor.colorCode
+                                                                        : '#b3b3b3'
+                                                                "></span>
+                                                            <span
+                                                                style="padding-left: 8px; font-weight: 600; font-size: 11px">
+                                                                {{
+                                                                itemColor?.categoryId == NACategoryID
+                                                                ? "NA"
+                                                                : itemColor?.categoryId == 0
+                                                                ? "-"
+                                                                : itemColor?.categoryName
+                                                                }}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </ng-container>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td cdkDropList id="heardFromList{{ i }}" [cdkDropListData]="client.heardFrom"
+                                    [cdkDropListConnectedTo]="listClientAccess"
+                                    (cdkDropListDropped)="drop($event, i, client)" [class.dragging]="isDraggingExpert">
+                                    <div>
+                                        <ng-container *ngIf="
+                                                client.heardFrom != null &&
+                                                client.heardFrom != undefined &&
+                                                client.heardFrom.length > 0
+                                            ">
+                                            <div class="example-box expert iconVisiblity"
+                                                *ngFor="let item of sortByPoolColor(client.heardFrom)"
+                                                [cdkDragDisabled]="true" [cdkDragData]="item" [class.disbaledColor]="
+                                                    item.expertState == 1 ||
+                                                    item.expertState == 2 ||
+                                                    (item && item.expertPoolColor?.length > 0 && hasNACategory(item))
+                                                " cdkDrag>
+                                                <ng-container *ngIf="item.expertPoolColor.length >= 1">
+                                                    <div class="row no-gutters" style="gap: 4px;">
+                                                        <div class="col add-ellipsis"
+                                                            [title]="!item.isExternalEmployee ? item.employeeCode : ''">
+                                                            {{ item.expertNameWithoutAbbreviation }}
+                                                            {{
+                                                            item.statusCode == "L" || item.statusCode == "T"
+                                                            ? "(" + item.statusCode + ")"
+                                                            : ""
+                                                            }}
+                                                        </div>
+                                                        <!-- personnel leave -->
+                                                        <div id="personnel-leave"
+                                                            *ngIf="!item.isEditing && item?.empAlertStatus"
+                                                            class="col-1">
+                                                            <i class="fas fa-exclamation-triangle"
+                                                                (click)="seeItem(group)" [ngbPopover]="popoverContent"
+                                                                popoverClass="note-popover-wrapper"
+                                                                triggers="mouseenter:mouseleave"
+                                                                placement="bottom-left bottom-right top-left top-right"
+                                                                container="body"></i>
+
+                                                            <!-- Popover content -->
+                                                            <ng-template #popoverContent>
+                                                                <div class="notes">
+                                                                    <div class="note-wrapper">
+                                                                        <p class="header" style="color: #f2dfd8">Alert
+                                                                        </p>
+                                                                        <p>Vacation from 04-Mar-2024 till 08-Mar-2024 in
+                                                                            next 4 weeks.</p>
+                                                                    </div>
+                                                                </div>
+                                                            </ng-template>
+                                                        </div>
+                                                        <div class="col-2 remove-padding">
+                                                            {{ item.abbreviation != undefined ? item.abbreviation : ""
+                                                            }}
+                                                        </div>
+                                                        <div class="col-4 remove-padding">
+                                                            <i *ngIf="!isTabReadOnly"
+                                                                (click)="removeItem(client, 'HeardFrom', item, i)"
+                                                                class="fas fa-times infoIcon itemVisible ml-2"></i>
+                                                            <i [class.disbaledColor]="
+                                                                    item.expertState == 1 || item.expertState == 2
+                                                                " class="fas fa-info-circle infoIcon"
+                                                                [class.colorblue]="isNoteAvailable(item)"
+                                                                [popover]="popTemplate" [containerClass]="tooltip"
+                                                                placement="auto" triggers="click"
+                                                                (onHidden)="onExpertPopupHide()"
+                                                                [outsideClick]="true"></i>
+                                                            <i id="expert-heardform-na"
+                                                                class="fas fa-minus-square colorRed activeIcon"
+                                                                *ngIf="hasNACategory(item)"></i>
+
+                                                            <ng-template #popTemplate>
+                                                                <app-user-profile-tooltip [item]="item"
+                                                                    (saveExpert)="saveExpert(item)"
+                                                                    (saveExpertNote)="saveExpertNote($event, item)"></app-user-profile-tooltip>
+                                                            </ng-template>
+                                                            <span *ngIf="item.isExternalEmployee" class="tag-small"
+                                                                style="float: right; margin-right: 3px"
+                                                                title="BAN Expert">B</span>
+
+                                                            <!-- Bain office short form should come here -->
+                                                            <span>{{ item.officeAbbreviation }}</span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row no-gutters">
+                                                        <div class="pr-1" style="width: max-content"
+                                                            *ngFor="let itemColor of item.expertPoolColor">
+                                                            <div class="mulPoolContainer">
+                                                                <span class="roundedPoolColor" [style.background-color]="
+                                                                        itemColor.expertPoolColor
+                                                                            ? itemColor.expertPoolColor.colorCode
+                                                                            : '#b3b3b3'
+                                                                    "></span>
+                                                                <span style="
+                                                                        padding-left: 8px;
+                                                                        font-weight: 600;
+                                                                        font-size: 11px;
+                                                                    ">
+                                                                    {{
+                                                                    itemColor?.categoryId == NACategoryID
+                                                                    ? "NA"
+                                                                    : itemColor?.categoryId == 0
+                                                                    ? "-"
+                                                                    : itemColor?.categoryName
+                                                                    }}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </ng-container>
+                                            </div>
+                                        </ng-container>
+                                    </div>
+                                </td>
+                                <td cdkDropList id="nextCallList{{ i }}" [cdkDropListData]="client.nextCall"
+                                    [cdkDropListConnectedTo]="listClientAccess"
+                                    (cdkDropListDropped)="drop($event, i, client)" [class.dragging]="isDraggingExpert">
+                                    <div>
+                                        <ng-container *ngIf="
+                                                client.nextCall != null &&
+                                                client.nextCall != undefined &&
+                                                client.nextCall.length > 0
+                                            ">
+                                            <div class="example-box expert iconVisiblity cdk-drag-disabled"
+                                                *ngFor="let item of sortByPoolColor(client.nextCall)"
+                                                [class.disbaledColor]="
+                                                    item.expertState == 1 ||
+                                                    item.expertState == 2 ||
+                                                    (item && item.expertPoolColor?.length > 0 && hasNACategory(item))
+                                                " [cdkDragData]="item" [cdkDragDisabled]="true" cdkDrag>
+                                                <ng-container *ngIf="item.expertPoolColor.length >= 1">
+                                                    <div class="row no-gutters">
+                                                        <div class="col-6 add-ellipsis"
+                                                            [title]="!item.isExternalEmployee ? item.employeeCode : ''">
+                                                            {{ item.expertNameWithoutAbbreviation }}
+                                                            {{
+                                                            item.statusCode == "L" || item.statusCode == "T"
+                                                            ? "(" + item.statusCode + ")"
+                                                            : ""
+                                                            }}
+                                                        </div>
+                                                        <div class="col-2 remove-padding">
+                                                            {{ item.abbreviation != undefined ? item.abbreviation : ""
+                                                            }}
+                                                        </div>
+                                                        <div class="col-4 remove-padding">
+                                                            <i *ngIf="!isTabReadOnly"
+                                                                (click)="removeItem(client, 'NextCall', item, i)"
+                                                                class="fas fa-times infoIcon itemVisible ml-2"></i><i
+                                                                [class.disbaledColor]="
+                                                                    item.expertState == 1 || item.expertState == 2
+                                                                " class="fas fa-info-circle infoIcon"
+                                                                [class.colorblue]="isNoteAvailable(item)"
+                                                                [popover]="popTemplate" [containerClass]="tooltip"
+                                                                placement="auto" triggers="click"
+                                                                (onHidden)="onExpertPopupHide()"
+                                                                [outsideClick]="true"></i>
+                                                            <i id="expert-nextcall-na"
+                                                                class="fas fa-minus-square colorRed activeIcon"
+                                                                *ngIf="hasNACategory(item)"></i>
+
+                                                            <ng-template #popTemplate>
+                                                                <app-user-profile-tooltip [item]="item"
+                                                                    (saveExpert)="saveExpert(item)"
+                                                                    (saveExpertNote)="saveExpertNote($event, item)"></app-user-profile-tooltip>
+                                                            </ng-template>
+                                                            <span *ngIf="item.isExternalEmployee" class="tag-small"
+                                                                style="float: right; margin-right: 3px"
+                                                                title="BAN Expert">B</span>
+
+                                                            <!-- Bain office short form should come here -->
+                                                            <span>{{ item.officeAbbreviation }}</span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row no-gutters">
+                                                        <div class="pr-1" style="width: max-content"
+                                                            *ngFor="let itemColor of item.expertPoolColor">
+                                                            <div class="mulPoolContainer"
+                                                                style="display: flex; align-items: center">
+                                                                <span class="roundedPoolColor" [style.background-color]="
+                                                                        itemColor.expertPoolColor
+                                                                            ? itemColor.expertPoolColor.colorCode
+                                                                            : '#b3b3b3'
+                                                                    "></span>
+                                                                <span style="
+                                                                        padding-left: 8px;
+                                                                        font-weight: 600;
+                                                                        font-size: 11px;
+                                                                    ">
+                                                                    {{
+                                                                    itemColor?.categoryId == NACategoryID
+                                                                    ? "NA"
+                                                                    : itemColor?.categoryId == 0
+                                                                    ? "-"
+                                                                    : itemColor?.categoryName
+                                                                    }}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </ng-container>
+                                            </div>
+                                        </ng-container>
+                                    </div>
+                                </td>
+                                <td (dblclick)="selectAllocationNote(client.registrationId)">
+                                    <div *ngIf="client.allocationNote != undefined" class="notes"
+                                        id="allocationNotes{{ client.registrationId }}">
+                                        <pre>{{ client.allocationNoteFormatted }}</pre>
+                                        <div>
+                                            <a id="currentAllocationNotesReadButton{{ client.registrationId }}"
+                                                (click)="toggleAllocationNotes(client)"
+                                                style="cursor: pointer; color: #007dc4" *ngIf="
+                                                    client.allocationNote.length > 400 ||
+                                                    client.allocationNote.split('\n').length > 4
+                                                ">
+                                                Read more</a>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div>
+                                        <b class="bold-color">Type of Work:</b>&nbsp;
+                                        <span class="client-detail"
+                                            [class.text-danger]="wtBuySidePreSalesList.includes(client.workType?.workTypeId)">{{
+                                            client.workType?.workTypeName }}</span>
+                                    </div>
+                                    <div>
+                                        <b class="bold-color">Legal Status Date:</b>
+                                        <span class="client-detail">{{ client.statusUpdateDate | date : "dd-MMM-yyyy"
+                                            }}</span>
+                                    </div>
+                                    <div><b class="bold-color">Target:</b>&nbsp;<span class="client-detail">{{
+                                            client?.target?.targetName }}</span>
+                                    </div>
+
+                                    <input id="expectedStartDate" name="expectedStartDate" type="text"
+                                        placeholder="DD-MMM-YYYY" #dpCaseReady="bsDatepicker"
+                                        class="mb-2 datepicker datCtrlWidth" bsDatepicker [minDate]="minDate"
+                                        [bsConfig]="bsConfig" [(ngModel)]="client.expectedStartDate"
+                                        (onHidden)="updateDealTrackerClient(client, 'ExpectedStartDate')" />
+                                    <b class="bold-color">Estimated Start Date: &nbsp;</b>
+                                    <div *ngIf="client.registrationId > 0">
+                                        <a href="#" (click)="$event.preventDefault(); dpCaseReady.show()"
+                                            *ngIf="client.expectedStartDate">{{ client?.expectedStartDate | date :
+                                            "dd-MMM-yyyy" }}</a>
+                                        <a href="#" (click)="$event.preventDefault(); dpCaseReady.show()"
+                                            *ngIf="!client.expectedStartDate">Add date</a>
+                                        <span class="fas fa-times" style="padding-left: 4px; cursor: pointer"
+                                            *ngIf="client.expectedStartDate" title="Remove Expected Start Date"
+                                            (click)="removeExpectedStartDate(client)"></span>
+                                    </div>
+
+                                    <div>
+                                        <b class="bold-color">Likelihood:</b>
+
+                                        <span class="likelihood-select client-detail"
+                                            *ngIf="!(isSelectLikelihood && selectedLikelihood == client?.likelihood && selectedIndex == i)"
+                                            (click)="selectLikelihood($event, client, i)">
+                                            {{ client?.likelihood && client?.likelihood?.label ?
+                                            client?.likelihood?.label :
+                                            "Select Likelihood" }}
+                                        </span>
+
+                                        <ng-select (click)="$event.stopPropagation()" class="likelihood-select"
+                                            *ngIf="isSelectLikelihood && selectedLikelihood == client?.likelihood && selectedIndex == i"
+                                            id="likelihood" name="likelihood" [(ngModel)]="client.likelihood"
+                                            [items]="likelihoodList" bindLabel="label"
+                                            (clear)="updateDealTrackerClient(client, 'Likelihood')" [clearable]="true"
+                                            (change)="onLikelihoodSelectionChange($event, client)">
+                                        </ng-select>
+                                    </div>
+                                    <div>
+                                        <b class="bold-color">Retainer</b>
+
+                                        <span class="retainer-select client-detail"
+                                            *ngIf="!(isSelectRetainer && selectedRetainer?.value == client?.isRetainer && selectedIndex == i)"
+                                            (click)="selectRetainer($event, client, i)">
+                                            {{ client?.isRetainer ?
+                                            getSelectedRetainerName(client?.isRetainer) :
+                                            "Select" }}
+                                        </span>
+
+                                        <ng-select (click)="$event.stopPropagation()" class="retainer-select"
+                                            *ngIf="isSelectRetainer && selectedRetainer?.value == client?.isRetainer && selectedIndex == i"
+                                            id="retainer" name="retainer" [(ngModel)]="selectedRetainer"
+                                            [items]="retainerList" bindLabel="name" [clearable]="false"
+                                            (change)="onRetainerSelectionChange($event, client)">
+                                        </ng-select>
+                                    </div>
+                                    <div>
+                                        <b class="bold-color">Retainer Notes</b>
+
+                                        <span class="retainer-select client-detail"
+                                            *ngIf="!(isSelectRetainerNotes  && selectedIndex == i)"
+                                            (click)="selectRetainerNotes($event, client, i)">
+                                            {{ client?.retainerNotes && client?.retainerNotes!="" ?
+                                            client?.retainerNotes :
+                                            "Add Retainer Notes" }}
+                                        </span>
+                                        <input type="text" (click)="$event.stopPropagation()" class="retainer-notes "
+                                            maxlength="200" id="retainerNotes" name="retainerNotes"
+                                            placeholder="Add retainer notes"
+                                            (blur)="onRetainerNotesChange($event, client)"
+                                            [(ngModel)]="selectedRetainerNotes"
+                                            *ngIf="isSelectRetainerNotes  && selectedIndex == i" />
+
+                                    </div>
+                                    <div *ngIf="client.opportunityTypeId == 1 || client.opportunityTypeId == 4">
+
+                                        <ng-container
+                                            *ngFor="let status of expertPipelineStatus; let statusIndex = index">
+                                            <div *ngIf="statusIndex === i" class="request-info-button-wrapper">
+                                                <button class="request-button"
+                                                    (click)="requestExpertInfo(status,client.registrationId);"
+                                                    [disabled]="!client.isExpertInfoRequested">
+                                                    <i
+                                                        class="fas fa-{{ status.expertRequested ? 'minus' : 'plus' }}"></i>
+                                                    <span>{{ status.expertRequested ? 'Close' : 'Expert Request'
+                                                        }}</span>
+                                                </button>
+                                                <span style="font-weight: 500;">|</span>
+                                                <button class="request-button"
+                                                    (click)="status.pipelineRequested = !status.pipelineRequested; status.expertRequested = false"
+                                                    [disabled]="!client.isPipeline">
+                                                    <i
+                                                        class="fas fa-{{ status.pipelineRequested ? 'minus' : 'plus' }}"></i>
+                                                    <span>{{ status.pipelineRequested ? 'Close' : 'Pipeline Request'
+                                                        }}</span>
+                                                </button>
+                                            </div>
+                                        </ng-container>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <!-- request info component -->
+                            <ng-container *ngFor="let status of expertPipelineStatus; let componentIndex = index">
+                                <div app-request-info-popup *ngIf="componentIndex === i"
+                                    [hidden]="!(status.expertRequested || status.pipelineRequested)"
+                                    class="request-info-component" [clientData]="client" [regId]="client.registrationId"
+                                    [isExpert]="status.expertRequested" [isPipeline]="status.pipelineRequested"
+                                    [status]="status"
+                                    (closeEmitter)="status.expertRequested = false; status.pipelineRequested = false">
+                                </div>
+                            </ng-container>
+                        </ng-container>
+
+                        <tr *ngIf="!IsReadyForAllocation">
+                            <td colspan="5" style="text-align: center; padding-top: 150px; height: 100%">
+                                <div>No Clients found. Please add clients to continue with experts allocation.</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <app-strategy-allocation-notes [dealTracker]="dealTracker" [registrationId]="selectedRegistrationId"
+            [dealLabel]="dealLabel" [isTabReadOnly]="isTabReadOnly">
+        </app-strategy-allocation-notes>
+
+        <i id="AllocationNotes" data-toggle="modal" data-target="#dealAllocationNotes" data-backdrop="static"
+            data-keyboard="false"></i>
+
+        <app-resource-allocation-information [caseCode]="caseCode"> </app-resource-allocation-information>
+
+        <i id="resourceAllocation" data-toggle="modal" data-target="#resouceAllocation" data-backdrop="static"
+            data-keyboard="false"></i>
+    </div>
+</div>
+
+<!-- <ng-container *ngIf="addPool">
+    <app-add-expert-pool [deal]="deal" [dealTracker]="dealTracker" [dealId]="dealId" [expertGroups]="expertGroups"
+        [enableImport]="enableImport" (saveExpertGroup)="saveExpertGroup($event)"
+        (closeExpertPool)="closeExpertPool($event)"></app-add-expert-pool>
+</ng-container> -->

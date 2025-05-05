@@ -1,0 +1,39 @@
+<div class="multiple" style="display: flex;" id="team">
+    <div class="cell-width" *ngFor="let item of teams; let i=index">
+
+        <div class="customX" style="margin-top: 5px;">
+            <span>Standard Size:</span>
+            <span>
+                <ng-select [disabled]="item.otherSize!=''" [items]="teamSize" class="slectComponent" bindLabel="teamSize" bindValue="teamSizeId"
+                    [multiple]="false" [(ngModel)]="item.teamSizeId" (change)="onSelectionChange($event,item)">
+                </ng-select>
+            </span>
+            <span style="text-align: center;">
+                <button class="addbutton" (click)="addNewTemplate()" *ngIf="i==teams.length-1">
+                    <i class="fas fa-plus"></i>
+                </button>
+                <button class="addbutton" (click)="removeTemplate(item)" *ngIf="!(i==teams.length-1)">
+                    <i class="fas fa-trash-alt"></i>
+                </button>
+            </span>
+        </div>
+        <div class="custom" style="margin-top: 5px;">
+            <span> Other Size:</span>
+            <span><input class="input" [disabled]="item.teamSizeId>0" [(ngModel)]="item.otherSize" style="width: 100%;"
+                    placeholder="" type="text" maxlength="100" /></span>
+            <span style="text-align: center;">
+
+                <button class="addbutton" (click)="removeTemplate(item)" *ngIf="i==teams.length-1">
+                    <i class="fas fa-trash-alt"></i>
+                </button>
+            </span>
+        </div>
+        <div class="custom" style="margin-top: 5px;">
+            <span> Comments:</span>
+            <span><input class="input" [(ngModel)]="item.comments" style="width: 100%;" placeholder="" type="text"
+                    maxlength="100" /></span>
+        </div>
+
+    </div>
+
+</div>

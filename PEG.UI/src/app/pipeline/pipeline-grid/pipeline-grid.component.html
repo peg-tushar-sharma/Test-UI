@@ -1,0 +1,256 @@
+<div class="split-area-pane">
+  <div class="default">
+    <button class="gridCollapse expand" (click)="onCurtainChange('expanded')" title="Click to expand grid"
+      *ngIf="isCurtainCollapsed">
+      <span><i class="fa fa-chevron-up" aria-hidden="true"></i></span>
+    </button>
+  </div>
+
+  <div class="default">
+    <button class="gridCollapse" (click)="onCurtainChange('split')" title="Click to expand grid"
+      *ngIf="isCurtainCollapsed">
+      <span><i class="fas fa-window-minimize" aria-hidden="true"></i></span>
+    </button>
+  </div>
+
+  <as-split direction="vertical" unit="percent">
+    <as-split-area id="capacitySplitArea" [size]="50"
+      [class.full-screen]="isAssigningOpp || curtainState === 'collapsed'"
+      [class.min-screen]="!isAssigningOpp && curtainState === 'expanded'">
+
+      <div class="main" *ngIf="curtainState != 'expanded' || isAssigningOpp">
+        <div class="pipeline-bucket-control-bar">
+          <div class="left-pipeline-buttons">
+            <button class="week-offset-btn" *ngIf="weekOffset <= 0" [disabled]="weekOffset < 0"
+              (click)="adjustWeekOffset($event, -1)">
+              <i class="fas fa-arrow-left"></i> &nbsp; Previous week
+            </button>
+
+            <button class="week-offset-btn" *ngIf="weekOffset > 0" (click)="adjustWeekOffset($event, -4)">
+              <i class="fas fa-arrow-left"></i> &nbsp; Previous 4 weeks
+            </button>
+
+            <div class="pipeline-search ml-2" *ngIf="pipelineBucketData && this.pipelineBucketData.length > 0">
+              <input #searchManagerBox id="searchManagerBox" type="text" spellcheck="false" autocomplete="off"
+                class="form-control" placeholder="Search multiple placeholders separated by comma (,)"
+                (keydown.enter)="onPlaceholderSearchChange()" (keyup)="onKeyPressPlaceholderChange($event)" />
+
+              <span class="fa fa-search form-control-feedback"></span>
+
+              <i class="fas fa-times cross_icon" (click)="searchManagerBox.value = ''; onPlaceholderSearchChange()"
+                *ngIf="searchManagerBox.value !== ''"></i>
+            </div>
+            <!-- <app-active-users-tile [activeUsers]="activeUsers" ></app-active-users-tile> -->
+            <div id="activeUserList">
+              <ul style="margin: 0;padding: 5px;display: flex;  list-style-type: none;">
+                <span *ngFor="let user of activeUsers  | slice:0:5">
+                  <li class="user-placeholder userInitials" title="{{user?.fullName}}"
+                    id="initials{{user.employeeCode}}" *ngIf="(user.isJpeg==false && user.isJpg==false)">
+                    {{user?.initials}}</li>
+                  <li title="{{user?.fullName}}" class="" id="img{{user.employeeCode}}"
+                    [class.display-none]="user.isJpeg==false && user.isJpg==false">
+                    <img class="user-image" height="33px"
+                      src="https://employeephotos.bain.com/photos/{{user.employeeCode}}.jpg" loading="lazy"
+                      decoding="async" [class.display-none]="user.isJpg==false" (error)='user.isJpg=false' />
+                    <img class="user-image" height="33px"
+                      src="https://employeephotos.bain.com/photos/{{user.employeeCode}}.jpeg"
+                      [class.display-none]="user.isJpeg==false" loading="lazy" decoding="async"
+                      (error)='user.isJpeg=false' />
+                  </li>
+                </span>
+                <span>
+                  <li class="user-placeholder userInitials" style="background-color: #b0b0b0;cursor: pointer;"
+                    id="otherActiveUsers" (mouseenter)="getOtherActiveUsers(activeUsers)" *ngIf="activeUsers?.length>5">
+                    +{{activeUsers?.length - 5}}
+
+                  </li>
+
+                </span>
+              </ul>
+            </div>
+          </div>
+
+          <div class="flex align-items-center">
+            <app-pipeline-filter (userPreferenceUpdate)="userPreferenceUpdate($event)"
+              (bucketColumnPreferenceEmitter)="bucketColumnPreferenceEmitter($event)"
+              [userBucketColumnPreference]="bucketColumnPreference"
+              (onRefreshGrid)="onRefreshGrid($event)"></app-pipeline-filter>
+
+            <button class="week-offset-btn" *ngIf="weekOffset == -1" [disabled]="weekOffset >= 12"
+              (click)="adjustWeekOffset($event, 1)">
+              Current week &nbsp; <i class="fas fa-long-arrow-alt-right"></i>
+            </button>
+
+            <button class="week-offset-btn" *ngIf="weekOffset != -1" [disabled]="weekOffset >= 12"
+              (click)="adjustWeekOffset($event, 4)">
+              Next 4 weeks &nbsp; <i class="fas fa-long-arrow-alt-right"></i>
+            </button>
+          </div>
+
+
+        </div>
+
+        <div class="container-fluid">
+          <!-- <app-date-buckets ></app-date-buckets> -->
+          <div id="bucketWeekScrollable" class="bucket-row" cdkScrollable>
+            <!-- Column -->
+            <div class="bucket-column">
+              <app-date-buckets-column class="bucketGroupContainer" (outOnMergeSuccess)="outOnMergeSuccess()"
+                (updateWeeklyBucketData)="updateWeeklyBucketData($event)"
+                (outOpportunityMove)="outOpportunityMove($event)" [userPreference]="preferenceUpdate"
+                (getPipelineBucket)="getPipelineBucket()" (deleteWeeklyBucketData)="deleteWeeklyBucketData($event)"
+                (dragover)="onDragOver($event)" [data]="bucketData" [groupData]="groupData" [rowData]="rowData"
+                [oppNameFields]="oppNameFields" (propogateGroupData)="propogateGroupData($event)"
+                (propogateBucketData)="propogateBucketData($event)" (setOpsLikelihood)="setOpsLikelihood($event)"
+                (drop)="onDrop($event)" [bucketData]="weeklyBucketData" [weekNumber]="0 + weekOffset"
+                [weekOffset]="weekOffset" [bucketWidth]="bucketWidthController[0]"
+                [isCurtainCollapsed]="isCurtainCollapsed" (setBucketWidth)="setBucketWidth($event)"
+                (outSendEmail)="outSendEmail($event)" (saveNotes)="saveNotes($event)"
+                (saveCaseCode)="saveCaseCode($event)" (redrawRows)="redrawRows($event)"
+                (userPreferenceUpdate)="userPreferenceUpdate($event)" [draggingBucketGroup]="draggingBucketGroup"
+                [addingNewGroup]="addingNewGroup" (updateAddingNewGroup)="updateAddingNewGroup($event)"
+                (deleteWeeklyBucketGroupData)="deleteWeeklyBucketGroupData($event)"
+                (bucketGroupDragUpdate)="bucketGroupDragUpdate($event)" [bucketNumber]="0"
+                [oppToBeAssigned]="oppToBeAssigned" (emitStoreData)="emitStoreData($event)"
+                (assignOppFromGrid)="assignOppFromGrid($event)"
+                (updateSelectedOpportunitesFlags)="updateSelectedOpportunitesFlags($event)"
+                (updatePartnerEditFlags)="updateSelectedOpportunitesPartnerFlags($event)"
+                [defaultColumnValueInput]="bucketColumnPreference" [opsLikelihood]="opsLikelihood">
+              </app-date-buckets-column>
+            </div>
+
+            <div class="bucket-column">
+              <app-date-buckets-column class="bucketGroupContainer" (outOnMergeSuccess)="outOnMergeSuccess()"
+                (updateWeeklyBucketData)="updateWeeklyBucketData($event)"
+                (outOpportunityMove)="outOpportunityMove($event)" [userPreference]="preferenceUpdate"
+                (getPipelineBucket)="getPipelineBucket()" (deleteWeeklyBucketData)="deleteWeeklyBucketData($event)"
+                (dragover)="onDragOver($event)" [data]="bucketData" [groupData]="groupData" [rowData]="rowData"
+                [oppNameFields]="oppNameFields" (propogateGroupData)="propogateGroupData($event)"
+                (propogateBucketData)="propogateBucketData($event)" (setOpsLikelihood)="setOpsLikelihood($event)"
+                (drop)="onDrop($event)" [bucketData]="weeklyBucketData" [weekNumber]="1 + weekOffset"
+                [weekOffset]="weekOffset" [bucketWidth]="bucketWidthController[1]"
+                [isCurtainCollapsed]="isCurtainCollapsed" (setBucketWidth)="setBucketWidth($event)"
+                (outSendEmail)="outSendEmail($event)" (saveNotes)="saveNotes($event)"
+                (saveCaseCode)="saveCaseCode($event)" (redrawRows)="redrawRows($event)"
+                (userPreferenceUpdate)="userPreferenceUpdate($event)" [draggingBucketGroup]="draggingBucketGroup"
+                [addingNewGroup]="addingNewGroup" (updateAddingNewGroup)="updateAddingNewGroup($event)"
+                (deleteWeeklyBucketGroupData)="deleteWeeklyBucketGroupData($event)"
+                (bucketGroupDragUpdate)="bucketGroupDragUpdate($event)" [bucketNumber]="1"
+                [oppToBeAssigned]="oppToBeAssigned" (emitStoreData)="emitStoreData($event)"
+                (assignOppFromGrid)="assignOppFromGrid($event)"
+                (updateSelectedOpportunitesFlags)="updateSelectedOpportunitesFlags($event)"
+                (updatePartnerEditFlags)="updateSelectedOpportunitesPartnerFlags($event)"
+                [defaultColumnValueInput]="bucketColumnPreference" [opsLikelihood]="opsLikelihood">
+              </app-date-buckets-column>
+            </div>
+
+            <div class="bucket-column">
+              <app-date-buckets-column class="bucketGroupContainer" (outOnMergeSuccess)="outOnMergeSuccess()"
+                (updateWeeklyBucketData)="updateWeeklyBucketData($event)" (setOpsLikelihood)="setOpsLikelihood($event)"
+                (outOpportunityMove)="outOpportunityMove($event)" [userPreference]="preferenceUpdate"
+                (getPipelineBucket)="getPipelineBucket()" (deleteWeeklyBucketData)="deleteWeeklyBucketData($event)"
+                (dragover)="onDragOver($event)" [data]="bucketData" [groupData]="groupData" [rowData]="rowData"
+                [oppNameFields]="oppNameFields" (propogateGroupData)="propogateGroupData($event)"
+                (propogateBucketData)="propogateBucketData($event)" (drop)="onDrop($event)"
+                [bucketData]="weeklyBucketData" [weekNumber]="2 + weekOffset" [weekOffset]="weekOffset"
+                [bucketWidth]="bucketWidthController[2]" [isCurtainCollapsed]="isCurtainCollapsed"
+                (setBucketWidth)="setBucketWidth($event)" (outSendEmail)="outSendEmail($event)"
+                (saveNotes)="saveNotes($event)" (saveCaseCode)="saveCaseCode($event)" (redrawRows)="redrawRows($event)"
+                (userPreferenceUpdate)="userPreferenceUpdate($event)" [draggingBucketGroup]="draggingBucketGroup"
+                [addingNewGroup]="addingNewGroup" (updateAddingNewGroup)="updateAddingNewGroup($event)"
+                (deleteWeeklyBucketGroupData)="deleteWeeklyBucketGroupData($event)"
+                (bucketGroupDragUpdate)="bucketGroupDragUpdate($event)" [bucketNumber]="2"
+                [oppToBeAssigned]="oppToBeAssigned" (emitStoreData)="emitStoreData($event)"
+                (assignOppFromGrid)="assignOppFromGrid($event)"
+                (updateSelectedOpportunitesFlags)="updateSelectedOpportunitesFlags($event)"
+                (updatePartnerEditFlags)="updateSelectedOpportunitesPartnerFlags($event)"
+                [defaultColumnValueInput]="bucketColumnPreference" [opsLikelihood]="opsLikelihood">
+              </app-date-buckets-column>
+            </div>
+
+            <div class="bucket-column">
+              <app-date-buckets-column class="bucketGroupContainer"
+                (updateWeeklyBucketData)="updateWeeklyBucketData($event)" (outOnMergeSuccess)="outOnMergeSuccess()"
+                (outOpportunityMove)="outOpportunityMove($event)" [userPreference]="preferenceUpdate"
+                (getPipelineBucket)="getPipelineBucket()" (deleteWeeklyBucketData)="deleteWeeklyBucketData($event)"
+                (dragover)="onDragOver($event)" [data]="bucketData" [groupData]="groupData" [rowData]="rowData"
+                [oppNameFields]="oppNameFields" (propogateGroupData)="propogateGroupData($event)"
+                (propogateBucketData)="propogateBucketData($event)" (setOpsLikelihood)="setOpsLikelihood($event)"
+                (drop)="onDrop($event)" [bucketData]="weeklyBucketData" [weekNumber]="3 + weekOffset"
+                [weekOffset]="weekOffset" [bucketWidth]="bucketWidthController[3]"
+                [isCurtainCollapsed]="isCurtainCollapsed" (setBucketWidth)="setBucketWidth($event)"
+                (outSendEmail)="outSendEmail($event)" (saveNotes)="saveNotes($event)"
+                (saveCaseCode)="saveCaseCode($event)" (redrawRows)="redrawRows($event)"
+                (userPreferenceUpdate)="userPreferenceUpdate($event)" [draggingBucketGroup]="draggingBucketGroup"
+                [addingNewGroup]="addingNewGroup" (updateAddingNewGroup)="updateAddingNewGroup($event)"
+                (deleteWeeklyBucketGroupData)="deleteWeeklyBucketGroupData($event)"
+                (bucketGroupDragUpdate)="bucketGroupDragUpdate($event)" [bucketNumber]="3"
+                [oppToBeAssigned]="oppToBeAssigned" (emitStoreData)="emitStoreData($event)"
+                (assignOppFromGrid)="assignOppFromGrid($event)"
+                (updateSelectedOpportunitesFlags)="updateSelectedOpportunitesFlags($event)"
+                (updatePartnerEditFlags)="updateSelectedOpportunitesPartnerFlags($event)"
+                [defaultColumnValueInput]="bucketColumnPreference" [opsLikelihood]="opsLikelihood">
+              </app-date-buckets-column>
+            </div>
+          </div>
+        </div>
+      </div>
+    </as-split-area>
+    <as-split-area id="opportunitySplitArea" [size]="50"
+      [class.full-screen]="!isAssigningOpp && curtainState === 'expanded'">
+
+      <div class="pipelineTableContainer" *ngIf="curtainState != 'collapsed'" (click)="setClear()">
+        <app-pipelineNavigationBar (onRefreshGrid)="onRefreshGrid($event)"
+          (onRegistrationSelect)="onRegistrationSelect($event)" (newItemEvent)="editItem($event)"
+          (onGroupToggle)="onGroupToggle($event)" (showRegistrationInGrid)="showRegistrationInGrid($event)"
+          [estimatedStartDate]="estimatedStartDate" (onFilterChange)="onExternalFilterChange($event)"
+          [savedFilters]="savedFilters" [selectedFilter]="selectedFilter"
+          (setSelectedFilter)="setSelectedFilter($event)" (getUserFilter)="getUserFilter($event)"
+          [userColumnList]="userColumnList" [defaultSort]="defaultSort" [toggleSearchableDiv]="toggleSearchableDiv"
+
+          (onSavedFilterChange)="onSavedFilterChange($event)" [gridApi]="gridApi" [gridColumnApi]="gridColumnApi"
+          (onCurtainChange)="onCurtainChange($event)" (openFlyoutEmitter)="handleOpenFlyout($event)"
+          [curtainState]="curtainState"></app-pipelineNavigationBar>
+
+
+        <div class="row2 " id="agGridSection" (click)="setClear()">
+          <div class="col-12" style="padding-left: 0px; padding-right: 0px">
+
+
+            <div id="pipelineGrid" class="ag-theme-balham" style="height: 100%" (contextmenu)="$event.preventDefault()">
+              <ag-grid-angular #agGrid style="width: 100%; height: 100%" class="ag-theme-balham" [rowData]="rowData"
+                [columnDefs]="columnDefs" (gridReady)="onGridReady($event)" [gridOptions]="gridOptions"
+                [groupDefaultExpanded]="1" [rowSelection]="rowSelection" [animateRows]="false" [floatingFilter]="false"
+                [allowContextMenuWithControlKey]="true" [groupUseEntireRow]="true"
+                [getContextMenuItems]="getContextMenuItems" (cellContextMenu)="onCellContextMenu($event)"
+                [defaultGroupOrderComparator]="defaultGroupOrderComparator" [groupDisplayType]="groupDisplayType"
+                rowGroupPanelShow="always" [suppressDragLeaveHidesColumns]="true" [animateRows]="false"
+                [suppressMakeColumnVisibleAfterUnGroup]="false" (columnMoved)="onColumnMoved($event)"
+                [processCellForClipboard]="processCellForClipboard" (columnResized)="onWidthChanged($event)"
+                [popupParent]="popupParent" [isExternalFilterPresent]="isExternalFilterPresent"
+                [doesExternalFilterPass]="doesExternalFilterPass">
+              </ag-grid-angular>
+            </div>
+          </div>
+        </div>
+        <!-- To show custom notifications -->
+        <div id="snackbar">{{currentUser}} has started editing</div>
+
+      </div>
+    </as-split-area>
+  </as-split>
+</div>
+
+<app-opp-slideout [opportunity]="selectedOpportunity" [isConflicted]="isPipelineConflicted"
+  [oppNameFields]="oppNameFields" [weeklyBucket]="weeklyBucketData" (emitPipelineValue)="updatePipeline($event)"
+  (emitAddRowinGrid)="addDuplicatedRowinGrid($event)" (closeFlyoutEmitter)="closeFlyoutEmitter($event)" ></app-opp-slideout>
+
+<div class="assignOppToolbar" [class.active]="isAssigningOpp">
+  <div class="assignOppLabel">
+    <div>Select an office or manager to assign for&nbsp;</div>
+    <div class="oppName">{{ assignOppDisplayName }}</div>
+  </div>
+  <button class="assignOppCancel" (click)="endAssignOpp()">
+    <i class="fas fa-times"></i>
+  </button>
+</div>

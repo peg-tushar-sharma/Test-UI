@@ -1,0 +1,93 @@
+<!-- Resource Notes Modal Component -->
+<div class="resource-note-modal d-flex flex-column">
+    <!-- Header -->
+    <div class="resource-note-modal__header-wrapper d-flex align-items-center justify-content-between">
+        <h3>Resource Notes</h3>
+
+        <button class="resource-note-header-cta ml-auto" (click)="close()">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <!-- resource iframe -->
+    <div class="resource-note-modal__section-wrapper" id="bossIframeWrapper"
+        style="border: 1px solid #e0e4e8; min-height: 320px; overflow: auto; resize: vertical" *ngIf="displayIframe">
+        <iframe [src]="urlSafe" frameborder="0" id="bossIframe" style="height: 320px;" scrolling="no" #loginIframe
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen></iframe>
+    </div>
+    <div class="levelOfImpact">
+        <!-- Outages -->
+        <div class="resource-note-modal__section-wrapper">
+            <div class="d-flex align-items-center">
+                <p class="section-label"> Outages
+                </p>
+
+                <div class="level-of-impact-wrapper btn-group" dropdown>
+                    <!-- Toggle -->
+                    <button id="button-loi-picker" class="level-of-impact-wrapper__cta d-flex align-items-center"
+                        [class.colorSelected]="selectedLevelOfImpact"
+                        [style.background-color]="selectedLevelOfImpact ? selectedLevelOfImpact.colorCode : ''"
+                        dropdownToggle aria-controls="dropdown-loi-picker">
+                        <span>{{ selectedLevelOfImpact?.colorName ? selectedLevelOfImpact?.colorName : "Level of Impact"
+                            }}</span>
+                        <i class="fas fa-chevron-{{ displayImpactLevelsModal ? 'up' : 'down' }}"></i>
+                    </button>
+
+                    <!-- Dropdown Menu -->
+                    <div class="level-of-impact-wrapper__dropdown-menu dropdown-menu" id="dropdown-loi-picker"
+                        *dropdownMenu aria-labelledby="button-loi-picker" role="menu">
+                        <div class="dropdown-item" role="menuitem" *ngFor="let item of levelsOfImpact"
+                            (click)="setLevelOfImpact(item)">
+                            <button class="level-of-impact-wrapper__dropdown-menu__level-cta"
+                                [style.background-color]="item.colorCode"
+                                [style.color]="item.colorName == 'N/A' ? '#121212' : '#fff'">
+                                {{ item.colorName }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <textarea (input)="onOutageUpdate()" class="section-input" [(ngModel)]="outrage" name="outrage"
+                maxlength="2000" required></textarea>
+        </div>
+        <!-- CD Availability -->
+        <div class="resource-note-modal__section-wrapper">
+            <p class="section-label mb-1">CD Work</p>
+
+            <textarea class="section-input" [(ngModel)]="cdWork" name="cdWork" maxlength="2000"
+                required></textarea>
+
+        </div>
+
+        <!-- Preferences -->
+        <div class="resource-note-modal__section-wrapper">
+            <p class="section-label mb-1">Preferences</p>
+
+            <textarea class="section-input" [(ngModel)]="preference" name="preference" maxlength="2000"
+                required></textarea>
+
+           
+        </div>
+        <!-- Available Date -->
+        <div class="resource-note-modal__section-wrapper" *ngIf="data?.office?.officeName">
+            <p class="section-label mb-1">Available Date</p>
+
+            <input class="availabledatwidth" type="text" placeholder="/" bsDatepicker [(ngModel)]="data.availableDate"
+                (bsValueChange)="onDateChanged($event)"
+                [bsConfig]="{ dateInputFormat: 'MM/DD', containerClass: 'theme-red', showWeekNumbers: false }" readonly
+                placement="right" />
+        </div>
+    </div>
+    <div class="resource-note-modal__section-wrapper" >
+        <img *ngIf="managerPopup" style="cursor: pointer" (click)="openStaffing()"
+        src="./../../../assets/img/BOSS.png" title="Staffing Resource Profile" />
+    </div>
+    <!-- Footer -->
+    <div class="resource-note-modal__footer-wrapper d-flex justify-content-end">
+        <button class="resource-note-footer-cta" (click)="saveNote()">
+            Save
+        </button>
+    </div>
+</div>

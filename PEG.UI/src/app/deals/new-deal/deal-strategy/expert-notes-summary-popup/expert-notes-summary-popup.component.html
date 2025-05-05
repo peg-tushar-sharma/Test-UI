@@ -1,0 +1,23 @@
+<div class="expert-notes-summary-popup">
+    <!-- Header -->
+    <div class="expert-notes-summary-popup__header-wrapper d-flex align-items-center justify-content-between">
+        <h2 class="header">Expert Notes Summary</h2>
+
+        <button class="btn-class" (click)="closeModal()">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <!-- Body -->
+    <div class="expert-notes-summary-popup__body-wrapper mt-4">
+        <!-- Copy All -->
+        <button class="copy-all-btn mb-2" (click)="copyGridToClipboard()">
+            <div class="fas fa-clone"></div>
+            <span>Copy All</span>
+        </button>
+
+        <ag-grid-angular class="ag-theme-alpine" [columnDefs]="columnDefs" [defaultColDef]="defaultColDef"
+            [animateRows]="true" [gridOptions]="gridOptions" [enableBrowserTooltips]="true" [rowData]="rowData"
+            (gridReady)="onGridReady($event)"></ag-grid-angular>
+    </div>
+</div>

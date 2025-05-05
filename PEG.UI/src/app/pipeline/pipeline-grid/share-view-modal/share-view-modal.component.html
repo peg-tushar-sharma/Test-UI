@@ -1,0 +1,37 @@
+<div class="pipeline-filter-modal pipeline-filter-save-modal">
+  <div class="modal-body">
+    <h3>Share This View</h3>
+    <p>By sharing this view with others, it will be available in their list of Saved Views.</p>
+
+    <form [class.submitted]="form.submitted" #form="ngForm">
+      <div class="form-row">
+        <input type="radio" [value]="true" #shareViewEveryone="ngModel" name="shareViewEveryone" required
+          [(ngModel)]="shareSetting" id="shareViewEveryone">
+        <label class="radio-label" for="shareViewEveryone">
+          Share with everyone
+          <p>Available to everyone in the organization</p>
+        </label>
+      </div>
+
+      <div class="form-row">
+        <input type="radio" [value]="false" #shareViewUsers="ngModel" name="shareViewUsers" required
+          [(ngModel)]="shareSetting" id="shareViewUsers">
+        <label class="radio-label" for="shareViewUsers">
+          Share with specific users
+          <p>Only available to designated users</p>
+        </label>
+      </div>
+
+      <ng-select *ngIf="!shareSetting" id="pipelineUsers" [items]="pipelineUsers" bindLabel="searchableName"
+        [(ngModel)]="selectedUser" [multiple]="true" [clearable]="true" placeholder="Search">
+      </ng-select>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" (click)="cancelFilterShare()">Cancel</button>
+        <button type="submit" class="btn btn-default btn-highlighted" (click)="shareFilter()">Share</button>
+      </div>
+    </form>
+
+  </div>
+
+</div>

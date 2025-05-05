@@ -1,0 +1,33 @@
+<div [ngClass]="fromSidebar == true ? 'sidebar-case-editor' : 'grid-case-editor'">
+
+    <ng-select  *ngIf="isEditable"  #caseComp id="case" class="custom case-select" #client="ngModel" name="case" required [items]="cases" [selectOnTab]="true"
+        [dropdownPosition]="dropdownPosition" bindLabel="oldCaseCode" bindValue="oldCaseCode" [clearSearchOnAdd]="true"
+        maxSelectedItems=5 [multiple]="isMultiple" [loading]="caseLoad" loadingText="loading..." [hideSelected]="false"
+        [typeahead]="caseTypeAhead" [(ngModel)]="selectedCases" (change)="onCaseChange($event)" [appendTo]="dropdownParent"
+        (open)="onDropdownOpen()" (clear)="setCaseData('');" groupBy="customGroup">
+
+        <ng-template ng-option-tmp let-item="item">
+            <div [ngClass]="fromSidebar == true ? 'flex-parent sidebar-caseData' : 'flex-parent'">
+                <div title="{{item.oldCaseCode}}" class="flex-item-casecode">{{item.oldCaseCode}} </div>
+                <div title="{{item.caseName}}" [ngClass]="fromSidebar == true ? 'flex-item-caseName-sidebar' : 'flex-item-caseName'"> {{item.caseName}}</div>
+                <div title="{{item.clientName}}" [ngClass]="fromSidebar == true ? 'flex-item-clientName-sidebar' : 'flex-item-clientName'"> {{item.clientName}}</div>
+                <div title="{{item.managingOfficeAbbreviation}}" [ngClass]="fromSidebar == true ? 'flex-item-officeAbbreviation-sidebar' : 'flex-item-officeAbbreviation'">{{item.managingOfficeAbbreviation}}</div>
+                <div title="{{item.startDate}}" class="flex-item-startDate">{{item.startDate }}</div>
+                <div title="{{item.endDate}}" class="flex-item-endDate">{{item.endDate }}</div>
+            </div> 
+        </ng-template>
+
+    </ng-select>
+
+    <div class="flex-parent sidebar-caseData case-detail-label" *ngIf="isEditable && fromSidebar">
+        <ng-container  *ngIf="selectedCaseData">
+            <div title="{{selectedCaseData.caseName}}" [ngClass]="fromSidebar == true ? 'flex-item-caseName-sidebar' : 'flex-item-caseName'"> {{selectedCaseData.caseName}}</div>
+            <div title="{{selectedCaseData.clientName}}" [ngClass]="fromSidebar == true ? 'flex-item-clientName-sidebar' : 'flex-item-clientName'"> {{selectedCaseData.clientName}}</div>
+            <div title="{{selectedCaseData.managingOfficeAbbreviation}}" [ngClass]="fromSidebar == true ? 'flex-item-officeAbbreviation-sidebar' : 'flex-item-officeAbbreviation'">{{selectedCaseData.managingOfficeAbbreviation}}</div>
+            <div title="{{selectedCaseData.startDate}}" class="flex-item-startDate">{{selectedCaseData.startDate | date: 'dd-MMM-yyyy'}}</div>
+            <div title="{{selectedCaseData.endDate}}" class="flex-item-endDate">{{selectedCaseData.endDate | date: 'dd-MMM-yyyy'}}</div>
+        </ng-container>
+    </div>
+
+    <div *ngIf="!isEditable">{{selectedCases}}</div>
+</div>

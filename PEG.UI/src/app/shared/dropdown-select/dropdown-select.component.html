@@ -1,0 +1,7 @@
+<ng-select *ngIf="isEditable" [id]="id" [bindLabel]="labelName" [ngModelOptions]="{standalone: true}" class="mb-1"
+  (change)="updateValue($event);" [(ngModel)]="modelValue" [bindValue]="labelValue"
+  [items]="dataObject"  [clearable]=clearable [dropdownPosition]="bottom"
+  >
+</ng-select>
+
+<label *ngIf="!isEditable">{{selectedText}}</label>

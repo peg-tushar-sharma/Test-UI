@@ -1,0 +1,454 @@
+@use "sass:math";
+
+#sidebar-mask{
+  background-color: #000;
+  opacity: .4;
+  z-index: 100;
+  position: fixed;
+  top: 0 ;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: none;
+  &.active{
+    display: block;
+  }
+}
+ 
+.registration-sidebar{
+  position: relative;
+  z-index: 101!important;
+  &.minimized{
+    z-index: 102!important;
+  }
+  height: calc(100vh - 170px);  
+  background-color: $white;
+  overflow: hidden;  
+  border: 1px solid $grey-medium-dark;
+  border-left: none;
+  box-shadow: 3px 3px 5px rgba(228, 228, 228, 1);
+  > .container{
+    padding: $base-padding*1.5;
+   
+    .sidebar-controls{
+      position: absolute;
+      top:$base-padding*1.5;
+      right:$base-padding*1.5;
+ 
+      i{
+        cursor: pointer;
+        color: $grey-light;
+        &:not(:last-child){
+          margin-right: math.div($base-padding,1.5);
+        }
+        &.fa.fa-window-minimize{
+          position: relative;
+          bottom: 2px;
+        }
+        &:before{
+          font-size: 24px;        
+        }      
+        &.fa.fa-times:before{
+          font-size: 32px;
+        }
+      }
+    }
+ 
+    .sidebar-summary{
+      header{
+        color: $sky;
+        font-size: 25px;
+        line-height: 25px;
+      }
+   
+      .status{
+        color: $grey-darkest;
+        strong{
+          font-weight: bold;
+        }        
+      }
+   
+      .steps{      
+        .step{
+          position: relative;
+          background-color: $grey-light;
+          border-radius: 50%;
+          display: inline-block;
+          height: 25px;
+          width: 25px;
+          &:not(:last-child){
+            margin-right:80px;
+            &:after{
+              content: '';
+              display: block;
+              height:4px;
+              width:85px;
+              background-color: $grey-light;
+              position:absolute;
+              top: 50%;
+              left: 100%;
+              transform: translateY(-50%);
+            }
+          }
+   
+          &.complete{
+            &:before{
+              content: "\f00c";
+              font-family: 'Font Awesome\ 5 Free';
+              font-size: 14px;
+              font-weight: 600;
+              color: $white;
+              position: absolute;
+              left: 50%;
+              top: 50%;
+              transform: translate(-50%, -50%);
+            }
+          }
+   
+          &.active{
+            &:before{
+              content: "\f111";
+              font-family: 'Font Awesome\ 5 Free';
+              font-size: 16px;
+              font-weight: 600;
+              color: $accent-1;
+              position: absolute;
+              left: 50%;
+              top: 50%;
+              transform: translate(-50%, -50%);
+            }
+          }
+        }
+      }      
+   
+      .tags{
+        margin-top:40px;
+        .tag{
+          font-size:16px;
+   
+          &:not(:last-child){
+            margin-right:math.div($base-padding,4);
+          }
+        }
+      }
+   
+      form{
+        font-size: 13px;
+         
+        label.label{
+          width:120px;
+          justify-content: left;
+        }
+        label.control-label{
+          &.auto-width{
+            justify-content: flex-start;
+            flex-grow: 1;
+ 
+            span{
+              width: 100%;
+            }
+          }
+          &:not(.auto-width){
+            max-width: 150px;
+            .form-control{
+              max-width: 150px;
+            }
+          }
+          display: inline-block;
+          white-space: nowrap;
+          overflow: hidden;          
+          text-overflow: ellipsis;
+ 
+          textarea.notes{
+            height: 150px;
+            width: 100%;
+          }
+        }
+ 
+        input[type=checkbox]{
+          position: relative;
+          top:1px;
+        }
+ 
+        strong{
+          position: relative;
+          top: 2px;
+        }
+ 
+        button.btn{
+          padding: math.div($base-padding,8) math.div($base-padding,4);
+          font-size: 13px;
+        }
+ 
+        #stage-2, #stage-3, #stage-4{
+          display:none;
+        }
+      }
+    }
+ 
+    .clearance-status{
+      position: relative;
+      top: - math.div($base-padding,4);
+      button{
+        background-color: $bain-red!important;
+        color: $white!important;        
+      }
+      ul.dropdown-menu{
+        padding: 0;
+        width: 100%;
+        .dropdown-filter{
+          width:100%;
+          padding:0;
+          background-color: transparent;
+          ul{
+            padding: 0;
+          }
+        }
+      }
+    }
+ 
+    .sidebar-tabview-container{
+      margin-top: 36px;
+ 
+      .vertical-tabs{
+        padding-right:math.div($base-padding,2);
+        padding-top: math.div($base-padding,2);
+        .tab{
+          text-align: right;
+          margin-bottom: 24px;
+          a{
+            position: relative;
+            display: inline-block;
+            font-size: 16px;
+            line-height: 16px;
+            color: $grey-alt-4;
+            overflow: hidden;
+            padding-bottom: 12px;  
+             
+            &:hover{
+              text-decoration: none;
+            }
+ 
+            &:after{
+              content: '';
+              display: inline-block;
+              position: absolute;
+              background-color: $bain-red;
+              right: 100%;
+              transition: none;
+              opacity: 0;
+              height: 2px;
+              bottom: 0px;
+              width: 100%;          
+            }              
+          }
+          &.active{
+            a{
+              color: $bain-red;              
+              &:after{
+                opacity: 1;
+                transition: right .5s;                
+                right: 0;
+              }
+            }
+          }
+        }
+      }
+ 
+      .tab-content{  
+        height: calc(100vh - 475px);                
+        header{
+          background-color: $grey-lighter;
+          align-items: center;
+          padding: 8px $base-padding 8px $base-padding;
+          color: $grey-alt-3;
+          box-shadow: 0px 5px 4px rgba(0, 0, 0, 0.149019607843137);
+          z-index: 2;
+          position: relative;
+          button{
+            background-color: $grey-darkest;
+          }
+          input {
+            width: 250px;
+          }
+        }
+ 
+        .tab-details{
+          overflow: auto;
+          max-height: 100%;
+          min-height: 100%;
+ 
+          .registration-details-table{
+            td{
+              font-size: 13px;
+            }
+          }
+ 
+          .table:not(.registration-details-table){            
+            td{
+              border: none!important;              
+              padding-top:$base-padding;
+              padding-bottom:$base-padding;
+ 
+              vertical-align: middle;
+              
+              &:first-child{
+                padding-left: $base-padding!important;
+              }
+ 
+              &:last-child{
+                padding-right: $base-padding*2!important; 
+              }
+ 
+              position: relative;
+ 
+              .content{
+                color: $grey-darkest;
+                font-size: 16px;
+              }
+ 
+              .details{
+                color: $grey-dark;
+                font-size: 14px;
+              }
+ 
+              .fa-check-circle{
+                color: $accent-4;
+              }
+ 
+              &.editable{                
+                i.fa-edit{
+                  display: none;
+                  position: absolute;
+                  right: $base-padding;
+                  top: $base-padding;
+                  color: $grey-medium;
+                  cursor: pointer;
+                }
+ 
+                &:hover{
+                  i.fa-edit{
+                    display: block;
+                  }
+                }
+ 
+                .editor{                  
+                  display: none;
+                  width: calc(100% - 4px);                  
+                  box-shadow: 3px 3px 5px rgba(161, 161, 161, 0.87843137254902);                                    
+ 
+                  i.fa-eye{
+                    margin-right: $base-padding;
+                  }
+ 
+                  textarea{
+                    padding: math.div($base-padding,2);
+                    display: block;
+                    width: 100%;
+                    height: 100px;
+                  }
+ 
+                  .footer{
+                    display: flex;
+                    padding: $base-padding;
+                    border-top: 1px solid $grey-medium;
+                  }
+                }
+ 
+                &.editing{
+                  padding: 0!important;
+ 
+                  .editor{
+                    display: block;
+                  }
+ 
+                  .content, .details, .fa-edit{
+                    display: none;
+                  }
+                }
+              }
+            }
+          }
+ 
+          form{
+            padding: $base-padding;
+            h2{
+              font-size: 15px!important;
+              font-weight: bold;
+            }
+            .form-check.standalone{
+              position: relative;              
+              top:40px;
+            }
+ 
+            label{
+              overflow: visible;
+              // white-space: nowrap;
+            }
+ 
+            label.readonly{
+              display: block;
+              position: relative;
+              top:10px;
+            }
+
+
+            font-size: 13px;
+            
+            label.label{
+              width:166.28px;
+              justify-content: left;
+            }
+            label.control-label{
+              &.auto-width{
+                justify-content: flex-start;
+                flex-grow: 1;
+    
+                span{
+                  width: 100%;
+                }
+              }
+              &:not(.auto-width){
+                max-width: 100%;
+                .form-control{
+                  max-width: 100%;
+                }
+              }
+              display: inline-block;
+              white-space: nowrap;
+              overflow: hidden;          
+              text-overflow: ellipsis;
+    
+              textarea.notes{
+                height: 150px;
+                width: 100%;
+              }
+            }
+    
+            input[type=checkbox]{
+              position: relative;
+              top:1px;
+            }
+    
+            strong{
+              position: relative;
+              top: 2px;
+            }
+    
+            button.btn{
+              padding: math.div($base-padding,8) math.div($base-padding,4);
+              font-size: 13px;
+            }
+    
+            #stage-2, #stage-3, #stage-4{
+              display:none;
+            }
+          }                                
+        }        
+      }
+    }
+  }
+}
+.left-align label.value{
+  left:0px !important;
+}

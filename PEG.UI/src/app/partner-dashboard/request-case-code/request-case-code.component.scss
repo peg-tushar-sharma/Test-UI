@@ -1,0 +1,645 @@
+:host {
+    display: flex;
+}
+
+.request-case-code {
+    background-color: #fff;
+    font-family: 'Graphik', sans-serif;
+    max-height: 80vh;
+    width: 100%;
+
+    .request-case-code-wrapper {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+
+        // header
+        &__header {
+            border-bottom: 1px solid #e0e4e8;
+            display: flex;
+            justify-content: space-between;
+            padding: 20px 40px;
+
+            &__title {
+                color: #121212;
+                font-size: 20px;
+                font-weight: 500;
+                line-height: 24px;
+            }
+
+            &__subtitle {
+                color: #616568;
+                font-size: 14px;
+                line-height: 20px;
+                margin: 0px;
+            }
+
+            &__close {
+                background: none;
+                border: none;
+                font-size: 20px;
+                height: fit-content;
+                padding: 0px;
+            }
+        }
+
+        // form
+        &__form {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            overflow: auto;
+            padding: 20px 30px 20px 40px;
+        }
+
+        &__form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+
+            &__group-title {
+                color: #121212;
+                font-size: 16px;
+                font-weight: 500;
+                line-height: 20px;
+                margin: 0px;
+            }
+        }
+
+        &__form-row {
+            display: grid;
+            gap: 20px;
+            grid-template-columns: 1fr 1fr;
+
+            &.single-column {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        &__form-column {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+
+            label {
+                color: #121212;
+                font-size: 12px;
+                font-weight: 500;
+                line-height: 16px;
+                margin: 0px;
+
+                #sub-label {
+                    font-weight: 400;
+                }
+
+                span.required {
+                    color: #cc0000;
+                }
+            }
+
+            p {
+                color: #121212;
+                font-size: 13px;
+                font-weight: 400;
+                line-height: 16px;
+                margin: 0px;
+            }
+
+            // text input
+            input[type="text"] {
+                background-color: #fff;
+                border: 1px solid #e0e4e8;
+                border-radius: 4px;
+                color: #121212;
+                font-size: 16px;
+                line-height: 18px;
+                outline: none;
+                padding: 10px;
+                width: 100%;
+
+                &::placeholder {
+                    color: #616568;
+                }
+
+                &:focus {
+                    border-color: #284ce0;
+                }
+
+                &:disabled {
+                    background-color: #f8f6f8;
+                    color: #616568;
+                }
+            }
+
+            // date input
+            .date-picker-wrapper {
+                align-items: center;
+                background-color: #fff;
+                border: 1px solid #e0e4e8;
+                border-radius: 4px;
+                display: flex;
+                position: relative;
+
+                input[type="text"] {
+                    border: none;
+                    cursor: pointer;
+
+                    &:disabled {
+                        cursor: default;
+                    }
+                }
+
+                .far {
+                    color: #121212;
+                    position: absolute;
+                    right: 10px;
+                }
+            }
+
+            // file input
+            .csv-file-upload-wrapper {
+                align-items: center;
+                background-color: #f7f9ff;
+                border: 1px dashed #e0e4e8;
+                border-radius: 4px;
+                color: #284ce0;
+                display: flex;
+                flex-direction: column;
+                padding: 10px;
+                position: relative;
+
+                .fas {
+                    font-size: 14px;
+                }
+
+                .csv-file-upload-wrapper-label {
+                    font-size: 12px;
+                    font-weight: 500;
+                    line-height: 16px;
+                    text-align: center;
+
+                    &.subheader {
+                        color: #616568;
+                        font-weight: 400;
+                    }
+                }
+
+                // file-input
+                .file-input {
+                    background: none;
+                    cursor: pointer;
+                    height: 100%;
+                    opacity: 0;
+                    position: absolute;
+                    top: 0px;
+                    width: 100%;
+                }
+            }
+
+            // selected files list
+            .selected-files-wrapper {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+
+                .file-row {
+                    background-color: #f8f6f8;
+                    border: 1px solid #e0e4e8;
+                    border-radius: 4px;
+                    color: #121212;
+                    font-size: 12px;
+                    font-weight: 500;
+                    gap: 10px;
+                    height: 40px;
+                    line-height: 16px;
+                    padding: 10px;
+                    text-transform: lowercase;
+
+                    .fa-file {
+                        color: #284ce0;
+                        font-size: 14px;
+                    }
+
+                    .fa-times {
+                        color: #616568;
+                        font-size: 14px;
+
+                        &:hover {
+                            color: #121212;
+                        }
+                    }
+                }
+            }
+
+            // CSLs popover
+            ::ng-deep .case-code-request-popover {
+                border: none;
+                box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.15);
+
+                .popover-body {
+                    color: #121212;
+                    font-family: "Graphik";
+                    font-size: 12px;
+                    line-height: 16px;
+                    max-width: 250px;
+                    padding: 15px;
+                }
+            }
+        }
+
+
+
+        // match grid
+        &__matching-grid-wrapper {
+            background-color: #f7f9ff;
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 16px;
+        }
+
+        &__matching-grid-row {
+            align-items: start;
+            display: grid;
+            gap: 24px;
+            grid-template-columns: 1fr 1fr;
+
+            label {
+                color: #121212;
+                font-size: 12px;
+                font-weight: 500;
+                line-height: 16px;
+                margin: 0;
+            }
+
+            .grid-box {
+                background-color: #fff;
+                border-radius: 4px;
+                color: #121212;
+                font-size: 16px;
+                height: auto;
+                line-height: 24px;
+                min-height: 40px;
+                outline: none;
+                padding: 7px 8px;
+
+                .required {
+                    color: red;
+                }
+
+                &.input {
+                    border: 1px solid #e0e4e8;
+
+                    &::placeholder {
+                        color: #616568;
+                    }
+
+                    &:focus {
+                        border-color: #284ce0;
+                    }
+
+                    &:disabled {
+                        background-color: #f8f6f8;
+                        color: #616568;
+                    }
+                }
+            }
+        }
+
+        // footer
+        &__footer {
+            align-items: center;
+            background-color: #fff;
+            border-top: 1px solid #e0e4e8;
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            left: 0px;
+            padding: 20px 40px;
+
+            &__error-message {
+                color: #cc0000;
+                font-size: 12px;
+                font-weight: 500;
+                margin-right: auto;
+            }
+
+            &__cta {
+                border-radius: 4px;
+                font-size: 12px;
+                font-weight: 500;
+                line-height: 20px;
+                outline: none;
+                padding: 10px 24px;
+
+                &.secondary {
+                    background-color: #fff;
+                    border: none;
+                    color: #616568;
+                }
+
+                &.primary {
+                    background-color: #284ce0;
+                    border: none;
+                    color: #fff;
+
+                    &:hover {
+                        background-color: #152d90;
+                    }
+                }
+            }
+        }
+    }
+
+    // ng-select
+    ::ng-deep .ng-select,
+    ::ng-deep .ng-select-multiple {
+        .ng-select-container {
+            color: #121212;
+            border-color: #e0e4e8;
+            min-height: 40px;
+
+            //TODO: Can be uncomented if need to make the typeahead options smaller
+            // .ng-value {
+            //     max-width: 220px;
+            //     overflow: hidden;
+            //     text-overflow: ellipsis;
+            // }
+        }
+
+        &.ng-select-disabled>.ng-select-container {
+            background-color: #f8f6f8;
+        }
+
+        &.invalid .ng-select-container {
+            border-color: #cc0000 !important;
+        }
+    }
+
+    .invalid {
+        border-color: #cc0000 !important;
+    }
+}
+
+::ng-deep .ng-dropdown-panel {
+    border-color: #e0e4e8 !important;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.15) !important;
+    z-index: 1000000 !important;
+}
+
+// custom elements
+// Custom radio buttons styling
+.custom-radio-button-wrapper {
+    align-items: center;
+    display: flex;
+    gap: 10px;
+
+    /* The container */
+    .container {
+        display: block;
+        position: relative;
+        padding-left: 28px;
+        margin-bottom: 0px;
+        cursor: pointer;
+        font-family: "Graphik", sans-serif;
+        font-size: 14px;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        color: #121212;
+        line-height: 18px;
+        width: fit-content;
+        line-height: 18px !important;
+
+        .bold {
+            font-weight: 500;
+        }
+
+        &.invalid {
+            color: #cc0000 !important;
+        }
+
+        &.disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+    }
+
+    /* Hide the browser's default radio button */
+    .container input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    /* Create a custom radio button */
+    .checkmark {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 18px;
+        width: 18px;
+        background-color: #fff;
+        border-radius: 50%;
+        border: 1px solid #e0e4e8;
+
+        &.invalid {
+            border-color: #cc0000;
+        }
+    }
+
+    /* On mouse-over, add a grey background color */
+    .container:hover input~.checkmark {
+        background-color: #ccc;
+    }
+
+    /* Create the indicator (the dot/circle - hidden when not checked) */
+    .checkmark:after {
+        content: "";
+        position: absolute;
+        display: none;
+    }
+
+    /* Show the indicator (dot/circle) when checked */
+    .container input:checked~.checkmark:after {
+        display: block;
+    }
+
+    /* Style the indicator (dot/circle) */
+    .container .checkmark:after {
+        top: 2px;
+        left: 2px;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: #284ce0;
+    }
+}
+
+.text-sm {
+    font-size: 12px;
+}
+
+.request-case-note .note {
+    display: block;
+    color: #616568;
+    font-size: 16px;
+    line-height: 24px;
+    margin-bottom: 20px;
+
+    .required {
+        color: red;
+    }
+}
+
+.inline-note {
+    font-size: 12px;
+
+    b {
+        color: red;
+    }
+}
+
+app-info-icon {
+    color: #949494;
+}
+
+.line-break {
+    border-top: 1px solid #ccc;
+    margin-top: 15px;
+    margin-left: -10px;
+}
+
+.content-section {
+    min-height: 200px;
+    /* Set a height so the loader is visible */
+}
+
+.loading-test {
+    font-size: 1rem;
+    margin-left: 10px;
+}
+
+.section-loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2rem;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    z-index: 10;
+
+
+}
+
+.file-block {
+    ul {
+        list-style-type: none;
+        /* Removes bullets */
+        padding: 0;
+        /* Removes default padding */
+        margin: 0;
+        /* Removes default margin */
+    }
+
+    a {
+        font-size: 12px;
+        color: #284ce0;
+        cursor: pointer;
+        font-weight: 500;
+    }
+}
+
+.textarea-wrapper {
+    position: relative;  /* Important: makes mirror div position relative to this container */
+    width: 100%;
+  }
+  
+  textarea {
+    width: 100%;
+    height: 144px;
+    font-family: monospace;
+    padding: 8px;
+    font-size: 16px;
+    line-height: 1.5;   
+    box-sizing: border-box;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    z-index: 1;
+   
+  }
+  .highlight-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 120px;
+    padding: 8px;
+    color: #121212;
+    font-family: monospace;
+    font-size: 16px;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    z-index: 2;  /* This ensures it is beneath the textarea */
+    pointer-events: none;  /* So it doesn't interfere with typing */
+    box-sizing: border-box;
+    overflow :hidden
+  }
+  .mirror {
+    visibility: hidden;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 8px;
+    width: 100%;
+    font-family: monospace;
+    z-index: -1;
+  }
+
+  .caret-marker {
+    display: inline-block;
+    width: 1px;
+    height: 1em;
+    background-color: transparent;
+  }
+  
+  .mention-list {
+    position: absolute;
+    background: #fff;
+    border: 1px solid #ccc;
+    z-index: 10;
+    max-height: 150px;
+    overflow-y: auto;
+    width: 200px;
+  }
+  
+  .mention-item {
+    padding: 6px 10px;
+    cursor: pointer;
+  }
+  
+  .mention-item:hover {
+    background-color: #f0f0f0;
+  }
+
+
+  
+  
+  ::ng-deep .mention-tag {
+  
+    color:  rgba(33, 150, 243, 0.4) !important;
+    pointer-events: none !important; /* Make it non-clickable */
+      
+}
+

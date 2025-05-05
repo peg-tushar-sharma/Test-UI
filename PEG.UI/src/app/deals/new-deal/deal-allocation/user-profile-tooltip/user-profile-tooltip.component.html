@@ -1,0 +1,36 @@
+<div class="row">
+
+  <div class="col-12">
+    <div style="width: 270px;">
+      <div class="expertProfile">
+
+        <span class="expertProfileHead">{{item.expertName}} </span>
+
+        <br>
+        <span class="expertProfileTitle">{{item.title}}</span>
+        <div class="mt-2" style="-webkit-box-orient: vertical !important;">
+
+          <div *ngFor="let itemColor of item.expertPoolColor;">
+            <span
+              [style.background-color]="itemColor.expertPoolColor!=undefined && itemColor.expertPoolColor.colorCode!=undefined?itemColor.expertPoolColor.colorCode:'#b3b3b3'"
+              style="height: 12px;width:12px;border-radius: 50%; display: inline-block;"> </span> 
+            <span class="ml-2">{{itemColor.poolGroupName}}
+              <span>
+                <i style="padding-left: 6px;">
+                | {{itemColor.categoryId==0 ? '-' : itemColor.categoryId== NACategoryID ? 'NA' : itemColor.categoryName}}
+              </i>
+                <span
+                *ngIf="itemColor.poolExpertNotes != null && itemColor.poolExpertNotes != undefined && itemColor.poolExpertNotes != ''"
+                class="two" style="word-break: break-all;padding-left: 6px;">| {{itemColor.poolExpertNotes}}</span>
+              </span>
+              
+              </span>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

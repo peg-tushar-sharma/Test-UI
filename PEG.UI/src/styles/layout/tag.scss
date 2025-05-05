@@ -1,0 +1,46 @@
+.tag{
+  display: inline-block;
+  font-size:14px;
+  padding:2px 6px!important;
+  line-height: 18px;
+  background-color: $grey-extra-light;
+  border: 1px solid $grey-light;
+  color: $grey-darker;
+  margin: 0px 2px 0px 2px;
+  &.tag-orange{
+    background-color: $tag-1;
+    color: $white;
+    border:none;
+  }
+
+  .borders{
+    border: solid;
+  }
+ 
+  &.tag-purple{
+    background-color: $tag-2;
+    color: $white;
+    border:none;
+
+  }
+
+  &.tag-blue{
+    background-color: $tag-3;
+    color: $white;
+    border:none;
+
+  }
+
+  &.tag-black{
+    color: $black;
+    border:none;
+
+  }
+  &.tag-borderless{
+    background-color: transparent;
+    border:none;
+  }
+  &.tag-borders{
+    border: 1px solid white;
+  }
+}

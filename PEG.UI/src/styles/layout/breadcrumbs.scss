@@ -1,0 +1,9 @@
+#breadcrumbs{
+  height: 75px;
+  padding: 0 $base-padding * 1.5;
+  background-color: $grey-extra-light;
+  h1{
+    line-height: 75px;
+    font-size: $breadcrumb-header-font-size;
+  }
+}

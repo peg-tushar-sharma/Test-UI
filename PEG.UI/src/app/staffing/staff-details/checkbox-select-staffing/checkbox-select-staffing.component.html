@@ -1,0 +1,5 @@
+<label class="container" [class.disabled]="disabled" [for]="uniqueId">
+    {{ labelText }}
+    <input type="checkbox" name="name" [id]="uniqueId" [disabled]="disabled" (change)="isEditable?updateValue($event.target.checked):prevent($event)" [(ngModel)]="modelValue" />
+    <span class="checkmark"></span>
+</label>

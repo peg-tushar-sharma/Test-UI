@@ -1,0 +1,16 @@
+
+.table-wrapper {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    margin-top: 20px;
+
+   ::ng-deep .btn-link-custom{
+      font-weight: 500 !important;
+      color: #284ce0 !important;
+      font-size: 13px;
+    }
+    ::ng-deep .ag-theme-alpine .ag-cell, .ag-theme-alpine .ag-full-width-row .ag-cell-wrapper.ag-row-group{
+      line-height: 30px !important;
+    }
+  }

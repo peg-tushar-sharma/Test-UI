@@ -1,0 +1,24 @@
+<main role="main" class="container"  *ngIf="registrationMessageConfig">
+
+    <div class="row">      
+      <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center"
+        style="text-align: center;padding: 70px 10px 0px 10px;">
+        <h1 class="pageHeader" *ngIf="registrationMessageConfig.headerText">{{registrationMessageConfig.headerText}}</h1>
+        <p class="lead" *ngIf="registrationMessageConfig.mainMessage" >{{registrationMessageConfig.mainMessage}}</p>
+        <br>
+        <div *ngFor="let items of registrationMessageConfig.buttons">
+          <button type="submit" *ngIf="items.buttonText" name="createNewRegistration"  [routerLink]="items.buttonUrl" class="btn btn-primary center-block ml-3" text="sad" >{{items.buttonText}}</button> 
+        </div>
+      </div>     
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center" style="text-align: center;" *ngIf="registrationMessageConfig.infoText">
+            <br>
+            <br>
+          <p>{{registrationMessageConfig.infoText}}</p>          
+        </div>
+      </div>
+
+  </main>
+  

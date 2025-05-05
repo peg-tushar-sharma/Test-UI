@@ -1,0 +1,242 @@
+// AG-Grid Theming
+
+@import "ag-grid-community/src/styles/ag-grid.scss";
+@import "ag-grid-community/src/styles/ag-theme-alpine/sass/ag-theme-alpine.scss";
+
+// Apply the class, "ag-theme-peg", to any AG-Grid instance
+// For e.g... '<ag-grid class="ag-theme-balham ag-theme-peg">...' 
+// Recommend using "ag-theme-bootstrap" as the default theme to start off with
+
+.ag-theme-peg {
+
+  // Wrapper
+  .ag-root-wrapper {
+    background-color: #fff;
+    border: 1px solid #e0e4e8 !important;
+    border-radius: 4px;
+    font-family: "Graphik";
+  }
+
+  // Header
+  .ag-header {
+    background: #f7f9ff;
+    border-bottom-color: #f0f2f3;
+    box-shadow: none;
+    margin-bottom: 0px;
+
+    .ag-header-row {
+      color: #616568;
+      height: 100% !important;
+
+      .ag-header-cell {
+        padding-inline: 16px;
+
+        // Label
+        .ag-header-cell-text {
+          font-size: 12px;
+          font-weight: 600;
+        }
+      }
+    }
+  }
+
+  .ag-header-group-cell {
+    padding: 0px 16px;
+  }
+
+  // Body
+  // Rows
+  .ag-row {
+    border: 1px solid #f0f2f3;
+    font-size: 12px;
+
+    .ag-cell {
+      align-items: center;
+      display: inline-flex;
+      padding-inline: 16px;
+      overflow: hidden;
+
+      // When there's no cell-wrapper
+      span {
+        color: #121212;
+        font-size: 12px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .ag-cell-wrapper {
+        width: 100%;
+      }
+    }
+  }
+
+  // Popup
+  .ag-popup .ag-popup-editor {
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25), 0px 2px 6px rgba(0, 0, 0, 0.15);
+    border: none;
+    border-radius: 4px;
+    transform: translateY(42px);
+  }
+
+  // Inputs | Search, date picker inputs
+  input[type=text],
+  input[type=date] {
+    border: 1px solid #e0e4e8 !important;
+    border-radius: 4px;
+    color: #121212;
+    font-size: 12px;
+    font-weight: 500;
+    height: auto;
+    outline: none;
+    padding: 10px;
+
+    &::placeholder {
+      color: #616568;
+    }
+  }
+
+  // Menu Popup
+  // For header filters
+  .ag-theme-bootstrap .ag-popup-child:not(.ag-tooltip-custom) {
+    border: 1px solid #f0f2f3;
+    border-radius: 4px;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.15);
+    font-family: "Graphik";
+    font-size: 12px;
+
+    // Filter search tab header
+    .ag-column-selected-header {
+      height: auto !important;
+      padding: 5px !important;
+    }
+
+    // Menu options
+    .ag-menu-option {
+      cursor: pointer;
+
+      &:hover {
+        background-color: #f0f2f3;
+      }
+    }
+  }
+
+  .ag-column-select-header {
+    height: auto;
+    padding: 6px;
+  }
+
+  // Apply Btn
+  .ag-filter-apply-panel {
+    button {
+      background: none;
+      border: none;
+      color: #284ce0;
+      font-family: "Graphik";
+      font-size: 12px;
+      font-weight: 500;
+      margin-left: 0px;
+      padding: 0px;
+    }
+  }
+}
+
+// Side Bar
+.ag-side-bar {
+  background-color: #f0f2f3;
+  border-left: 1px solid #e0e4e8;
+  gap: 12px;
+  padding: 12px;
+
+  // Side Buttons
+  .ag-side-buttons {
+    .ag-side-button-button {
+      background: none;
+      border: none;
+      color: #121212;
+      font-family: "Graphik";
+      font-size: 12px;
+      font-weight: 500;
+      padding: 10px 4px;
+
+      &:hover {
+        color: #284ce0;
+      }
+    }
+  }
+
+  // Tool Panel | Columns or filters
+  .ag-column-panel,
+  .ag-filter-toolpanel {
+    border-right: 1px solid #e0e4e8;
+    padding-right: 12px;
+
+    .ag-input-wrapper,
+    .ag-picker-field-wrapper {
+
+      input[type=checkbox] {
+        margin-right: 5px;
+      }
+    }
+
+    // List of checked columns or applied filters
+    .ag-column-select-list,
+    .ag-filter-list-panel {
+      margin-top: 12px;
+
+      .ag-virtual-list-viewport,
+      .ag-filter-toolpanel-group-wrapper {
+        margin-bottom: 5px;
+
+        // Filter Panel
+        .ag-filter-toolpanel-header {
+          border: 1px solid #e0e4e8;
+          border-radius: 4px;
+          padding-inline: 10px;
+
+          // Filter menu label
+          .ag-group-title {
+            color: #121212;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+          }
+        }
+
+        // Filter Submenu
+        .ag-virtual-list-viewport.ag-filter-virtual-list-viewport.ag-focus-managed {
+          background: #fff;
+          border: 1px solid #e0e4e8;
+          border-radius: 4px;
+          padding: 5px;
+
+          // Options Container
+          .ag-virtual-list-container,
+          .ag-group-container {
+            // margin-top: 5px;
+
+            .ag-virtual-list-item {
+              color: #121212;
+              cursor: pointer;
+              font-size: 12px;
+              font-weight: 500;
+            }
+
+            .ag-filter-wrapper {
+              .ag-picker-field-wrapper {
+
+                // TODO : Check this
+                // Date Picker
+                .ag-picker-field-display {
+                  color: #616568;
+                  font-size: 12px;
+                  font-weight: 500;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

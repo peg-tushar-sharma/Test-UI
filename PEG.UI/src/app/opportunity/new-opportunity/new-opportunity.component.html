@@ -1,0 +1,987 @@
+<form (ngSubmit)="onSubmit()" [formGroup]="opportunitynew" #form="ngForm">
+  <div id="newOppPageContainer">
+
+    <div id="newOppContentWrapper">
+
+      <div id="newOppSidebar">
+        <h2>Create New Opportunity</h2>
+
+        <div class="sectionScrollNav">
+          <ng-container *ngFor="let section of getEnabledSections(); let i = index;">
+            <a *ngIf="section.enabled" (click)="clickSectionNavigation(section)"
+              [class.active]="currentSection == section.slug" [class.NavBarDisabled]="isNewOpFormDataLoading" ><span class="circleNumber">{{ i+1 }}</span>{{
+              section.title }}</a>
+          </ng-container>
+        </div>
+      </div>
+
+      <div id="newOppFormContainer">
+        <ng-container *ngFor="let section of getEnabledSections(); let i = index;">
+
+          <div [id]="section.slug" class="newOppFormCard">
+            <div class="titleCol">
+              <h2>{{ section.title }}</h2>
+            </div>
+            <div class="formContainerCol">
+
+              <!--Section radio button toggles-->
+              <div class="oppFormRow toggle-section" *ngIf=" section.slug == 'experts'">
+                <div class="col-12">
+                  <label class="oppLabel">Would you like to enter / request expertise?</label>&nbsp;
+
+                  <input type="radio" [value]="true" name="sectionToggleExperts" id="sectionToggleExpertsOn"
+                    [disabled]="!canEditExperts" [checked]="section.show" (change)="toggleSection(section, true, true)">
+                  <label for="sectionToggleExpertsOn">Yes</label>
+                  <input type="radio" [value]="false" name="sectionToggleExperts" id="sectionToggleExpertsOff"
+                    [disabled]="!canEditExperts" [checked]="! section.show"
+                    (change)="toggleSection(section, false, false)">
+                  <label for="sectionToggleExpertsOff">No</label>
+
+                  <p class="info" *ngIf="canEditExperts">If you’re not ready, you can enter this information later from
+                    your dashboard under ‘Expert Info.’</p>
+                </div>
+              </div>
+
+              <div class="oppFormRow toggle-section" *ngIf=" section.slug == 'pipeline'">
+                <div class="col-12">
+                  <label class="oppLabel">Would you like to enter pipeline information / staffing needs?</label>&nbsp;
+
+                  <input type="radio" [value]="true" name="sectionTogglePipeline" id="sectionTogglePipelineOn"
+                    [disabled]="! canEditPipeline" [checked]="section.show"
+                    (change)="toggleSection(section, true, true)">
+                  <label for="sectionTogglePipelineOn">Yes</label>
+                  <input type="radio" [value]="false" name="sectionTogglePipeline" id="sectionTogglePipelineOff"
+                    [disabled]="! canEditPipeline" [checked]="! section.show"
+                    (change)="toggleSection(section, false, false)">
+                  <label for="sectionTogglePipelineOff">No</label>
+
+                  <p class="info" *ngIf="canEditPipeline">If you’re not ready, you can enter this information later from
+                    your dashboard under ‘Resource Request.'</p>
+                </div>
+              </div>
+
+              <!--Registration Info-->
+              <ng-container *ngIf=" section.slug == 'registration-info' && section.show"
+                formGroupName="opportunityDetails">
+                <div class="oppFormRow">
+                  <div class="col-12 workTypeWrapper">
+                    <label class="oppLabel">Type of Work <span class="required">*</span></label>&nbsp;
+                    <!--<app-info-icon *ngIf="infoText" [name]="'workType'" [infoText]="infoText.TypeOfWorkText"
+                      [placement]="'bottom'">
+                    </app-info-icon>-->
+
+                    <!-- radio btns -->
+                    <div class="form-row" *ngIf="workTypEditMode"
+                      style="align-items: flex-start; display: flex; flex-direction: column; gap: 10px; margin: 0px;">
+                      <div class="custom-radio-button-wrapper" *ngFor="let item of workTypes">
+                        <label class="container"
+                          [class.invalid]="opportunityDetails.controls['workType'].status=='INVALID' && form.submitted">
+                          <span class="bold">{{ item.workTypeName }}</span>
+                          <span>: {{ item.workTypeDescription }}</span>
+
+                          <input type="radio" [value]="item" name="workType" id="workType" formControlName="workType"
+                            (change)="workTypeChange(item)" />
+                          <span class="checkmark"
+                            [class.invalid]="opportunityDetails.controls['workType'].status=='INVALID' && form.submitted"></span>
+                        </label>
+                      </div>
+                    </div>
+
+                    <!-- selected work type -->
+                    <div class="form-row"
+                      *ngIf="!workTypEditMode && (selectedWorkType && selectedWorkType.workTypeName)">
+                      <div class="col-12 d-flex align-items-center">
+                        <input type="radio" [value]="selectedWorkType.workTypeId" name="workType" id="workType"
+                          formControlName="workType" style="display: none;" />
+                        <label class="mb-0"
+                          [ngClass]="(opportunityDetails.controls['workType'].status=='INVALID' && form.submitted)? 'inValidLabel':''">
+                          <span style="font-weight: 500;">{{ selectedWorkType.workTypeName }}</span>
+                          <span>: {{ selectedWorkType.workTypeDescription }}</span>
+                        </label>
+                      </div>
+                    </div>
+
+                    <!-- edit -->
+                    <button class="mt-2 ml-0 p-0 d-flex align-items-center" type="button"
+                      *ngIf="!workTypEditMode && opportunityDetails.get('registrationId').value == 0"
+                      (click)="workTypEditMode = !workTypEditMode" style="color: #284ce0; font-weight: 500;">
+                      <i class="fas fa-pen mr-1"></i>
+                      <span>Edit Selection</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="oppFormRow">
+                  <div class="col-6">
+                    <label class="oppLabel">Client <span class="required">*</span></label>
+
+                    <ng-select id="client" class="custom new-opp-client-select" formControlName="client"
+                      [items]="clients" [selectOnTab]="true" [addTag]="addClient" bindLabel="clientName"
+                      maxSelectedItems=5 [clearSearchOnAdd]="true" [multiple]="false" [loading]="clientLoad"
+                      loadingText="loading..." [hideSelected]="true" [clearable]=isClearOnClient
+                      [typeahead]="clientTypeAhead" (change)="onClientChange($event);" groupBy="customGroup">
+                      <!-- label -->
+                      <ng-template ng-label-tmp let-item="item" let-searchTerm="searchTerm">
+                        <span>{{ item.clientName ? item.clientName : '' }}</span>
+                        <span>{{ item.informalName && item.clientName != item.informalName ? ' (' + item.informalName +
+                          ')' : '' }}</span>
+                        <span>{{item.clientPriorityName? ' - '+ item.clientPriorityName:''}}</span>
+                      </ng-template>
+
+                      <!-- value -->
+                      <ng-template ng-option-tmp let-item="item" let-searchTerm="searchTerm">
+                        <!-- <span >{{ searchTerm}}</span> -->
+                        <span appSearchHighlight="{{searchTerm}}" [innerHTML]="item.clientName"></span>
+                        <span appSearchHighlight="{{searchTerm}}"
+                          [innerHTML]="item.informalName  && item.clientName != item.informalName ? ' (' + item.informalName + ')' : ''"></span>
+                        <span appSearchHighlight="{{searchTerm}}"
+                          [innerHTML]="item.clientPriorityName? ' - '+ item.clientPriorityName:''"></span>
+                      </ng-template>
+                    </ng-select>
+
+                    <div class="form-row">
+                      <div class="col col-12 align-items-center">
+                        <input type="checkbox" name="hedgeFund" id="chkHedgeFund" name="hedgeFund"
+                          formControlName="isClientHedgeFund" [value]="isClientHedgeFund">
+                        <label for="hedgeFund" for="chkHedgeFund">&nbsp; Client is hedge fund</label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-6" *ngIf="!isPlaceholderOpportunity">
+                    <label class="oppLabel">Target <span class="required">*</span></label>&nbsp;<app-info-icon
+                      *ngIf="infoText" [name]="'target'" [infoText]="infoText.TargetText">
+                    </app-info-icon>
+                    <input validateText id="target" formControlName="target" type="text" />
+                    <p class="info">
+                      Full name of individual target company
+                    </p>
+                    <div class="checkbox-flex">
+                    <input type="checkbox" class="mr-2" (change)="onPTEChange($event.target.checked)" name="equity"
+                          id="equity_2" formControlName="isPubliclyTradedEquity">
+                    <label class="oppLabel" for="equity_2"> Check here if target or its corporate parent is a <u>publicly traded company</u></label>
+                    </div>
+                  </div>
+
+                </div>
+
+                <div class="oppFormRow">
+                  <div class="col-6" *ngIf="!isPlaceholderOpportunity">
+
+                    <label class="oppLabel">Target Owner/Parent Company <span
+                        *ngIf="!opportunityDetails.value.targetOwnerUnknown" class="required">*</span> </label>&nbsp;
+                    <app-info-icon *ngIf="infoText" [name]="corporateRelationship"
+                      [infoText]="infoText.CorporateRelationshipText">
+                    </app-info-icon>
+
+                    <input validateText id="corporateRelationship" name="corporateRelationship" type="text"
+                      formControlName="corporateRelationship" />
+                    <div class="form-row">
+                      <div class="col align-items-center">
+                        <input type="checkbox" name="targetOwnerUnknown" id="chkTargetOwnerUnknown"
+                          name="chkTargetOwnerUnknown" (change)="toggleTargetCompanyValidation($event.target.checked)"
+                          formControlName="targetOwnerUnknown" />
+                        <label for="chkTargetOwnerUnknown">&nbsp; I don't know</label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-6" *ngIf="showWebsite">
+                    <label class="oppLabel">Website <span class="required">*</span></label>
+                    <input validateText id="website" name="website" type="text" formControlName="website" />
+                  </div>
+                </div>
+
+                <div class="oppFormRow">
+                  <div class="col-6">
+                    <label class="oppLabel">
+                      <!-- <span *ngIf="opportunityDetails.get('workType').value.workTypeId != sectorScanID">Industry (of Target/work)</span> -->
+                      <span>{{isPlaceholderOpportunity?'Industry of Work': 'Industry (of Target/work)'}}</span>
+                      <span class="required">*</span>
+
+                    </label>
+
+                    <ng-select [clearable]=isClearOnIndustry id="industries" class="custom" bindLabel="industryName"
+                      [items]="industries" formControlName="industry" (change)="onIndustryChange($event)">
+                    </ng-select>
+                  </div>
+
+                  <div class="col-6">
+                    <label class="oppLabel">Sector</label>
+
+                    <ng-select [clearable]=isClearOnSector id="sector" class="custom" name="sectorSelect"
+                      bindLabel="sectorName" [items]="sectorsList" [multiple]="true" formControlName="sector">
+                    </ng-select>
+
+
+                  </div>
+                </div>
+
+                <div class="oppFormRow">
+                  <div class="col-12">
+                    <label class="oppLabel">Please provide a brief description of the target/industry (please do not
+                      include target name) <span class="required">*</span></label>
+
+                    <input id="targetDescription" name="targetDescription" type="text"
+                      formControlName="targetDescription" />
+                  </div>
+                </div>
+
+                <div class="oppFormRow" *ngIf="!isPlaceholderOpportunity">
+                  <div class="col-12">
+                    <label class="oppLabel">Market Questions <span class="description">Check all that
+                        apply</span></label>
+
+                    <div class="form-row">
+                      <div class="col col-12 align-items-center">
+                        <input type="checkbox" class="mr-1" name="spac" id="spac" formControlName="isSPAC">
+                        <label for="spac">SPAC &nbsp;<app-info-icon *ngIf="infoText" [name]="'spac'"
+                            [infoText]="infoText.SPAC">
+                          </app-info-icon></label>
+                      </div>
+                      <div class="col col-12 align-items-center">
+                        <input type="checkbox" class="mr-1" name="carve" id="carve" formControlName="isCarveOut">
+                        <label for="carve" id="carve-label">Carve-Out</label>
+                      </div>
+                      <div class="col col-12 align-items-center">
+                        <input type="checkbox" class="mr-1" (change)="onPTEChange($event.target.checked)" name="equity"
+                          id="equity" formControlName="isPubliclyTradedEquity">
+                        <label for="equity">Publicly Traded Equity</label>
+                      </div>
+                      <div class="col col-12 align-items-center">
+
+                        <input type="checkbox" class="mr-1" name="debt" id="debt" formControlName="isPubliclyTradedDebt"
+                          (change)="onPTDChange($event.target.checked)">
+                        <label for="debt" id="debt-label">Publicly Traded
+                          Debt</label>
+                      </div>
+
+                      <!-- <div class="col col-12 align-items-center">
+                        <input type="checkbox" class="mr-1" name="openMarket" id="openMarket"
+                          formControlName="isOpenMarketPurchase">
+                        <label for="openMarket">Open Market Purchase &nbsp;<app-info-icon *ngIf="infoText"
+                            [name]="'openMarket'" [infoText]="infoText.OpenMarketPurchaseText">
+                          </app-info-icon></label>
+                      </div> -->
+                    </div>
+                    <div class="col align-items-center" *ngIf="isOMPVisible()">
+                      <label class="oppLabel mr-3"
+                      [ngClass]="(opportunityDetails.controls['isOpenMarketPurchase'].status=='INVALID' && form.submitted)? 'inValidLabel':''">
+                       Does this transaction involve an open market purchase? <span class="required">*</span>
+                      </label>
+                      <input type="radio" [value]="true" name="isOpenMarketPurchase" id="ompYes"  formControlName="isOpenMarketPurchase">
+                      <label [ngClass]="(opportunityDetails.controls['isOpenMarketPurchase'].status=='INVALID' && form.submitted)? 'inValidLabel':''" for="ompYes">Yes</label>
+                      <input type="radio" [value]="false" name="isOpenMarketPurchase" id="ompNo" formControlName="isOpenMarketPurchase">
+                      <label [ngClass]="(opportunityDetails.controls['isOpenMarketPurchase'].status=='INVALID' && form.submitted)? 'inValidLabel':''" for="ompNo">No</label>
+                      <label style="color: #121212ed; font-size: 13px;">Answer “Yes” if the purchase of the shares is from the open market (i.e. stock exchange) rather than a direct, privately negotiated transaction.</label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="oppFormRow">
+                  <div class="col-6">
+                    <label class="oppLabel">Country/Location of Deal <span class="required">*</span></label>&nbsp;
+                    <app-info-icon *ngIf="infoText" [name]="'locationOfDeal'" [infoText]="infoText.LocationofDealText">
+                    </app-info-icon>
+
+                    <ng-select [clearable]=isClearOnTarget [multiple]="false" [name]="'locationofDeal'"
+                      id="LocationOfDeal" [items]="locationOfDeal" formControlName="locationOfDeal"
+                      bindLabel="locationName" groupBy="customGroup">
+                    </ng-select>
+                  </div>
+
+                  <div class="col-6" *ngIf="!isPlaceholderOpportunity">
+                    <label class="oppLabel">Stage <span class="required">*</span></label>
+                    <div class="form-row">
+                      <div class="col-12 align-items-center">
+                        <input type="radio" value="1" name="registrationStageId" id="interest"
+                          formControlName="registrationStageId">
+                        <label
+                          [ngClass]="(opportunityDetails.controls['registrationStageId'].status=='INVALID' && form.submitted)? 'inValidLabel':''"
+                          for="interest">Interest</label>
+                      </div>
+                      <div class="col-12 align-items-center">
+                        <input type="radio" value="2" name="registrationStageId" id="commitment"
+                          formControlName="registrationStageId">
+                        <label
+                          [ngClass]="(opportunityDetails.controls['registrationStageId'].status=='INVALID' && form.submitted)? 'inValidLabel':''"
+                          for="commitment">Commitment</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="oppFormRow" *ngIf="!isPlaceholderOpportunity">
+                  <div class="col-6 d-flex flex-column">
+                    <label class="oppLabel">Bid Date</label>
+                    <div class="start-date-input">
+                      <input name="opportunityBidDate" type="text" placeholder="DD-MMM-YYYY" autocomplete="off"
+                        class="mb-2 datepicker datCtrlWidth" bsDatepicker [minDate]="minDate"
+                        (bsValueChange)="onDateChange($event,'bidDate')" formControlName="bidDate"
+                        [bsConfig]="bsConfig">
+                      <span class="crossIcon"
+                        *ngIf="opportunityDetails.value.bidDate && !opportunityDetails.get('registrationId').value>0"
+                        (click)="clearDate('bidDate')">×</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="oppFormRow">
+                  <div class="col-6">
+
+                    <label class="oppLabel">When do you think the case will be ready to start?</label>
+                    <input name="expectedStartDate" type="text" placeholder="DD-MMM-YYYY" #dpCaseReady="bsDatepicker"
+                      autocomplete="off" class="mb-2 datepicker datCtrlWidth" bsDatepicker [minDate]="minDate"
+                      (bsValueChange)="onDateChange($event,'expectedStartDate')" formControlName="expectedStartDate"
+                      [bsConfig]="bsConfig" [attr.disabled]="opportunityDetails.value.isStartDateUnknown?'':null">
+                    <span class="crossIcon"
+                      *ngIf="opportunityDetails.value.expectedStartDate && !opportunityDetails.get('registrationId').value>0"
+                      (click)="clearDate('expectedStartDate')">×</span>
+                  </div>
+
+                  <div class="col-6">
+                    <label class="oppLabel">When is the latest the case can start?</label>
+                    <input name="latestStartDate" type="text" placeholder="DD-MMM-YYYY" autocomplete="off"
+                      #dpCaseLatestStart="bsDatepicker" class="mb-2 datepicker datCtrlWidth" bsDatepicker
+                      (bsValueChange)="onDateChange($event,'latestStartDate')" [minDate]="minDate"
+                      formControlName="latestStartDate" [bsConfig]="bsConfig"
+                      [attr.disabled]="opportunityDetails.value.isStartDateUnknown?'':null">
+                    <span class="crossIcon"
+                      *ngIf="opportunityDetails.value.latestStartDate && !opportunityDetails.get('registrationId').value>0"
+                      (click)="clearDate('latestStartDate')">×</span>
+                  </div>
+                </div>
+
+                <div class="oppFormRow" *ngIf="!isPlaceholderOpportunity">
+                  <div class="col-6">
+                    <label class="oppLabel">Other Partners Who Should See This Registration: </label>
+
+                    <ng-select id="othersInvolved" name="othersInvolved" [items]="employeeList" [selectOnTab]="true"
+                      bindLabel="searchableName" maxSelectedItems=5 [clearSearchOnAdd]="true" [addTag]="false"
+                      [loading]="employeeLoad" (blur)="employeeLoad = false" loadingText="loading..." [multiple]="true"
+                      [hideSelected]="true" [clearable]="true" [typeahead]="employeeTypeAhead"
+                      (change)="onSelectEmployeeChange($event);" formControlName="othersInvolved"></ng-select>
+                  </div>
+
+                  <div class="col-6">
+                    <label class="oppLabel">Client Head <span class="required">*</span></label>
+
+                    <ng-select id="clientHead" class="custom" name="clientHeadSelect" [items]="employeeList"
+                      [selectOnTab]="true" [addTag]="false" bindLabel="searchableName" [clearSearchOnAdd]="true"
+                      [loading]="employeeLoad" (blur)="employeeLoad = false" [multiple]="true" loadingText="loading..."
+                      [hideSelected]="true" [clearable]="true" [typeahead]="employeeTypeAhead"
+                      (change)="onSelectEmployeeChange($event);" formControlName="clientHead">
+                    </ng-select>
+                  </div>
+                </div>
+
+                <div class="oppFormRow" *ngIf="!isPlaceholderOpportunity">
+                  <div class="col-6">
+                    <label class="oppLabel">Client Sector Leads </label>&nbsp;<app-info-icon *ngIf="infoText"
+                      [name]="'workType'" [infoText]="infoText.ClientSectorLead"></app-info-icon>
+
+                    <ng-select id="clientSectorLead" name="clientSectorLead" [items]="employeeList" [selectOnTab]="true"
+                      bindLabel="searchableName" maxSelectedItems=5 [clearSearchOnAdd]="true" [addTag]="false"
+                      (change)="onSelectEmployeeChange($event);" [multiple]="true" [loading]="employeeLoad"
+                      (blur)="employeeLoad = false" loadingText="loading..." [hideSelected]="true" [clearable]="true"
+                      [trackByFn]="trackByFn" [typeahead]="employeeTypeAhead" formControlName="clientSectorLead">
+                    </ng-select>
+                  </div>
+                </div>
+
+                <div class="oppFormRow" *ngIf="!isPlaceholderOpportunity">
+                  <div class="col-12">
+                    <label class="oppLabel">Other context you’d like to share with the Legal team</label>
+                    <textarea name="generalNote" formControlName="generalNote"></textarea>
+                  </div>
+                </div>
+
+              </ng-container>
+
+              <!--Risk Assessment-->
+              <ng-container *ngIf=" section.slug == 'risk-assessment' && section.show" formGroupName="risk">
+
+                <div class="col-12">
+                  <label class="oppLabel">Is
+                    this a target company or industry with which we would be proud to be
+                    associated? <span class="required">*</span></label>&nbsp;<app-info-icon *ngIf="infoText"
+                    [name]="'risk'" [infoText]="infoText.Risk"></app-info-icon>
+
+                  <span style="color:#121212ed;font-size: 13px" [innerHTML]="infoText?.RiskTarget??''"></span>
+                  <div class="form-row" style="margin-left: 18px;">
+                    <div class="col-12 align-items-center">
+                      <input type="radio" value="true" name="isREN" id="noConcern" formControlName="isREN">
+                      <label class="oppLabelRisk"
+                        [ngClass]="(risk.controls['isREN'].status=='INVALID' && form.submitted)? 'inValidLabel':''"
+                        for="noConcern">No concern <span class="spanFontWeight">- happy to proceed with pride</span>
+                      </label>
+                    </div>
+                    <div class="col-12 align-items-center">
+                      <input type="radio" value="false" name="isREN" id="potentialConcern" formControlName="isREN">
+                      <label class="oppLabelRisk"
+                        [ngClass]="(risk.controls['isREN'].status=='INVALID' && form.submitted)? 'inValidLabel':''"
+                        for="potentialConcern">Potential concern <span class="spanFontWeight">- The regional risk team will be notified of all of the details in this registration, including the name of the target unless you have indicated the target has publicly traded equity.
+                           They will reach out to you for further discussion.</span></label>
+                    </div>
+                  </div>
+                  <br />
+                  <label class="oppLabel">Does the target operate in any of the below industries?
+                    <span class="required">*</span></label>&nbsp;<app-info-icon *ngIf="infoText" [name]="'risk'"
+                    [infoText]="infoText.Risk"></app-info-icon>
+                  <br />
+                  <span style="color:#121212ed;font-size: 13px" [innerHTML]="infoText?.RiskProduct??''"></span>
+                  <div class="form-row" style="margin-left: 18px;">
+                    <div class="col-12 align-items-center">
+                      <input type="radio" value="true" name="isProductREN" id="noProduct"
+                        formControlName="isProductREN">
+                      <label class="oppLabelRisk"
+                        [ngClass]="(risk.controls['isProductREN'].status=='INVALID' && form.submitted)? 'inValidLabel':''"
+                        for="noProduct">No, target does not operate in one of these industries <span
+                          class="spanFontWeight">– happy to proceed with pride</span></label>
+                    </div>
+                    <div class="col-12 align-items-center">
+                      <input type="radio" value="false" name="isProductREN" id="yesProduct"
+                        formControlName="isProductREN">
+                      <label class="oppLabelRisk"
+                        [ngClass]="(risk.controls['isProductREN'].status=='INVALID' && form.submitted)? 'inValidLabel':''"
+                        for="yesProduct">Yes, target operates in one of these industries <span class="spanFontWeight">–
+                          The regional risk team will be notified of all of the details in this registration, including the name of the target unless you have indicated the target has publicly traded equity.
+                           They will reach out to you for further discussion.</span></label>
+                    </div>
+                  </div>
+                </div>
+
+              </ng-container>
+
+              <!--Experts-->
+              <ng-container *ngIf=" section.slug == 'experts' && isShowSection && section.show" formGroupName="experts">
+                <span *ngIf="!isPlaceholderOpportunity">
+                  <hr>
+                  <div class="oppFormRow">
+
+                    <div class="col-6">
+                      <label class="oppLabel">Has there been an expert call? <span class="required">*</span></label>
+
+                      <div class="form-row optional-datepicker-row">
+                        <div class="col-3 align-items-center optional-datepicker-container">
+                          <input type="radio" value="1" name="expertCall" formControlName="expertCall" required
+                            (change)="onExpertCallChange($event)" id="expertCallYes">
+                          <label for="expertCallYes"
+                            [ngClass]="(experts.controls['expertCall'].status=='INVALID' && form.submitted)? 'inValidLabel':''">Yes</label>
+
+
+                        </div>
+                        <div class="col-3 align-items-center">
+                          <input type="radio" value="0" name="expertCall" formControlName="expertCall" required
+                            (change)="onExpertCallChange($event)" id="expertCallNo">
+                          <label for="expertCallNo"
+                            [ngClass]="(experts.controls['expertCall'].status=='INVALID' && form.submitted)? 'inValidLabel':''">No</label>
+                        </div>
+                        <div class="col align-items-center optional-datepicker-container">
+                          <input type="radio" value="2" name="expertCall" formControlName="expertCall" required
+                            (change)="onExpertCallChange($event)" id="expertCallScheduled">
+                          <label for="expertCallScheduled"
+                            [ngClass]="(experts.controls['expertCall'].status=='INVALID' && form.submitted)? 'inValidLabel':''">Scheduled</label>
+
+
+
+                        </div>
+                      </div>
+                      <ng-container *ngIf="experts.get('expertCall').value == '1'" formGroupName="scheduledFields">
+                        <input name="expertCallDate" formControlName="expertCallDate" type="text" autocomplete="off"
+                          placeholder="DD-MMM-YYYY" #dpExpertCallDate="bsDatepicker"
+                          class="mb-2 datepicker datCtrlWidth" bsDatepicker [bsConfig]="bsConfig" readonly
+                          [disabled]="! editExpertCallDate">
+                        <span class="crossIcon"
+                          *ngIf="experts.get('scheduledFields.expertCallDate').value && editExpertCallDate"
+                          (click)="experts.get('scheduledFields.expertCallDate').setValue('')">×</span>
+                      </ng-container>
+                      <ng-container *ngIf="experts.get('expertCall').value == '2'" formGroupName="scheduledFields">
+                        <input name="expertCallDate" formControlName="expertCallDate" type="text"
+                          placeholder="DD-MMM-YYYY" #dpExpertCallDate="bsDatepicker"
+                          class="mb-2 datepicker datCtrlWidth" bsDatepicker [bsConfig]="bsConfig" readonly
+                          [disabled]="! editExpertCallDate">
+                        <span class="crossIcon"
+                          *ngIf="experts.get('scheduledFields.expertCallDate').value && editExpertCallDate"
+                          (click)="experts.get('scheduledFields.expertCallDate').setValue('')">×</span>
+                      </ng-container>
+                    </div>
+
+                    <div class="col-6" formGroupName="scheduledFields">
+                      <label class="oppLabel">Which experts (incl. BAN) joined your call / have you invited to join your
+                        call?</label>
+                      <ng-select id="expertsOnCall" name="expertsOnCall" [items]="employeeList" [selectOnTab]="true"
+                        bindLabel="searchableName" maxSelectedItems=5 [clearSearchOnAdd]="true" [addTag]="false"
+                        [loading]="employeeLoad" (blur)="employeeLoad = false" loadingText="loading..."
+                        [multiple]="true" [hideSelected]="true" [clearable]="true"
+                        (change)="onSelectEmployeeChange($event);" [typeahead]="employeeTypeAheadWIthBAN"
+                        formControlName="expertsOnCall">
+
+                        <ng-template ng-option-tmp let-item="item">
+                          <div [title]="item.employeeStatusCode!='EX'?item.employeeCode:''">{{item.searchableName}}
+                            <span *ngIf="item.employeeStatusCode=='EX'" style="font-size: 10px;
+                            padding: 0px 2px !important;" class="tag tag-gray ng-star-inserted">BAN</span>
+                          </div>
+                        </ng-template>
+
+                      </ng-select>
+                    </div>
+                  </div>
+
+                  <div class="oppFormRow">
+                    <div class="col-6">
+                      <label class="oppLabel">Do you need help identifying experts? <span
+                          class="required">*</span></label>
+
+                      <div class="form-row">
+                        <div class="col-3 align-items-center">
+                          <input type="radio" value="true" name="identifyExperts" formControlName="identifyExperts"
+                            required id="identifyExpertsYes" (change)="onIdentifyExpertsChange(true)">
+                          <label for="identifyExpertsYes"
+                            [ngClass]="(experts.controls['identifyExperts'].status=='INVALID' && form.submitted)? 'inValidLabel':''">Yes</label>
+                        </div>
+                        <div class="col align-items-center">
+                          <input type="radio" value="false" name="identifyExperts" formControlName="identifyExperts"
+                            required id="identifyExpertsNo" (change)="onIdentifyExpertsChange(false)">
+                          <label for="identifyExpertsNo"
+                            [ngClass]="(experts.controls['identifyExperts'].status=='INVALID' && form.submitted)? 'inValidLabel':''">No</label>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-6">
+                      <label class="oppLabel">Besides knowledge of the asset, what other expertise or knowledge areas
+                        are required? For instance, supply chain experts, retail specialists, or utility professionals?
+                        <span *ngIf="isExpertiseTypeRequired" class="required">*</span></label>
+                      <input id="typesOfExpertise" name="typesOfExpertise" type="text"
+                        formControlName="typesOfExpertise"
+                        [class.invalid]="(experts.controls['typesOfExpertise'].status=='INVALID' && form.submitted)? 'invalid':''" />
+                    </div>
+                  </div>
+
+                  <div class="oppFormRow">
+                    <div class="col-12">
+                      <label class="oppLabel">Which other experts have you identified that have relevant knowledge for
+                        this asset?</label>
+
+                      <ng-select id="preferredExpertsForCase" name="preferredExpertsForCase"
+                        formControlName="preferredExpertsForCase" [items]="employeeList" [selectOnTab]="true"
+                        bindLabel="searchableName" [clearSearchOnAdd]="true" [multiple]="true" [addTag]="false"
+                        [loading]="employeeLoad" (blur)="employeeLoad = false" loadingText="loading..."
+                        (change)="onSelectEmployeeChange($event);" [hideSelected]="true" [clearable]="true"
+                        [typeahead]="employeeTypeAheadWIthBAN">
+
+                        <ng-template ng-option-tmp let-item="item">
+                          <div [title]="item.employeeStatusCode!='EX'?item.employeeCode:''">{{item.searchableName}}
+                            <span *ngIf="item.employeeStatusCode=='EX'" style="font-size: 10px;
+                          padding: 0px 2px !important;" class="tag tag-gray ng-star-inserted">BAN</span>
+                          </div>
+                        </ng-template>
+                      </ng-select>
+                    </div>
+                  </div>
+
+                  <div class="oppFormRow">
+                    <div class="col-12">
+                      <label class="oppLabel">Process details or other notes for MB team</label>
+                      <textarea name="expertTeamNotes" formControlName="expertTeamNotes"></textarea>
+                      <p class="info">E.g., expertise of each advisor, expert share of voice on call, preferred expert
+                        line-up,
+                        deal process</p>
+                    </div>
+                  </div>
+                </span>
+              </ng-container>
+
+              <!--Pipeline-->
+              <ng-container *ngIf=" section.slug == 'pipeline' && isShowSection && section.show"
+                formGroupName="pipeline">
+                <hr>
+                <div class="oppFormRow">
+                  <div class="col-6">
+                    <label class="oppLabel">Selling Partners? (Who is leading the conversations?) </label>
+
+                    <ng-select id="sellingPartners" name="sellingPartners" [items]="employeeList" [selectOnTab]="true"
+                      bindLabel="searchableName" maxSelectedItems=5 [clearSearchOnAdd]="true" [addTag]="false"
+                      [loading]="employeeLoad" (blur)="employeeLoad = false" loadingText="loading..." [multiple]="true"
+                      [hideSelected]="true" [clearable]="true" [typeahead]="employeeTypeAhead"
+                      (change)="onSelectEmployeeChange($event);" formControlName="sellingPartners"></ng-select>
+                  </div>
+
+                  <div class="col-6">
+                    <label class="oppLabel">Who is the likely OVP?</label>
+
+                    <ng-select id="OVP" name="OVP" [items]="employeeList" [selectOnTab]="true"
+                      bindLabel="searchableName" [clearSearchOnAdd]="true" [addTag]="false" [loading]="employeeLoad"
+                      (blur)="employeeLoad = false" loadingText="loading..." [hideSelected]="true" [multiple]="true"
+                      [clearable]="true" [typeahead]="employeeTypeAhead" formControlName="OVP"
+                      (change)="onSelectEmployeeChange($event);"></ng-select>
+
+                    <div class="form-row">
+                      <div class="col col-12 align-items-center">
+                        <input type="checkbox" name="isLikelyOVP" id="chkIsLikelyOVP" name="isLikelyOVP"
+                          formControlName="isLikelyOVP">
+                        <label for="chkIsLikelyOVP">&nbsp; I need support identifying an OVP</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="oppFormRow">
+                  <div class="col-6">
+                    <label class="oppLabel">Who is the likely SVP?</label>
+
+                    <ng-select id="SVP" name="SVP" [items]="employeeList" [selectOnTab]="true"
+                      bindLabel="searchableName" [clearSearchOnAdd]="true" [addTag]="false" [loading]="employeeLoad"
+                      (blur)="employeeLoad = false" loadingText="loading..." [hideSelected]="true" [multiple]="true"
+                      [clearable]="true" [typeahead]="employeeTypeAhead" formControlName="SVP"
+                      (change)="onSelectEmployeeChange($event);"></ng-select>
+
+                    <div class="form-row">
+                      <div class="col col-12 align-items-center">
+                        <input type="checkbox" name="isLikelySVP" id="chkIsLikelySVP" name="isLikelySVP"
+                          formControlName="isLikelySVP">
+                        <label for="chkIsLikelySVP">&nbsp; I need support identifying an SVP</label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div *ngIf="! isAMER" class="col-6">
+                    <label class="oppLabel">Who is the requested Senior Manager?</label>
+
+                    <ng-select id="requestedSM" name="requestedSM" [items]="employeeList" [selectOnTab]="true"
+                      bindLabel="searchableName" [clearSearchOnAdd]="true" [addTag]="false" [loading]="employeeLoad"
+                      (blur)="employeeLoad = false" loadingText="loading..." [hideSelected]="true" [multiple]="true"
+                      [clearable]="true" [typeahead]="employeeTypeAheadWIthBAN"
+                      (change)="onSelectEmployeeChange($event);" formControlName="requestedSM"></ng-select>
+                  </div>
+                </div>
+                <div *ngIf="isAMER" class="oppFormRow">
+
+                  <div class="col-6">
+                    <label class="oppLabel">Will this be served by a retainer team?</label>
+
+                    <div class="form-row">
+                      <div class="col-12 align-items-center" *ngFor="let answer of answers">
+                        <input type="radio" value="{{answer.value}}" id="isRetainer{{answer.value}}"
+                          formControlName="isRetainer">
+                        <label for="isRetainer{{answer.value}}">{{answer.name}}</label>
+                      </div>
+
+                    </div>
+                  </div>
+
+
+                  <div class="col-6" *ngIf="!isPlaceholderOpportunity">
+                    <label class="oppLabel">Do you expect this to be/do you know if this is multibidder?</label>
+
+                    <div class="form-row">
+
+                      <div class="col-12 align-items-center" *ngFor="let answer of answers">
+                        <input type="radio" value="{{answer.value}}" id="isMultibidder{{answer.value}}"
+                          formControlName="isMultibidderPartner">
+                        <label for="isMultibidder{{answer.value}}">{{answer.name}}</label>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+
+                <div *ngIf="!isAMER" class="oppFormRow">
+                  <div class="col-12">
+                    <label
+                      class="oppLabel"
+                    >
+                      Which ring-fence pipeline should this request be added to? <span class="required">*</span>
+                    </label>
+                    <div class="form-row">
+                      <div class="col-12"  [ngClass]="{
+                        'invalidDropdown': pipeline.controls['officeToBeStaffed'].invalid && form.submitted
+                      }">
+                        <app-location-tree-view
+                          [officesToBeStaffed]="officesToBeStaffed"
+                          [disabled]="!canEditPipeline && !opportunityDetails.value.isPipelineEdit"
+                          (updateOfficeSelection)="updateOfficeSelection($event)"
+                          [parentFormGroup]="pipeline"
+                          [formSubmitted]="form.submitted"
+                          [user]="currentUserData"
+                        ></app-location-tree-view>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div *ngIf="! isAMER" class="oppFormRow">
+
+                  <div class="col-12">
+                    <label class="oppLabel">Will this be served by a retainer team?</label>
+
+                    <div class="form-row">
+                      <div class="col-12 align-items-center" *ngFor="let answer of answers">
+                        <input type="radio" value="{{answer.value}}" id="isRetainer{{answer.value}}"
+                          formControlName="isRetainer">
+                        <label for="isRetainer{{answer.value}}">{{answer.name}}</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="oppFormRow">
+                  <div class="col-6 d-flex flex-column">
+                    <label class="oppLabel">Bid Date</label>
+                    <div class="start-date-input">
+                      <input name="pipelineBidDate" type="text" placeholder="DD-MMM-YYYY" autocomplete="off"
+                        class="mb-2 datepicker datCtrlWidth" bsDatepicker [minDate]="minDate"
+                        (bsValueChange)="onDateChange($event,'bidDate')" formControlName="bidDate"
+                        [bsConfig]="bsConfig">
+                      <span class="crossIcon"
+                        *ngIf="pipeline.value.bidDate && !opportunityDetails.get('registrationId').value>0"
+                        (click)="clearDate('bidDate')">×</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="oppFormRow">
+
+                  <div class="col-6">
+                    <label class="oppLabel">When do you think the case will be ready to start?<span
+                        class="required">*</span></label>
+
+                    <input name="pipelineExpectedStartDate" (bsValueChange)="onDateChange($event,'expectedStartDate')"
+                      autocomplete="off" formControlName="expectedStartDate" type="text" placeholder="DD-MMM-YYYY"
+                      #dpPipelineCaseReady="bsDatepicker" class="mb-2 datepicker datCtrlWidth" bsDatepicker
+                      [minDate]="minDate" [bsConfig]="bsConfig"
+                      [attr.disabled]="pipeline.value.pipleineStartDateUnknown?'':null">
+                    <span class="crossIcon" *ngIf="pipeline.value.expectedStartDate && canEditPipeline"
+                      (click)="clearDate('expectedStartDate')">×</span>
+                  </div>
+
+                  <div class="col-6">
+                    <label class="oppLabel">When is the latest the case can start?</label>
+                    <input name="latestStartDate" formControlName="latestStartDate" autocomplete="off"
+                      (bsValueChange)="onDateChange($event,'latestStartDate')" type="text" placeholder="DD-MMM-YYYY"
+                      #dpPipelineCaseLatestStart="bsDatepicker" class="mb-2 datepicker datCtrlWidth" bsDatepicker
+                      [minDate]="minDate" [bsConfig]="bsConfig"
+                      [attr.disabled]="pipeline.value.pipleineStartDateUnknown?'':null">
+                    <span class="crossIcon" *ngIf="pipeline.value.latestStartDate && canEditPipeline"
+                      (click)="clearDate('latestStartDate')">×</span>
+                  </div>
+                </div>
+
+                <div class="oppFormRow">
+
+                  <div class="col-6">
+                    <label class="oppLabel">Anticipated Team Size (select more than one if you expect multiple teams)
+                      <span class="required">*</span></label>
+                  </div>
+
+                  <div class="col-6">
+                    <label class="oppLabel">What is the estimated project duration (in weeks)? <span
+                        class="required">*</span></label>
+                    &nbsp;
+                    <app-info-icon *ngIf="infoText" [name]="'duration'" [infoText]="infoText.Duration"
+                      [placement]="'top'">
+                    </app-info-icon>
+                  </div>
+
+                  <div class="col-6">
+                    <ng-select id = "teamSize"   [items]="teamSizeList" class="slectComponent" bindLabel="teamSize"  [hideSelected]="true"
+                    bindValue="teamSizeSelectId" required  [multiple]="true" #selectComponent (add)="onTeamSizeChange($event)" 
+                    formControlName="teamSize" [clearable]="false"  [maxSelectedItems]="5"   
+                    >
+                      <ng-template ng-option-tmp let-item="item"  > 
+                        <span (pointerdown)="onTeamSizeChange($event,item.teamSizeId)" >
+                          {{item.teamSize}}
+                        </span>
+                      </ng-template>
+                      <ng-template ng-label-tmp let-item="item">
+                        <div class="team-size" *ngIf = "item.teamSize">
+                          <span  class = "team-size-clear" (mousedown)="onRemoveTeamSize($event,item.teamSizeSelectId)">&times;</span>
+                         <span class = "team-size-text">{{item.teamSize }}</span>
+                        </div>
+                        <div class="team-size"  *ngIf = "!item.teamSize" >
+                         <span class = "team-size-text">{{item.teamSizeSelectId | getListItemValue : backupTeamSizeList : 'teamSizeSelectId' : 'teamSize' }}</span>
+                      </div> 
+                      </ng-template>
+                    </ng-select>
+                  </div>
+
+                  <div class="col-6">
+                    <input id="duration" (keypress)="validateDurationKeys($event)" maxlength="4" name="duration"
+                      type="text" formControlName="duration" required />
+                  </div>
+
+                </div>
+                <div class="oppFormRow">
+
+
+                  <div class="col-12">
+                    <label class="oppLabel">Comments on team including size, duration, and requested experience</label>
+                    <textarea id="teamComments" name="teamComments" type="text"
+                      formControlName="teamComments"></textarea>
+                  </div>
+
+                </div>
+                <div class="oppFormRow">
+                  <div class="col-6">
+                    <label class="oppLabel">Estimated Total Revenue<span class="required"
+                        *ngIf="requiredTotalRevenue">*</span>
+                    </label>
+                    <div class="input-group d-flex">
+                      <div class="input-group-prepend">
+                        <div class="input-group-text"><span [innerHTML]="selectedCurrencySymbol"></span></div>
+                      </div>
+                      <input type="number" class="form-control" (keyup)="onEstimatedRevenueChange($event)"
+                        onkeydown="javascript: return event.keyCode == 69 || event.keyCode == 189 || event.keyCode == 38 || event.keyCode == 40 || event.keyCode == 187 || event.keyCode == 107|| event.keyCode == 109 ? false : true"
+                        maxlength="10" formControlName="totalRevenue" placeholder="000.00">
+                    </div>
+                    <div *ngIf="pipeline.get('totalRevenue')?.errors?.invalidDecimal" class="inValidLabel">Please enter
+                      a number with up to 2 decimal places and a maximum of 14 characters. </div>
+                  </div>
+                  <div class="col-6">
+                    <label class="oppLabel">Revenue Currency <span class="required"
+                        *ngIf="requiredRevenueCurrency">*</span></label>
+                    <ng-select name="revenue-currency" [items]="currencyList" bindLabel="searchableName"
+                      formControlName="revenueCurrency" id="revenue-currency" (change)="onCurrencyChange($event)"
+                      [clearable]="true">
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="option-container">
+                          <div class="currency-name">
+                            {{item.serviceCode}} - {{ item.currencyName }}
+                          </div>
+                          <div class="currency-symbol">
+                            (<span [innerHTML]="item.currencySymbol"></span>)
+                          </div>
+                        </div>
+                      </ng-template>
+                      <ng-template ng-label-tmp let-item="item">
+                        <div class="option-container">
+                          <div class="currency-name">
+                            {{item.serviceCode}} - {{ item.currencyName }}
+                          </div>
+
+                        </div>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="oppFormRow">
+
+                  <div class="col-6">
+                    <label class="oppLabel">Is the client committed to working with Bain or is this competitive?</label>
+
+                  </div>
+
+                  <div class="col-6">
+                    <label class="oppLabel">Likelihood (%) <span class="required">*</span></label>
+                  </div>
+
+                  <div class="col-6">
+                    <ng-select name="clientCommitments" bindLabel="clientCommitmentName" class="slectComponent"
+                      [items]="clientCommitments" formControlName="clientCommitment">
+                    </ng-select>
+                  </div>
+
+
+                  <div class="col-6">
+                    <ng-select name="likelihood" id="likelihood" class="selector" bindLabel="label" required
+                      [items]="likelihoodList" formControlName="likelihood" [clearable]="true">
+                    </ng-select>
+                  </div>
+
+                </div>
+
+
+                <div class="oppFormRow">
+
+                  <div class="col-6">
+                    <label class="oppLabel">What is the expected project name (please don’t use Bank given
+                      name)?</label>
+                    <input id="expectedProjectName" name="expectedProjectName" type="text"
+                      formControlName="expectedProjectName" />
+                  </div>
+
+                  <div class="col-6" *ngIf="! isAMER">
+                    <label class="oppLabel">Does this project require language capabilities?</label>
+                    <ng-select name="language" id="language" class="selector" bindLabel="name" bindValue="name"
+                      [multiple]="true" formControlName="requiredLanguage" [clearable]="true" [items]="languages">
+                    </ng-select>
+                  </div>
+
+                </div>
+
+                <div class="oppFormRow">
+                  <div class="col-12">
+                    <label class="oppLabel">What do you know about the client's decision-making steps/gating factors and
+                      any bank/selling process details?
+                      For example, data-room access, bid deadlines, IC meeting dates, internal approval for Bain
+                      fees.</label>
+                    <textarea name="processInfo" formControlName="processInfo" maxlength="800"></textarea>
+                  </div>
+                </div>
+
+                <div class="oppFormRow">
+                  <div class="col-12">
+                    <label class="oppLabel">Which of the following types of complexity does the project have? <span
+                        class="description">Check all that
+                        apply</span></label>
+
+                    <div class="form-row">
+                      <div class="checkbox-flex col-12"
+                        *ngFor="let csComp of pipeline.get('caseComplexity').controls; let i= index"
+                        formArrayName="caseComplexity"> <input class="mr-1" type="checkbox"
+                          id="caseComplexity{{caseComplexity[i].caseComplexityId}}" [formControl]="csComp"><label
+                          for="caseComplexity{{caseComplexity[i].caseComplexityId}}">
+                          {{caseComplexity[i].caseComplexityName.split('(')[0]}} <span
+                            class="description">{{caseComplexity[i].caseComplexityName.split('(').length>1?'('+caseComplexity[i].caseComplexityName.split('(')[1]:''}}</span></label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!--Commented this code for temporary-->
+                <!-- <div class="oppFormRow" *ngIf="!isPlaceholderOpportunity">
+                  <div class="col-12">
+                    <label class="oppLabel">What product(s) have you and the client discussed?</label>
+
+                    <div class="checkbox-flex col-12"
+                      *ngFor="let addService of pipeline.get('additionalServices').controls; let i=index"
+                      formArrayName="additionalServices"> <input type="checkbox" class="mr-1"
+                        id="{{ 'additionalServices_'+additionalServices[i].additionalServicesId }}"
+                        [formControl]="addService"> <label
+                        for="{{ 'additionalServices_'+additionalServices[i].additionalServicesId }}">{{additionalServices[i].additionalServicesName
+                        }}</label></div>
+                  </div>
+                </div> -->
+
+              </ng-container>
+
+
+            </div>
+          </div>
+
+        </ng-container>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div id="newOppFooter">
+    <button type="button" (click)="goBack()" id="btnOppDiscard">Discard &amp; Close</button>
+    <button id="btnOppSubmit" type="submit" [disabled]="isSubmitDisabled"
+      [ngClass]="isSubmitDisabled ? 'btn btn-secondary' : ''">
+      <i class="fas fa-spinner fa-pulse"
+        *ngIf="form.submitted && isSubmitDisabled && opportunitynew.status == 'VALID' "></i>
+
+      Submit </button>
+  </div>
+
+</form>
+
+<!-- message for cortex small window -->
+<!--
+  cortex displays this page in a small window, so to encourage
+  users to expand it and view in as full of a screen as possible
+-->
+<div *ngIf="!hideSalesforceWarning" class="salesforce-custom-message" (click)="hideSalesforceWarning = true">
+  <h2>Viewing in Cortex?</h2>
+  <p>Click on the expand button at the top right of this window to view in full screen.</p>
+</div>

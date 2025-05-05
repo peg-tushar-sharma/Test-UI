@@ -1,0 +1,19 @@
+.btn.clear-filters{
+  i.fa-times{
+    top: unset;
+    left: unset;
+    width: unset;
+    &:before{
+      font-size: 8px!important;
+      position: relative;
+      top: unset;
+      bottom: -2px;
+      right: 2px;
+    }
+  }
+}
+
+.btn.active{
+  background-color: $active-button!important;
+  color: $white!important;
+}

@@ -1,0 +1,41 @@
+<div class="new-conflict-wrapper d-flex" [formGroup]="addConflictForm">
+  <h3>{{this.isEdit?'Update':'Add new'}} conflict</h3>
+  <div class="form-group">
+    <label for="" class="required">Type</label>
+    <ng-select formControlName="companyType"  bindLabel="companyTypeName" required
+    [items]="conflictTypes"  [clearable]="false"  [searchable]="false"
+    [class.invalid-input]="addConflictForm.get('companyType').touched && addConflictForm.get('companyType').invalid">
+    </ng-select>
+  </div>
+  <div class="form-group">
+    <label for="" class="required">Company name</label>
+    <input
+      type="text"
+      class="form-control"
+      [class.invalid-input]="addConflictForm.get('companyName').touched && addConflictForm.get('companyName').invalid"
+      formControlName="companyName" />
+  </div>
+  <div class="form-group">
+    <label for="">Submitted By</label>
+    <input type="text" class="form-control" formControlName="submittedBy">
+  </div>
+  <div class="form-group">
+    <label for="">Submitted Date</label>
+    <input type="text" class="form-control" formControlName="submittedDate">
+  </div>
+  <div class="form-group">
+    <label for="" class="required">Stage</label>
+    <ng-select formControlName="stageType" [clearable]="false" >
+      <ng-option value="active">Active</ng-option>
+      <ng-option value="archived">Archived</ng-option>
+    </ng-select>
+  </div>
+  <div class="form-group">
+    <label for="">Notes</label>
+    <textarea rows="5" class="form-control" formControlName="notes"></textarea>
+  </div>
+  <div class="cta">
+    <button type="button" class="cancel-button" (click)="closeModal()">Cancel</button>
+    <button class="save-button" [disabled]="addConflictForm.invalid" (click)="saveConflict()">{{this.isEdit?'Update':'Save'}}</button>
+  </div>
+</div>

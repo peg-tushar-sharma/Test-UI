@@ -1,0 +1,34 @@
+<div class="textarea-wrapper" #textareaWrapper>
+    <textarea
+      #textarea
+      [value]="innerValue"
+      (input)="onInput($event)"
+      (keyup)="onKeyUp($event)"
+      (keydown)="onKeyDown($event)"
+      (scroll)="onTextareaScroll()"
+      (click)="onTextClick($event)"
+      (blur)="onTextareaBlur()"
+      placeholder="Type @mention here..."
+    ></textarea>
+  <div  #overlay class="highlight-overlay" [innerHTML]="highlightText"></div>
+ 
+    <div class="mirror" #mirrorDiv>
+      <span [innerHTML]="highlightText"></span><span class="caret-marker">|</span>
+    </div>
+  
+  
+    <div #mentionlist
+      *ngIf="showMentionList"
+      class="mention-list"
+      [ngStyle]="{ top: caretTop + 'px', left: caretLeft + 'px' }"
+    >
+      <div
+        *ngFor="let user of filteredUsers"
+        (click)="selectUser(user)"
+        class="mention-item"
+      >
+        {{ user.searchableName }}
+      </div>
+    </div>
+  </div>
+

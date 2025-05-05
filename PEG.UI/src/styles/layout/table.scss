@@ -1,0 +1,51 @@
+@use "sass:math";
+
+table.table{
+    background-color: $white;
+    thead{
+      background-color: $grey-light;
+      th{    
+        border-color: transparent;
+        white-space: nowrap;
+        font-weight: normal;
+        color: $black;
+        font-size: 14px;
+        &.sortable{
+          transition: color .5s;
+          cursor: pointer;
+          &:hover{
+            color: $bain-red;
+          }
+          i{
+            position: relative;
+            top:-2px;
+          }
+  
+          i.fa-filter{
+            font-size:12px;
+            top:2px;
+            left:6px;
+          }
+        }
+      }
+    }
+    tbody{
+      tr.clickable{
+        cursor: pointer;
+  
+        td.waiting{
+          > div{
+            position: relative;
+            padding-right: $base-padding*4;
+            i.fa.fa-hourglass{   
+              color: $grey-medium;         
+              position: absolute;
+              right:math.div($base-padding,2);
+              top:50%;
+              transform: translateY(-50%);
+            }
+          }
+        }
+      }
+    }
+  }

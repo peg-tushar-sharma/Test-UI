@@ -1,0 +1,268 @@
+<div class="request-info-wrapper">
+
+    <!-- header -->
+    <div class="request-info-wrapper__header">
+        <span (click)="seeItem()" role="button">{{ isExpert ? 'Expert' : 'Pipeline' }} Request Information</span>
+
+        <button class="close-button" (click)="close()">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <!-- content -->
+    <!-- expert info request -->
+    <div *ngIf="isExpert && status.expertData" class="request-info-wrapper__content">
+        <!-- timing -->
+        <div class="content-column">
+            <label class="row-label header">Timing</label>
+
+            <div class="content-column__row">
+                <label class="row-label">Submitted Date: <span class="row-value">{{ submittedDate ? (submittedDate |
+                        date: 'dd-MMM-yyyy') : 'n/a' }}</span></label>
+            </div>
+
+            <div class="content-column__row">
+                <label class="row-label">Last Updated: <span class="row-value">{{ status.expertData?.expertLastUpdated ?
+                        (status.expertData?.expertLastUpdated | date:
+                        'dd-MMM-yyyy') : 'n/a' }}</span></label>
+            </div>
+
+            <div class="content-column__row">
+                <label class="row-label">Work to Start Within: <span
+                        class="row-value">{{status.expertData?.workToStart?.workToStartName}}</span></label>
+            </div>
+
+            <div class="content-column__row">
+                <label class="row-label">Pipeline Notes: <span
+                        class="row-value">{{status.expertData.processInfo}}</span></label>
+            </div>
+        </div>
+
+        <!-- expertise needs -->
+        <div class="content-column">
+            <label class="row-label header">Expertise Needs</label>
+
+            <div class="content-column__row">
+                <label class="row-label">Has there been an expert call?: <span
+                        class="row-value">{{getIsExpertCallValue(status.expertData.isExpertCall)}}</span></label>
+            </div>
+
+            <div class="content-column__row">
+                <label class="row-label">Which experts (incl. BAN) joined your call / have you invited to join the
+                    call?: <span class="row-value">{{getExpertsString(status.expertData.expertsOnCall)}}</span></label>
+            </div>
+        </div>
+
+        <div class="content-column">
+            <div class="content-column__row">
+                <label class="row-label">Do you need help identifying experts?: <span class="row-value">{{
+                        status.expertData.isNeedHelp?'Yes':'No'}}</span></label>
+            </div>
+
+            <div class="content-column__row">
+                <label class="row-label">Which types of expertise do you need?: <span
+                        class="row-value">{{status.expertData.expertise}}</span></label>
+            </div>
+
+            <div class="content-column__row">
+                <label class="row-label">Which other experts have you identified that have relevant knowledge for this
+                    asset?: <span
+                        class="row-value">{{getExpertsString(status.expertData.preferredExpertsForCase)}}</span></label>
+            </div>
+        </div>
+
+        <!-- notes -->
+        <div class="content-column">
+            <label class="row-label header">Notes</label>
+
+            <div class="content-column__row">
+                <label class="row-label">Multi-bidder Team: <span
+                        class="row-value">{{status.expertData.notes}}</span></label>
+
+            </div>
+
+            <div class="content-column__row">
+                <label class="row-label">Other Legal Notes: <span
+                        class="row-value">{{status.expertData.legalNotes}}</span></label>
+            </div>
+
+            <div class="content-column__row">
+                <label class="row-label">Other Partners: <span
+                        class="row-value">{{getExpertsString(status.expertData.otherPartners)}}</span></label>
+            </div>
+        </div>
+    </div>
+
+    <!--  -->
+    <!--  -->
+
+    <!-- pipeline info request -->
+    <div *ngIf="isPipeline && status.pipelineData" class="request-info-wrapper__content">
+        <div class="content-column">
+            <label class="row-label header">Timing</label>
+
+            <div class="content-column__row">
+                <!-- timing -->
+
+                <div class="content-column">
+                    <div class="content-column__row">
+                        <label class="row-label">Submitted Date: <span class="row-value">{{
+                                status.pipelineData.pipelineInfoRequestedDate ?
+                                (status.pipelineData.pipelineInfoRequestedDate | date: 'dd-MMM-yyyy') : 'N/A'
+                                }}</span></label>
+                    </div>
+
+                    <div class="content-column__row">
+                        <label class="row-label">Last Updated Date: <span class="row-value">{{
+                                status.pipelineData.updatedDate
+                                ? (status.pipelineData.updatedDate | date:
+                                'dd-MMM-yyyy') : 'N/A' }}</span></label>
+                    </div>
+
+                    <div class="content-column__row">
+                        <label class="row-label">Bid Date: <span class="row-value">{{ bidDate ?
+                                bidDate  : 'n/a' }}</span></label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-column__row mt-3">
+                <!-- selling status -->
+                <div class="content-column">
+                    <label class="row-label header">Selling Status</label>
+
+                    <div class="content-column__row">
+                        <label class="row-label">Competitive/Client Situation: <span class="row-value">{{
+                                status.pipelineData.clientCommitment?.clientCommitmentName}}</span></label>
+                    </div>
+
+                    <div class="content-column__row">
+                        <label class="row-label">Likelihood: <span class="row-value">{{status.pipelineData.likelihood?
+                                status.pipelineData.likelihood.label:'N/A'}}</span></label>
+                    </div>
+
+                    <div class="content-column__row">
+                        <label class="row-label">Context on the client decision-making: <span class="row-value">{{
+                                status.pipelineData.processInfo}}</span></label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- case context -->
+        <div class="content-column">
+            <label class="row-label header">Case Context</label>
+
+            <div class="content-column__row">
+                <label class="row-label">Expected Team Size: <span
+                        class="row-value">{{getTeamName(status.pipelineData.pipelineTeam)}}</span></label>
+            </div>
+
+            <div class="content-column__row">
+                <label class="row-label">Team Comments: <span
+                        class="row-value">{{status.pipelineData.teamComments}}</span></label>
+            </div>
+
+            <div class="content-column__row">
+                <label class="row-label">Duration: <span
+                        class="row-value">{{status.pipelineData.durationInfo}}</span></label>
+            </div>
+
+            <div class="content-column__row">
+                <label class="row-label">Will this be served by Retainer Team?: <span
+                        class="row-value">{{getRetainerValue(status.pipelineData.isRetainer)}}</span></label>
+            </div>
+
+            <div class="content-column__row">
+                <label class="row-label">Do you expect this to be multibidder?: <span
+                        class="row-value">{{getMBPartnerValue(status.pipelineData.isMultibidder)}}</span></label>
+            </div>
+        </div>
+
+        <div class="content-column">
+            <div class="content-column__row">
+                <label class="row-label">Selling VP: <span
+                        class="row-value">{{getExpertsString(status.pipelineData.sellingVP)}}</span></label>
+            </div>
+
+            <div class="content-column__row">
+                <label class="row-label">OVP: <span
+                        class="row-value">{{getExpertsString(status.pipelineData.ovp)}}</span></label>
+            </div>
+
+            <div class="content-column__row">
+                <label class="row-label">Need support identifying OVP?: <span
+                        class="row-value">{{status.pipelineData.isOVPHelp?'Yes':'No'}}</span></label>
+            </div>
+
+            <div class="content-column__row">
+                <label class="row-label">SVP: <span
+                        class="row-value">{{getExpertsString(status.pipelineData.svp)}}</span></label>
+            </div>
+
+            <div class="content-column__row">
+                <label class="row-label">Need support identifying SVP?: <span
+                        class="row-value">{{status.pipelineData.isSVPHelp?'Yes':'No'}}</span></label>
+            </div>
+
+            <div class="content-column__row">
+                <label class="row-label">Other Partners: <span
+                        class="row-value">{{getExpertsString(status.pipelineData.otherPartners)}}</span></label>
+            </div>
+        </div>
+
+        <!-- case complexity -->
+        <div class="content-column">
+            <label class="row-label header">Case Complexity</label>
+
+            <div class="content-column__row">
+                <label class="row-label">Bain lacks deep experience?: <span
+                        class="row-value">{{getCaseComplexityById(1,status.pipelineData.caseComplexity)}}</span></label>
+            </div>
+
+            <div class="content-column__row">
+                <label class="row-label">Complex Scope?: <span
+                        class="row-value">{{getCaseComplexityById(2,status.pipelineData.caseComplexity)}}</span></label>
+            </div>
+
+            <div class="content-column__row">
+                <label class="row-label">Tough client dynamics?: <span
+                        class="row-value">{{getCaseComplexityById(3,status.pipelineData.caseComplexity)}}</span></label>
+            </div>
+
+            <div class="content-column__row">
+                <label class="row-label">Partner team lacks bandwidth?: <span
+                        class="row-value">{{getCaseComplexityById(4,status.pipelineData.caseComplexity)}}</span></label>
+            </div>
+
+            <div class="content-column__row">
+                <label class="row-label">Senior Manager or team expertise is critical?: <span
+                        class="row-value">{{getCaseComplexityById(5,status.pipelineData.caseComplexity)}}</span></label>
+            </div>
+
+            <div class="content-column__row">
+                <label class="row-label">Market knowledge or language capabilities are required?: <span
+                        class="row-value">{{getCaseComplexityById(6,status.pipelineData.caseComplexity)}}</span></label>
+            </div>
+
+            <div class="content-column__row">
+                <label class="row-label">Submitted by: <span class="row-value">{{
+                        getEmployeeName(status.pipelineData.submittedBy)}}</span></label>
+            </div>
+        </div>
+    </div>
+
+    <!-- if no pipeline data -->
+    <div *ngIf="isPipeline && !status.pipelineData" style="text-align: center;padding: 20px;">
+        <div class="content-column__row">No Information Submitted!</div>
+
+
+    </div>
+
+    <!-- if no expert data -->
+    <div *ngIf="isExpert && !status.expertData" style="text-align: center;padding: 20px;">
+        <div class="content-column__row">No Information Submitted!</div>
+
+
+    </div>
+</div>

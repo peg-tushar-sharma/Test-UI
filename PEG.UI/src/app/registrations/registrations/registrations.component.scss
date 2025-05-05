@@ -1,0 +1,240 @@
+@import "../../../styles/abstract/variables.scss";
+@import "../../../styles/layout/badge.scss";
+@import "../../../styles/layout/tag.scss";
+@import "../../../styles/layout/tag-filter.scss";
+@import "../../../styles/layout/modal.scss";
+@import "../../../styles/layout/form";
+@import "../../../styles/layout/registrations";
+// @import "../../../styles/ag-grid-styles/ag-grid-peg.scss";
+
+@import "../../../styles/layout/filters";
+@import "../../../styles/layout/search";
+@import "../../../styles/themes/bootstrap-theme";
+
+#informationChangeBanner {
+  background-color: #f79824;
+  border: 1px solid #f98f0d;
+  font-size: 14px;
+  padding: 5px 30px;
+  text-align: left;
+  color: #fff;
+
+  .sidebar-controls {
+    top: 30px !important;
+  }
+}
+
+.selectedOption {
+  color: #333;
+  background-color: #ebf5ff;
+  font-weight: 600;
+}
+
+
+.wraptext {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: 150px;
+  white-space: nowrap;
+}
+
+.action {
+  background-color: #cc0000 !important;
+  color: #FFFFFF !important;
+  border-radius: 5px;
+
+}
+
+.custom-width {
+  max-width: 150px;
+  text-overflow: ellipsis !important;
+  word-wrap: normal;
+}
+
+.filtersApplied {
+  margin-left: 10px;
+  background: #5f5959;
+  color: white;
+}
+
+.cell-pass {
+  background-color: red;
+}
+
+.filtersApplied1 {
+  background-color: #e6e6e6;
+  padding: 5px;
+  margin-left: 5px;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.searchWidth {
+  width: 550px !important;
+}
+
+// 
+// 
+
+// New Flyout Styling
+
+// sidebar
+.registration-sidebar {
+  background-color: #f7f9ff !important;
+  display: flex;
+  flex-direction: column;
+  font-family: "Graphik";
+
+  // flyout header
+  .flyout-header {
+    background-color: #ecf0ff;
+    color: #121212;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 20px;
+    min-height: 40px;
+    padding-inline: 20px;
+
+    .fas {
+      cursor: pointer;
+    }
+  }
+
+  // flyout container
+  .container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    padding: 0px;
+
+    // summary
+    .target-summary {
+      color: #121212;
+      font-size: 14px;
+      font-weight: 500;
+      gap: 10px;
+      line-height: 18px;
+      padding: 30px 20px;
+      white-space: nowrap;
+      width: 100%;
+
+      // ..name
+      #target {
+        font-size: 20px;
+        line-height: 24px;
+        max-width: 300px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      // ..stage
+      .stage {
+        background-color: #4c63b2;
+        border-radius: 4px;
+        color: #fff;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 19px;
+        padding: 4px 8px;
+        position: relative;
+      }
+
+      // ..status (clearance)
+      #idStatusTypeName {
+        gap: 10px;
+
+        #status {
+          background-color: #fff !important;
+          border: 1px solid #e0e4e8;
+          border-radius: 2px;
+          color: #616568 !important;
+          font-size: 14px;
+          font-weight: 500;
+          line-height: 19px;
+          outline: none;
+          padding: 2px 8px;
+          position: relative;
+        }
+
+        .clearance-status {
+          top: 0px;
+        }
+
+        .no-selection {
+          background-color: #cc0000 !important;
+          color: #fff !important;
+        }
+      }
+
+      .dropdown-menu {
+        font-size: 14px;
+        padding: 0px;
+        width: 270px;
+
+        .dropdown-filter {
+          padding: 0px;
+          overflow: hidden;
+
+          ul {
+            max-height: 350px;
+          }
+
+          // ctas
+          .dropdown-ctas {
+            gap: 10px;
+            padding: 10px;
+
+            .btn {
+              align-items: center;
+              display: flex;
+              font-size: 14px;
+              font-weight: 500;
+              height: 32px;
+              justify-content: center;
+              width: 100px;
+
+              &.secondary {
+                background-color: #fff !important;
+                border: 1px solid #284ce0;
+                color: #284ce0 !important;
+              }
+
+              &.primary {
+                background-color: #284ce0 !important;
+                color: #fff !important;
+              }
+
+              &:disabled {
+                opacity: 0.5;
+              }
+            }
+          }
+        }
+      }
+
+      // resend email..
+      .resend-email-wrapper {
+        gap: 8px;
+
+        // retry btn
+        .retry-btn {
+          color: #284ce0;
+          font-size: 14px;
+          font-weight: 500;
+          gap: 5px;
+          line-height: 18px;
+          padding: 0px;
+        }
+
+        div {
+          margin: 0px;
+          padding: 0px;
+        }
+      }
+    }
+  }
+}

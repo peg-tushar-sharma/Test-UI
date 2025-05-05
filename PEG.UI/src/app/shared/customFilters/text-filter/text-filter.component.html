@@ -1,0 +1,9 @@
+<div id="target-filter-popover">
+  <div class="column-filter">
+    <div class="input-group search">
+      <input class="form-control py-2 border-right-0 border" style="box-shadow: none" #input
+        (ngModelChange)="onChange($event)" (keyup.enter)="closePopUp()" [(ngModel)]="text" type="search"
+        placeholder="search">
+    </div>
+  </div>
+</div>

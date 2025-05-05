@@ -1,0 +1,72 @@
+h3 {
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 24px;
+  text-align: left;
+  color: #121212;
+}
+
+.invalid-input {
+  border: solid 1px red;
+}
+
+.new-conflict-wrapper {
+  display: flex;
+  padding: 40px;
+  flex-direction: column;
+}
+
+.cta {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+}
+
+button {
+  font-size: 12px;
+  padding: 10px 30px;
+  border-radius: 4px;
+  border: none;
+  outline: none;
+  margin-left: 15px;
+  font-weight: 500;
+  color: #284ce0;
+  background: #fff;
+}
+
+button:disabled {
+  color: #333;
+  background-color: #ccc;
+  cursor: not-allowed;
+  &:hover {
+    background-color: #CCC;
+  }
+}
+
+.cancel-button {
+  border: solid 1px #284ce0;
+}
+
+.save-button{
+  background: #284CE0;
+  color: #fff;
+  &:hover {
+    background: darken(#284ce0, 10%);
+  }
+}
+
+
+label {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  text-align: left;
+  color: #121212;
+
+}
+
+label.required::after {
+  content: '*';
+  color: red;
+  margin-left: 2px;
+}

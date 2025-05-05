@@ -1,0 +1,215 @@
+@import "../../../styles/ag-grid-styles/ag-grid-peg.scss";
+
+
+.link {
+	cursor: pointer;
+}
+
+#stage.no-sidebar {
+	background-color: #fff;
+	padding: 24px 24px 0px 24px;
+}
+
+.container {
+	max-width: 100%;
+	display: flex;
+
+}
+
+.item {
+	flex-grow: 1;
+	height: 70px;
+	text-align: center;
+}
+
+.item+.item {
+	margin-left: 0.5%;
+}
+
+.ngx-datatable.material {
+	box-shadow: none;
+}
+
+.rowDetailLable {
+	font-size: 14px;
+	color: black;
+	font-weight: 600;
+}
+
+
+#displayCount {
+	color: #aeaeae;
+	font-size: 14px;
+}
+
+.rowDetailValue {
+	font-size: 14px;
+	color: black;
+	margin-top: 5px;
+}
+
+::ng-deep .pt {
+	padding-top: 6px;
+}
+
+::ng-deep .mbfilter {
+	color: black;
+
+	#clear {
+		padding-left: 16px;
+	}
+}
+
+
+::ng-deep .input-group-append {
+	span {
+		color: #ccc;
+		transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+	}
+
+	&.input-group-append-focus span {
+		//box-shadow: none!important;
+		border-color: #999;
+	}
+}
+
+::ng-deep .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-marked {
+	background-color: #fff !important;
+	color: black !important;
+}
+
+:host::ng-deep .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-selected {
+	color: #cc0000 !important;
+	background-color: #fff !important;
+}
+
+::ng-deep .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-marked {
+	background-color: #3390ff !important;
+	color: white !important;
+}
+
+::ng-deep .ngx-datatable.material .datatable-body .datatable-body-row .datatable-body-cell {
+	text-align: left !important;
+	padding: 5px 10px 5px 10px !important;
+	vertical-align: top;
+	border-top: 0;
+	color: rgba(0, 0, 0, 0.87);
+	transition: width 0.3s ease;
+	font-size: 14px;
+	font-weight: 400;
+}
+
+// ::ng-deep .datatable-body-row{
+// 	background-color: green($color: #076007);
+// }
+::ng-deep .tracker-table .ngx-datatable .datatable-row-wrapper:hover {
+	background-color: rgb(242, 242, 242);
+	border-top: 1px solid #ddd;
+}
+
+
+
+::ng-deep #filters>div.col>div>div:nth-child(1)>div>div>div>div>button {
+	background-color: #e2e2e2;
+	color: #6D6D6D !important;
+}
+
+.hide {
+	display: none !important;
+}
+
+
+
+
+
+// @import "../../../styles/layout/grid.scss";
+// @import "../../../styles/abstract/variables.scss";
+h6 {
+	margin-left: 28px;
+	margin-bottom: 0px;
+}
+
+label {
+	margin-left: 30px;
+}
+
+.pt {
+	padding-top: 6px;
+}
+
+.mbfilter {
+	color: black;
+
+	#clear {
+		padding-left: 16px;
+	}
+}
+
+.input-group-append {
+	span {
+		color: #CCC;
+		transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+	}
+
+	&.input-group-append-focus span {
+		//box-shadow: none!important;
+		border-color: #999;
+	}
+}
+
+::ng-deep .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-marked {
+	background-color: #FFF !important;
+	color: black !important;
+}
+
+:host::ng-deep .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-selected {
+	color: #CC0000 !important;
+	background-color: #FFF !important;
+}
+
+.ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-marked {
+	background-color: #3390ff !important;
+	color: white !important;
+}
+
+::ng-deep #dealGridView .ag-theme-bootstrap {
+	max-height: 83vh;
+
+	.ag-root {
+		border: none;
+	}
+
+	.ag-header {
+		background-color: #FFF !important;
+		border-bottom: 1px solid black !important;
+		font-weight: bold !important;
+		color: black !important;
+		box-shadow: none !important;
+	}
+
+	.ag-header-cell {
+		border-right: none !important;
+	}
+
+	.ag-body-viewport {
+		background-color: #FFF !important;
+	}
+
+	.status {
+		font-weight: bold !important;
+	}
+
+	.noOfClients {
+		text-align: center !important;
+	}
+
+	.ag-header-cell .ag-header-cell-resize {
+		background-color: #fff;
+		transition: background-color 0s;
+
+	}
+}
+
+div.filter-list-item::before {
+	content: "\A";
+}

@@ -1,0 +1,9 @@
+<div class="d-flex">
+  <!-- <span class="tag tag-orange"><i class="fa fa-exclamation-triangle"></i></span> -->
+  <div *ngIf='isMultibidder' class="tag tag-blue" >{{showFullTagName?'Multibidder': 'MB'}}</div>
+  <div *ngIf='isSingleBidder' class="tag tag-blue" >{{showFullTagName?'SingleBidder': 'SB'}}</div>
+  <div *ngIf='isSeller' class="tag tag-blue" >{{showFullTagName?'Seller': 'S'}}</div>
+  <div *ngIf='workToStart==1' class="tag tag-orange" ><span><i class="fa fa-exclamation-triangle"></i></span></div>
+  <div *ngIf='typeOfWork==2 && (ispubliclyTradedEquity==true) && (openMarketPurchase==true)' class="tag" >{{showFullTagName?'Hedge Fund': 'HF'}}</div>
+  <div *ngIf='typeOfWork==3 && (ispubliclyTradedDebt==true) && (openMarketPurchase==true)' class="tag" >{{showFullTagName?'Publicly Traded Debt': 'PTD'}}</div>  
+</div>

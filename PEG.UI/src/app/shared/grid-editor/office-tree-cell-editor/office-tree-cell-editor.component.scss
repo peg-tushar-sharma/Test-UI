@@ -1,0 +1,47 @@
+:root{
+    --bdColor:#ccc;
+    --textColor:black;
+    --background:transparent;
+  }
+  ::ng-deep .row.row-all {
+      display: none ;
+  }
+  
+  .treeview-container .row-item .fa {
+      margin-left: -12.8px;
+      margin-right: 0px ;
+    }
+  
+  
+    ::ng-deep button.dropdown-toggle.btn {
+      color: black !important;
+      border-color: #ccc;
+      background-color: transparent !important;
+      &:hover {
+        background-color: transparent !important;
+        color: black;
+        border-color: #ccc;
+      }
+    }
+  
+  
+    ::ng-deep .show > .btn-outline-secondary.dropdown-toggle {
+      background-color: transparent !important;
+      color: black !important;
+      border-color: #ccc;
+    }
+
+    ::ng-deep .tree-node-nostyle-list {
+      list-style-type: none;
+    }
+
+    .treeview-container {
+      width: 280px ;
+    }
+
+    .loading-overlay {
+      width: 180px;
+      height: 21px;
+      font-size: 14px;
+      text-align: center
+    }

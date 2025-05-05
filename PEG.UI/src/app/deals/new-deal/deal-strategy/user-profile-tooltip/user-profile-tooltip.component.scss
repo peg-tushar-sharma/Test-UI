@@ -1,0 +1,110 @@
+::ng-deep .bs-popover-bottom {
+  margin-top: -1.7em !important;
+}
+
+.outer>* {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.two {
+  padding-left: 0px;
+}
+
+.notes {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical !important;
+}
+
+.expertProfile {
+  padding: 10px;
+  font-weight: 400;
+  border-radius: 3px;
+  border: 1px solid #d7d7d7 !important;
+  font-size: 13px;
+  color: #6d6d6d;
+  text-overflow: ellipsis;
+  overflow-y: auto;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  min-width: 400px;
+  min-height: 280px;
+}
+
+.expertProfileHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .expertName {
+    color: #005999 !important;
+    font-size: 14px;
+  }
+}
+
+.expertProfileTitle {
+  font-size: 12px;
+
+}
+
+.infoIcon {
+  float: right;
+  margin-top: 4px;
+  color: #6d6d6d;
+  height: 14px;
+  cursor: pointer !important;
+}
+
+.expertPoolItem {
+  display: flex;
+  align-items: flex-start;
+
+  .poolName {
+    width: auto;
+    hyphens: auto;
+  }
+
+  .poolCategory {
+    width: 40px;
+  }
+
+  textarea {
+    margin: 0 0 6px 6px;
+    padding: 3px;
+    min-height: 75px;
+    flex: 1;
+    resize: none;
+    border: 1px solid #ccc;
+    min-width: 200px;
+  }
+}
+
+
+
+#expertRating {
+  margin-left: 10px;
+  display: inline-block;
+  min-width: 100px;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.add-notes {
+  color: #6d6d6d;
+  cursor: pointer;
+}

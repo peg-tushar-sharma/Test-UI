@@ -1,0 +1,213 @@
+<div class="new-expert-group">
+    <form #form="ngForm" class="needs-validation data-collection" [class.submitted]="form.submitted" novalidate>
+
+        <!-- Header -->
+        <div class="new-expert-group__tab-header">
+            <!-- import.. -->
+            <div class="tab" *ngIf="enableImport" [class.active]="activeTab === 'import'" role="button"
+                (click)="toggleTab('import')">Import Expert Pool</div>
+
+            <!-- new.. -->
+            <div class="tab" [class.active]="activeTab === 'new'" role="button" (click)="toggleTab('new')">{{
+                updateGroup ? 'Update' : 'New' }} Expert
+                Pool</div>
+        </div>
+
+        <!--  -->
+        <!--  -->
+
+        <!-- Import Pool -->
+        <div *ngIf="enableImport && activeTab === 'import'" class="new-expert-group__tab-content">
+            <!-- tracker id / name -->
+            <div class="new-expert-group__tab-content__row">
+                <label id="row-label">Search for Experts Lists</label>
+
+                <ng-select id="importTargetID" placeholder="Search by Pool Name, Tracker ID or Tracker Name"
+                    name="trackerName" [items]="dealList" bindLabel="targetName" required [disabled]="disableImportPool"
+                    [typeahead]="dealTypeAhead" [(ngModel)]="selectedImportDeal" [multiple]="false" [minTermLength]="3"
+                    [hideSelected]="false" (change)="onTrackerSelectionChanged($event)" [selectOnTab]="true"
+                    (close)="clearItems();" [loading]="dealload"
+                    typeToSearchText="Please type atleast 3 characters to search">
+                    <ng-template ng-label-tmp let-item="item">
+                        <span >{{item.expertGroupName}} - {{ item.targetName}} ({{ item.dealId}})</span>
+                    </ng-template>
+                    <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                        <div>
+                            <div class="dropdownOptions">
+                                <!-- group name -->
+                                <div [ngStyle]="{'background-color':item.isMasked?'#bdbdbd':null}"
+                                    [disabled]='item.isMasked'>
+                                    {{item.expertGroupName}} - {{ item.targetName}} ({{ item.dealId}})
+                                </div>
+
+                                <!-- group category -->
+                                <div [ngClass]="{'location':item.expertGroups[0]?.expertGroupCategory?.categoryName}">
+                                    {{item.expertGroups[0]?.expertGroupCategory?.categoryName}}
+                                </div>
+
+                                <!-- experts icon -->
+                                <div class="col-1">
+                                    <i class="fas fa-info-circle" [ngbPopover]="popoverContent"
+                                        popoverClass="experts-popover-wrapper" triggers="mouseenter:mouseleave"
+                                        placement="bottom-left bottom-right top-left top-right" container="body"></i>
+
+                                    <!-- Popover content -->
+                                    <ng-template #popoverContent>
+                                        <div class="notes">
+                                            <div class="note-wrapper">
+                                                <p *ngFor="let expert of item.expertGroups[0]?.experts | slice:0:10">{{ expert.expertName
+                                                    }}</p>
+
+                                                <!-- if more than 10 -->
+                                                <p id="bolded" *ngIf="item.expertGroups[0]?.experts?.length > 10">+ {{ item.expertGroups[0]?.experts.length
+                                                    - 10 }} more
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </ng-template>
+                                </div>
+                            </div>
+
+                        </div>
+                    </ng-template>
+                </ng-select>
+            </div>
+
+
+            <!-- color -->
+            <div class="new-expert-group__tab-content__row" style="max-width: 200px;">
+                <label id="row-label">Color</label>
+
+                <ng-select [items]="lstColors" [disabled]="importPool" placeholder="Select Color" bindLabel="colorName"
+                    [(ngModel)]="selectedImportExpertPoolcolor" (change)="onImportPoolColorChange($event);"
+                    [disabled]="disableImportPool" name="poolColor1" ngDefaultControl>
+                    <ng-template ng-label-tmp let-item="item" let-clear="clear">
+                        <div class="outer">
+                            <div class="one" style="width: 14px; height: 14px; border-radius: 5rem;"
+                                [style.background-color]="item.colorCode">
+                            </div>
+                            <div class="two">{{item.colorName}}</div>
+                        </div>
+                    </ng-template>
+
+                    <ng-template ng-option-tmp let-item="item">
+                        <div class="outer">
+                            <div class="one" style="width: 14px; height: 14px; border-radius: 5rem"
+                                [style.background-color]="item.colorCode">
+                            </div>
+                            <div class="two">{{item.colorName}}</div>
+                        </div>
+                    </ng-template>
+                </ng-select>
+            </div>
+
+            <!-- experts -->
+            <div class="new-expert-group__tab-content__row" *ngIf="selectedGroupExperts && selectedGroupExperts.length">
+                <label id="row-label">Experts</label>
+                <div class="row-bordered-block multi-select">
+                    <span class="multi-select-option" *ngFor="let expert of selectedGroupExperts">{{ expert }}</span>
+                </div>
+            </div>
+
+            <!-- notes -->
+            <div class="new-expert-group__tab-content__row">
+                <label id="row-label">Notes</label>
+                <textarea style="height: 100px" [disabled]="disableImportPool" class="row-bordered-block"
+                    name="GroupNote1" (keydown.enter)="onEnterKeyPress($event)" [(ngModel)]="selectedImportNotes"
+                    [disabled]="active == 'new'"></textarea>
+            </div>
+        </div>
+
+        <!--  -->
+        <!--  -->
+
+        <!-- New Pool -->
+        <div *ngIf="activeTab === 'new'" class="new-expert-group__tab-content">
+            <div class="new-expert-group__tab-content__row">
+                <label id="row-label">Name</label>
+                <input type="text" placeholder="Enter Pool Name" class="row-bordered-block inputTag" autocomplete="off"
+                    (ngModelChange)="expertGroupNameChange($event);" name="GroupName" required
+                    [(ngModel)]="selectedExpertGroupName" id="txtExpertGroupName" />
+            </div>
+
+            <div class="new-expert-group__tab-content__row">
+                <label id="row-label">Category</label>
+                <ng-select [items]="lstExpertGroupCategory" placeholder="Select Category" bindLabel="categoryName"
+                    [(ngModel)]="selectedexpertGroupCategory" name="expertGroupCategory" #expertGroupCategory="ngModel"
+                    ngDefaultControl>
+                </ng-select>
+            </div>
+
+            <div class="new-expert-group__tab-content__row" style="display: none;">
+                <label id="row-label">Add Expert</label>
+                <ng-select class="expert-select" id="dealExpert" placeholder="Search experts by name" [multiple]="true"
+                    disabled name="dealExpert" [items]="typeaheadEmployeeList" [selectOnTab]="true"
+                    bindLabel="searchableName" [clearable]="true" (change)="onSelectionChange($event)"
+                    loadingText="loading..." [hideSelected]="true" [typeahead]="selectEmployeeTypeAhead"
+                    [(ngModel)]="selectedExpert" [addTag]="true" (blur)="peopleTagLoad = false">
+                    <ng-template ng-option-tmp let-item="item">
+                        <div
+                            [title]="item.employeeStatusCode != 'EX' || item.statusCode != 'EX' ? item.employeeCode : ''">
+                            {{ item.searchableName }}
+                            <span *ngIf="item.employeeStatusCode == 'EX' || item.statusCode == 'EX'"
+                                style="font-size: 10px; padding: 0px 2px !important"
+                                class="tag tag-gray ng-star-inserted">BAN</span>
+                        </div>
+                    </ng-template>
+                </ng-select>
+            </div>
+
+            <div class="new-expert-group__tab-content__row" style="max-width: 200px;">
+                <label id="row-label">Color</label>
+
+                <ng-select [items]="lstColors" placeholder="Select Color" bindLabel="colorName"
+                    [(ngModel)]="selectedExpertPoolcolor" name="poolColor" #poolColor="ngModel" ngDefaultControl>
+                    <ng-template ng-label-tmp let-item="item" let-clear="clear">
+                        <div class="outer">
+                            <div class="one" style="width: 14px; height: 14px; border-radius: 5rem;"
+                                [style.background-color]="item.colorCode"></div>
+                            <div class="two">{{item.colorName}}</div>
+                        </div>
+                    </ng-template>
+
+                    <ng-template ng-option-tmp let-item="item">
+                        <div class="outer">
+                            <div class="one" style="width: 14px; height: 14px; border-radius: 5rem;"
+                                [style.background-color]="item.colorCode"></div>
+                            <div class="two">{{item.colorName}}</div>
+                        </div>
+                    </ng-template>
+                </ng-select>
+            </div>
+
+            <div class="new-expert-group__tab-content__row">
+                <label id="row-label">Notes</label>
+                <textarea style="height: 100px" class="row-bordered-block" name="GroupNote"
+                    [(ngModel)]="selectedExpertGroupNote" name="note"
+                    (keydown.enter)="onEnterKeyPress($event)"></textarea>
+            </div>
+        </div>
+
+        <!--  -->
+        <!--  -->
+
+        <!-- Footer -->
+        <div class="new-expert-group__footer">
+            <label id="error-message" *ngIf="isDuplicateName">{{ errorMessage }}</label>
+
+            <button type="button" class="btn secondary ml-auto" id="btnPoolCancel" (click)="cancel()">
+                Cancel
+            </button>
+
+            <!-- if importing -->
+            <button *ngIf="activeTab === 'import'" type="button" id="btnSaveExpertPool" class="btn primary"
+                (click)="form.valid && !isDuplicateName ? import() : null"
+                [disabled]="form && form.invalid ">Import</button>
+
+            <!-- if new / existing -->
+            <button *ngIf="activeTab === 'new'" type="button" id="btnSaveExpertPool" class="btn primary"
+                (click)="form.valid && !isDuplicateName ? save() : null" [disabled]="form && form.invalid ">{{ poolEdit
+                }}</button>
+        </div>
+    </form>
+</div>

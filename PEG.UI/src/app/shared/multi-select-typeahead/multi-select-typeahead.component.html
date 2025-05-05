@@ -1,0 +1,18 @@
+<ng-select *ngIf="isEditable" id="employeeTypeahead" name="name" [disabled]="isDisabled" [required]='isRequired' [items]="employees" bindLabel="searchableName"
+            (change)="emitValue($event)" maxSelectedItems=5 [clearSearchOnAdd]="true" [addTag]="false" [loading]="employeeLoad"
+            loadingText="loading..." [multiple]="isMultiSelect" [hideSelected]="true" [clearable]="true"
+            [typeahead]="employeeTypeAhead" [(ngModel)]="selectedEmployees"> 
+            <!-- <ng-template ng-label-tmp let-item="item">
+                <span [title]="item.employeeCode">{{ item.searchableName }} </span>
+            </ng-template>
+            <ng-template ng-option-tmp let-item="item">
+                <div [title]="item.employeeCode">{{item.searchableName}}</div>
+            </ng-template> -->
+</ng-select>
+
+<label *ngIf="!isEditable">{{renderedLabel}}</label>
+<!-- <span *ngIf="!isEditable">
+<span *ngFor="let item of employees">
+    <label [title]="item.employeeCode">{{item.searchableName}};&nbsp; </label>
+</span>
+</span> -->

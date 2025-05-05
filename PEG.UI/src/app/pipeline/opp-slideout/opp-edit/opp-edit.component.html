@@ -1,0 +1,668 @@
+<div id="opp-edit-content" [class.loading]="! pipelineInfo">
+    <!--Top Section-->
+    <div class="section col-12">
+        <div id="oppDetailsTitleContainer" class="flex">
+            <h2 class="opp-detail-title-item">Edit Opportunity: {{ oppName }}</h2>
+
+            <div class="opp-detail-title-item" *ngIf="pipelineInfo">
+                <label>Stage:</label>
+                <label class="ml-3" style="color: blue;cursor: pointer;" (click)="selectStage($event)">
+                    {{pipelineInfo?.registrationStage?.stageTypeName ? pipelineInfo.registrationStage.stageTypeName :
+                    "Select Stage" }}
+                </label>
+            </div>
+
+            <div class="opp-detail-title-item">
+                <button *ngIf="pipelineInfo" [disabled]="isDisable" class="duplicate-button button mw-100"
+                    (click)="duplicateOpportunity()"><i class="fas fa-copy"></i>&nbsp;Duplicate</button>
+            </div>
+            <div *ngIf="! pipelineInfo" class="load-placeholder h-20" style="width: auto; flex: 1; flex-shrink: 1;">
+            </div>
+        </div>
+
+        <div class="flex-wrap" *ngIf="pipelineInfo">
+            <div class="flex-wrap col-9 pl-0" style="max-width: 75% !important; flex: 0 0 75% !important">
+                <div class="flex col-3 pr-5">
+                    <label class="lblWidth">Client<span class="required">*</span></label>
+
+                    <ng-select #client_selector id="client" [items]="clients" [selectOnTab]="true"
+                        bindLabel="clientName" [clearSearchOnAdd]="true" [clearable]="false" [multiple]="false"
+                        [loading]="clientLoad" loadingText="loading..." [hideSelected]="true"
+                        [typeahead]="clientTypeAhead" [(ngModel)]="client" [addTag]="true"
+                        (change)="onClientChange(ConstatntField.clientName, $event);" placeholder="Select"></ng-select>
+                </div>
+                <div class="flex col-3 pr-5">
+                    <label class="lblWidth">Industry</label>
+                    <ng-select id="industries" name="industries" bindLabel="industryName" [items]="industries"
+                        [clearable]="pipelineInfo.oppType == 'R' ? false : true"
+                        (change)="onIndustryChange(ConstatntField.industries, $event)" [(ngModel)]="selectedIndustries"
+                        placeholder="Select">
+
+                        <ng-template ng-multi-label-tmp let-items="items" let-clear="clear" style="width: 95%">
+                            <div class="ng-value" *ngFor="let item of items">
+                                <span class="ng-value-icon left" (click)="clear(item)" aria-hidden="true">×</span>
+
+                                <span class="ng-value-label"> {{ item.industryName }}</span>
+                            </div>
+                        </ng-template>
+                    </ng-select>
+                </div>
+                <div class="flex col-3 pr-5">
+                    <label class="lblWidth">Sector</label>
+                    <ng-select id="sectors" name="sectors" bindLabel="sectorName" [multiple]="true"
+                        [(ngModel)]="selectedSectors" [items]="sectorsList"
+                        (change)="onSectorChange(ConstatntField.sector, $event)" placeholder="Select">
+
+                        <ng-template ng-multi-label-tmp let-items="items" let-clear="clear" style="width: 95%">
+                            <div class="ng-value custom" *ngFor="let item of items">
+                                <span class="ng-value-icon left" (click)="clear(item)" aria-hidden="true">×</span>
+                                <span class="ng-value-label" style="white-space: pre-wrap"> {{ item.sectorName }}</span>
+                            </div>
+                        </ng-template>
+                    </ng-select>
+                </div>
+                <div class="flex col-3 pr-5">
+                    <label class="lblWidth">Sub-Sector</label>
+                    <ng-select id="subSectors" name="subSectors" [(ngModel)]="selectedSubSectors"
+                        bindLabel="subSectorName" [multiple]="true" [items]="subSectorsList"
+                        (change)="onSubSectorChange(ConstatntField.subSector)" placeholder="Select">
+                        <ng-template ng-multi-label-tmp let-items="items" let-clear="clear" style="width: 95%">
+                            <div class="ng-value custom" *ngFor="let item of items">
+                                <span class="ng-value-icon left" (click)="clear(item)" aria-hidden="true">×</span>
+                                <span class="ng-value-label" style="white-space: pre-wrap">
+                                    {{ item.subSectorName }}</span>
+                            </div>
+                        </ng-template>
+                    </ng-select>
+                </div>
+
+                <!--<div class="flex col-6 pr-5">
+                    <label class="lblWidth">Priority</label>
+                    <ng-select style="width: 100%" [items]="priorities" bindLabel="priorityName" [multiple]="false"
+                        (change)="onPriorityChange(ConstatntField.customPriority)"
+                        [(ngModel)]="this.selectedPriorities">
+                    </ng-select>
+                </div>-->
+
+                <div class="flex col-6 pr-5">
+                    <label class="lblWidth">Target</label>
+                    <input type="text" (blur)="onChangeText(ConstatntField.targetName, $event.target.value)"
+                        [(ngModel)]="target" />
+                </div>
+
+                <div class="flex col-6 pr-5">
+                    <label>Add Case Code</label>
+                    <app-case-editor [fromSidebar]="true" (caseDataChanges)="onCaseChange($event)"
+                        *ngIf="isCaseCodeComponentEdit" [caseName]="caseInfo?caseInfo.caseName:''"
+                        [caseCode]="caseInfo?caseInfo.caseCode:''"></app-case-editor>
+
+                </div>
+
+                <div class="flex col-6 pr-5">
+                    <label class="lblWidth">Target/Industry Description</label>
+                    <input type="text" [(ngModel)]="targetDescription"
+                        (blur)="onAdditionalInfoChange(ConstatntField.targetDescription, $event.target.value)" />
+
+                </div>
+                <div class="flex col-3 pr-5">
+                    <label class="lblWidth">Opportunity Type Details</label>
+                    <app-opportunity-type-details  [buttonType]="'dropdown'" [inputOpportunityTypeDetails]="opportunityTypeDetails" (opportunityTypeDetailsChange)="onOpportunityTypeDetailsChange(ConstatntField.OpportunityTypeDetails,$event)"></app-opportunity-type-details>
+
+                </div>
+                <div class="flex col-3 pr-5">
+                    <label class="lblWidth">Deal Country</label>
+                    <input type="text" [value]="locationName" disabled readonly />
+
+                </div>
+                <!--<div class="flex col-6 pr-5">
+                    <label class="lblWidth">MB</label>
+                    <input type="text" [value]="mbStatus" disabled />
+                </div>-->
+            </div>
+
+            <div class="col-3 flex-column" style="max-width: 25% !important; flex: 0 0 25% !important">
+                <label>Pipeline Notes (PEG Ops Use)</label>
+                <textarea (blur)="onChangeText(ConstatntField.comments, $event.target.value)" maxlength="2000"
+                    [(ngModel)]="notes"></textarea>
+            </div>
+        </div>
+
+        <div class="flex-wrap" *ngIf="! pipelineInfo">
+            <div class="flex-wrap col-9 pl-0 pr-15" style="max-width: 75% !important; flex: 0 0 75% !important">
+                <div *ngIf="! pipelineInfo" class="load-placeholder h-60 mb-10"></div>
+                <div *ngIf="! pipelineInfo" class="load-placeholder h-60 mb-10"></div>
+                <div *ngIf="! pipelineInfo" class="load-placeholder h-60"></div>
+            </div>
+            <div class="col-3 flex-column" style="max-width: 25% !important; flex: 0 0 25% !important">
+                <div *ngIf="! pipelineInfo" class="load-placeholder h-120"></div>
+            </div>
+        </div>
+    </div>
+    <!--end top section-->
+
+    <!-- Conflicts Section -->
+    <div class="section col-12 long-labels">
+        <div *ngIf="pipelineInfo" class="conflicts-wrapper">
+            <!-- Header -->
+            <div class="conflicts-header d-flex align-items-center">
+                <i class="fas fa-exclamation-circle conflicts-icon" [ngClass]="getConflictIconColor()"></i>
+                <h2>Conflicts</h2>
+                <div class=" ml-auto">
+                    <button *ngIf="!pipelineInfo?.dealId &&  pipelineInfo?.opportunityTypeId == 2"
+                        class="duplicate-button button ml-auto" style="cursor: pointer;"
+                        (click)="linkplaceholderToDeal($event)">
+                        <i class="fas fa-external-link-alt"></i>&nbsp;Link To Deal Tracker
+
+                    </button>
+                    <button *ngIf="pipelineInfo?.dealId && pipelineInfo?.dealId>0"
+                        class="duplicate-button button ml-auto" style="cursor: pointer;"
+                        (click)="openDealTracker(pipelineInfo)">
+                        <i class="fas fa-external-link-alt"></i>&nbsp;View Deal Tracker
+                    </button>
+
+                    <button to class="conflicts-cta ml-3"
+                        *ngIf="pipelineInfo?.dealId && pipelineInfo?.dealId>0 && pipelineInfo?.opportunityTypeId == 2 && pipelineInfo?.isPlaceholderLinkedToDeal==true"
+                        style="cursor: pointer; margin-right: -14px;" (click)="UnlinkedPlaceholder(pipelineInfo)">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+
+
+                    <button class="conflicts-cta ml-3" (click)="onConflictsClick()">
+                        <i class="{{ expandConflicts ? 'fas fa-window-minimize' : 'fa fa-chevron-down' }}"></i>
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- Body -->
+            <div class="conflicts-body" *ngIf="expandConflicts">
+                <ag-grid-angular class="ag-theme-alpine" style="height: 200px; width: 100%" [columnDefs]="columnDefs"
+                    [defaultColDef]="defaultColDef" [animateRows]="true" [gridOptions]="gridOptions" [rowData]="rowData"
+                    (gridReady)="onGridReady($event)"></ag-grid-angular>
+            </div>
+        </div>
+
+        <div *ngIf="! pipelineInfo" class="load-placeholder h-20"></div>
+    </div>
+
+    <!--Top Section-->
+    <div class="section col-12 long-labels">
+        <h2>Opportunity Details</h2>
+
+        <div class="flex-wrap" *ngIf="pipelineInfo">
+            <div class="flex-wrap col-9 pl-0 pr-15" style="max-width: 75% !important; flex: 0 0 75% !important">
+                <div class="flex col-3 pr-5">
+                    <label>Type of Work</label>
+                    <input type="text" value="{{ workType }}" disabled />
+                </div>
+
+                <div class="flex col-3 pr-5">
+                    <label>Expected Start Date</label>
+                    <div class="row no-gutters align-items-center">
+                        <div class="col-12 mt-1 ml-1 input-rel-container">
+                            <input type="text" placeholder="DD-MMM-YYYY" #dateInput class="mb-2" bsDatepicker
+                                [(bsValue)]="startDate" value="{{ startDateDisplay }}"
+                                (bsValueChange)="onDateChanged(ConstatntField.startDate, $event)" [bsConfig]="{
+                                    dateInputFormat: 'DD-MMM-YYYY',
+                                    containerClass: 'theme-red',
+                                    adaptivePosition: true,
+                                    showWeekNumbers: false
+                                }" readonly (onShown)="changeCalendarPosition(ConstatntField.startDate)" />
+                            <div #calendar_expectedStart id="calend"></div>
+
+                            <button type="button" (click)="clearValue(ConstatntField.startDate, $event)" class="close"
+                                aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex col-3 pr-5">
+                    <label>Latest Start Date</label>
+                    <div class="row no-gutters align-items-center">
+                        <div class="col-12 mt-1 ml-1 input-rel-container">
+                            <input type="text" placeholder="DD-MMM-YYYY" #dateInput class="mb-2" bsDatepicker
+                                [(bsValue)]="latestStartDate" value="{{ latestStartDateDisplay }}"
+                                (bsValueChange)="onDateChanged(ConstatntField.latestStartDate, $event)" [bsConfig]="{
+                                    dateInputFormat: 'DD-MMM-YYYY',
+                                    containerClass: 'theme-red',
+                                    adaptivePosition: true,
+                                    showWeekNumbers: false
+                                }" readonly (onShown)="changeCalendarPosition(ConstatntField.latestStartDate)" />
+                            <div #calendar_latestStart id="calender"></div>
+
+                            <button type="button" (click)="clearValue(ConstatntField.latestStartDate, $event)"
+                                class="close" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex col-3 pr-5">
+                    <label>Team Size</label>
+                    <ng-select [items]="teamSize" class="slectComponent" bindLabel="teamSize" bindValue="teamSizeId"
+                        [multiple]="true" [(ngModel)]="teams" (add)="onTeamSizeChange(ConstatntField.teamSize, $event)"
+                        [hideSelected]="true" (clear)="onClearAll(ConstatntField.teamSize,$event)"
+                        (remove)="onRemoveTeamSize(ConstatntField.teamSize,$event)" style="width: 100%"
+                        placeholder="Select" [maxSelectedItems]="5">
+                    </ng-select>
+                </div>
+
+                <div class="flex col-3 pr-5">
+                    <label>Estimated duration (in weeks) </label>
+                    <input type="text" class="ml-1" (keypress)="validateDurationKeys($event)" maxlength="4"
+                        [(ngModel)]="duration" (blur)="onDurationChange(ConstatntField.duration, $event)" />
+                </div>
+
+                <div class="flex col-3 pr-5">
+                    <label>Start Date Comments </label>
+                    <input type="text" class="ml-1"
+                        (blur)="onChangeText(ConstatntField.startDateComments, $event.target.value)"
+                        [(ngModel)]="startDateComments" />
+                </div>
+
+                <div class="flex col-3 pr-5">
+                    <label>Retainer</label>
+                    <ng-select id="retainer" name="retainer" [(ngModel)]="selectedIsRetainer" placeholder="Select"
+                        bindLabel="name" [multiple]="false" [items]="isRetainerValues" [clearable]="false"
+                        (change)="onIsRetainerChange(ConstatntField.isRetainer, $event.value)" style="width: 100%">
+                    </ng-select>
+                </div>
+
+                <div class="flex col-3 pr-5">
+                    <label>Likelihood (%)</label>
+                    <ng-select name="likelihood" id="likelihood" class="selector" bindLabel="label" [items]="statusList"
+                        [(ngModel)]="selectedLikelihood"
+                        (change)="onLikelihoodChange(ConstatntField.likelihood, $event)" style="width: 100%"
+                        (clear)="clearValue(ConstatntField.likelihood, $event)"
+                        (remove)="clearValue(ConstatntField.likelihood, $event)" [clearable]="true"
+                        placeholder="Select">
+                    </ng-select>
+                </div>
+
+                <div class="flex col-6 pr-5">
+                    <label>Process Info (from Partner)</label>
+                    <input type="text" class="ml-1"
+                        (blur)="onChangeText(ConstatntField.processInfo, $event.target.value)"
+                        [(ngModel)]="processInfo" />
+                </div>
+                <div class="flex col-3 pr-5">
+                    <label>Retainer Notes</label>
+                    <input type="text" class="ml-1" maxlength="200"
+                        (blur)="onChangeText(ConstatntField.retainerNotes, $event.target.value)"
+                        [(ngModel)]="retainerNotes" />
+                </div>
+                <!-- ops likelihood -->
+                <div class="flex col-3 pr-5">
+                    <label>Ops Likelihood</label>
+                    <ng-select id="subSectors" name="opsLikelihood" [(ngModel)]="selectedOpsLikelihood"
+                        [clearable]="false" bindLabel="opsLikelihoodName" [multiple]="false" [items]="oppLikelihoods"
+                        (change)="onOpsLikelihoodChange(ConstatntField.opsLikelihood, $event)" style="width: 100%"
+                        (clear)="clearValue(ConstatntField.opsLikelihood, $event)"
+                        (remove)="clearValue(ConstatntField.opsLikelihood, $event)" placeholder="Select">
+                    </ng-select>
+                </div>
+
+
+            </div>
+            <div class="flex-wrap flex-column col-3" style="max-width: 25% !important; flex: 0 0 25% !important">
+                <div>
+                    <label>Team Comments</label>
+                    <textarea (blur)="onChangeText(ConstatntField.teamComments, $event.target.value)"
+                        [(ngModel)]="teamComments"></textarea>
+                </div>
+                <div>
+                    <label>Discount</label>
+                    <textarea (blur)="onChangeText(ConstatntField.discount, $event.target.value)"
+                        [(ngModel)]="discount"></textarea>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="flex-wrap" *ngIf="! pipelineInfo">
+            <div class="flex-wrap col-9 pl-0 pr-15" style="max-width: 75% !important; flex: 0 0 75% !important">
+                <div class="load-placeholder h-60 mb-10"></div>
+                <div class="load-placeholder h-60"></div>
+            </div>
+            <div class="col-3 flex-column" style="max-width: 25% !important; flex: 0 0 25% !important">
+                <div class="load-placeholder h-120"></div>
+            </div>
+        </div>
+    </div>
+    <!--End top section-->
+
+    <!--Leadership Section-->
+    <div class="section col-12 long-labels">
+        <h2>Leadership</h2>
+
+        <div class="flex-wrap" *ngIf="pipelineInfo">
+            <div class="flex col-4 pr-5">
+                <label>Client Head</label>
+                <input type="text" [value]="selectedClientHead" disabled />
+            </div>
+
+            <div class="flex col-4 pr-5">
+                <label>Selling Partner</label>
+                <ng-select [items]="employeeList" [selectOnTab]="true" bindLabel="searchableName" [clearable]="false"
+                    loadingText="loading..." [multiple]="true" [hideSelected]="true" [(ngModel)]="selectedSelling"
+                    [typeahead]="selectEmployeeTypeAhead" style="width: 100%"
+                    (change)="OnEmployeechange($event, 'sellingPartner')" placeholder="Select">
+
+                    <ng-template ng-multi-label-tmp let-items="items" let-clear="clear" style="width: 95%">
+                        <div class="ng-value" *ngFor="let item of items">
+                            <span class="ng-value-icon left" (click)="clear(item)" aria-hidden="true">×</span>
+
+                            <span class="ng-value-label"> {{ item.searchableName }}</span>
+                        </div>
+                    </ng-template>
+
+                </ng-select>
+            </div>
+            <div class="flex col-4 pr-5">
+                <label>Other Partner</label>
+                <ng-select [items]="employeeList" [selectOnTab]="true" bindLabel="searchableName" [clearable]="false"
+                    loadingText="loading..." [multiple]="true" [hideSelected]="true" [(ngModel)]="selectedOther"
+                    [typeahead]="selectEmployeeTypeAhead" style="width: 100%"
+                    (change)="OnEmployeechange($event, 'othersInvolved')" placeholder="Select">
+
+                    <ng-template ng-multi-label-tmp let-items="items" let-clear="clear" style="width: 95%">
+                        <div class="ng-value" *ngFor="let item of items">
+                            <span class="ng-value-icon left" (click)="clear(item)" aria-hidden="true">×</span>
+
+                            <span class="ng-value-label"> {{ item.searchableName }}</span>
+                        </div>
+                    </ng-template>
+
+                </ng-select>
+            </div>
+
+            <div class="flex flex-column col-4 pr-5">
+                <label>Manager</label>
+                <input class="grow-0" type="text" value="{{ manager }}" disabled />
+            </div>
+
+            <div class="flex col-4 pr-5">
+                <label>Operating Partner</label>
+                <ng-select [items]="employeeList" [selectOnTab]="true" bindLabel="searchableName" [clearable]="false"
+                    loadingText="loading..." [multiple]="true" [hideSelected]="true" [(ngModel)]="selectedOperating"
+                    [typeahead]="selectEmployeeTypeAhead" style="width: 100%"
+                    (change)="OnEmployeechange($event, 'operatingPartner')" placeholder="Select">
+
+                    <ng-template ng-multi-label-tmp let-items="items" let-clear="clear" style="width: 95%">
+                        <div class="ng-value" *ngFor="let item of items">
+                            <span class="ng-value-icon left" (click)="clear(item)" aria-hidden="true">×</span>
+
+                            <span class="ng-value-label"> {{ item.searchableName }}</span>
+                        </div>
+                    </ng-template>
+
+
+                </ng-select>
+                <label for="OVP_Help">
+                    <input type="checkbox" class="mr-1" [checked]="isOVPHelp"
+                        (change)="onCheckchanged($event, 'isOVPHelp')" name="OVPHelp" />
+                    I need support identifying an OVP
+                </label>
+
+            </div>
+            <div class="flex col-4 pr-5">
+                <label>SVP</label>
+                <ng-select [items]="employeeList" [selectOnTab]="true" bindLabel="searchableName" [clearable]="false"
+                    loadingText="loading..." [multiple]="true" [hideSelected]="true" [(ngModel)]="selectedSVP"
+                    [typeahead]="selectEmployeeTypeAhead" style="width: 100%" (change)="OnEmployeechange($event, 'svp')"
+                    placeholder="Select">
+
+                    <ng-template ng-multi-label-tmp let-items="items" let-clear="clear" style="width: 95%">
+                        <div class="ng-value" *ngFor="let item of items">
+                            <span class="ng-value-icon left" (click)="clear(item)" aria-hidden="true">×</span>
+
+                            <span class="ng-value-label"> {{ item.searchableName }}</span>
+                        </div>
+                    </ng-template>
+
+                </ng-select>
+
+                <label for="OVP_Help">
+                    <input type="checkbox" class="mr-1" [checked]="isSVPHelp"
+                        (change)="onCheckchanged($event, 'isSVPHelp')" name="SVPHelp" />
+                    I need support identifying an SVP
+                </label>
+            </div>
+
+            <div class="flex flex-column col-4 pr-5"></div>
+
+            <div class="flex flex-column col-4 pr-5">
+                <label>OVP Comments</label>
+                <input class="grow-0" type="text" [(ngModel)]="ovpComments"
+                    (blur)="partnerCommentsChange('operatingPartner', $event.target.value)" />
+            </div>
+
+            <div class="flex flex-column col-4 pr-5">
+                <label>SVP Comments</label>
+                <input class="grow-0" type="text" [(ngModel)]="svpComments"
+                    (blur)="partnerCommentsChange('svp', $event.target.value)" />
+            </div>
+
+            <!--<div class="flex col-4 pr-5">
+                <label>Requested Senior Manager</label>
+                <ng-select [items]="employeeList" [selectOnTab]="true" bindLabel="searchableName" [clearable]="false"
+                    loadingText="loading..." [multiple]="true" [hideSelected]="true" [(ngModel)]="requestedSM"
+                    [typeahead]="selectEmployeeTypeAhead" style="width: 100%"
+                    (change)="OnEmployeechange($event, 'requestedSM')">
+                </ng-select>
+            </div>-->
+        </div>
+
+        <div class="flex-wrap" *ngIf="! pipelineInfo">
+            <div class="load-placeholder h-60 mb-10"></div>
+            <div class="load-placeholder h-60"></div>
+        </div>
+    </div>
+    <!--End leadership section-->
+
+    <!--Staffing Section-->
+    <div class="section col-12 long-labels">
+        <h2>Staffing Requests</h2>
+
+        <div class="flex-wrap" *ngIf="pipelineInfo">
+
+            <div class="flex col-3 pr-5 mt-2">
+                <label>Office to be Staffed</label>
+                <div style="width:100%" >
+                    <app-location-tree-view *ngIf="isTreeVisible" [officesToBeStaffed]="officesToeBeStaffed"
+                        [disabled]="false" class="location-tree-dropdown"
+                        (updateOfficeSelection)="updateOfficeSelection($event)"
+                        [saveOnlyOnBlur]="true"
+                        [dropdownTextItemsLimit] = 2
+                        >
+                    </app-location-tree-view>
+                </div>
+            </div>
+
+            <div class="flex col-3 pr-5 mt-2">
+                <label>Allocated Office</label>
+                <div style="width:100%">
+                    <ng-select [items]="offices" class="slectComponent" bindValue="officeCode" bindLabel="officeName"
+                        [multiple]="true" [(ngModel)]="selectedAllocatedOffice"
+                        (change)="onAllocatedOfficeChange(ConstatntField.allocatedOffice, $event)" style="width: 100%"
+                        [clearable]="false">
+                    </ng-select>
+                </div>
+            </div>
+
+            <div class="flex col-3 pr-5 mt-2">
+                <label>Conflicted Office</label>
+                <div style="width:100%">
+                    <ng-select [items]="offices" class="slectComponent" bindValue="officeCode" bindLabel="officeName"
+                        [multiple]="true" [(ngModel)]="selectedConflictedOffice"
+                        (change)="onConflictedOfficeChange(ConstatntField.conflictedOffice, $event)" style="width: 100%"
+                        [clearable]="false">
+                    </ng-select>
+                </div>
+            </div>
+
+            <div class="flex col-3 pr-5">
+                <label>Language Requirement</label>
+                <ng-select [multiple]="true" [items]="languages" name="language" [(ngModel)]="selectedlanguages"
+                    (change)="onlanguagesChange(ConstatntField.requiredLanguage,$event)" bindLabel="name"
+                    bindValue="name" (clear)="clearValue(ConstatntField.requiredLanguage, $event)" #langauge>
+
+                    <ng-template ng-multi-label-tmp let-items="items" let-clear="clear" style="width: 95%">
+                        <div class="ng-value" *ngFor="let item of items">
+                            <span class="ng-value-icon left" (click)="clear(item)" aria-hidden="true">×</span>
+
+                            <span class="ng-value-label"> {{ item.name }}</span>
+                        </div>
+                    </ng-template>
+                </ng-select>
+
+            </div>
+        </div>
+
+        <div class="flex-wrap" *ngIf="! pipelineInfo">
+            <div class="load-placeholder h-60"></div>
+        </div>
+    </div>
+
+
+    <!-- Case info section -->
+    <div class="section col-12 long-labels">
+        <h2>Case Information</h2>
+
+        <div *ngIf="pipelineInfo" class="flex-wrap">
+
+            <!-- <div class="flex col-6 pr-5">
+                <label>Client Commitment</label>
+                <input type="text" />
+            </div>
+
+            <div class="flex col-6 pr-5">
+                <label>Case Complexity</label>
+                <input type="text" />
+            </div> -->
+
+
+            <div class="flex col-6 pr-5">
+                <label>Client Commitment</label>
+                <ng-select name="clientCommitments" bindLabel="clientCommitmentName" class="selector"
+                    [items]="clientCommitments" [multiple]="false" [(ngModel)]="selectedclientCommitments"
+                    (change)="onClientCommitmentChange(ConstatntField.clientCommitment, $event)"
+                    (clear)="clearValue(ConstatntField.clientCommitment, $event)"
+                    [clearable]="selectedclientCommitments">
+                </ng-select>
+            </div>
+            <div id="caseComplexity" class="flex col-6 pr-5">
+                <label>Case Complexity</label>
+                <ng-select [searchable]="false" [items]="caseComplexity" [multiple]="true"
+                    bindLabel="caseComplexityName" [closeOnSelect]="false" [clearable]="false"
+                    [(ngModel)]="selectedCaseComplexity"
+                    (change)="onCaseComplexityChange(ConstatntField.caseComplexity, $event)">
+                    <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                        <input id="item-{{ index }}" type="checkbox" [ngModel]="item$.selected" />
+                        <span style="white-space: pre-wrap"> {{ item.caseComplexityName }}</span>
+                    </ng-template>
+                </ng-select>
+            </div>
+
+            <!--<div class="flex col-4 pr-5">
+                <label>Case Name</label>
+                <p class="label-text">{{caseInfo?.caseName}}</p>
+            </div>
+
+            <div class="flex col-4 pr-5">
+                <label>Case Start Date:
+                </label>
+                <p class="label-text">{{caseInfo?.caseStartDate | date :'dd-MMM-yyyy'}}</p>
+            </div>
+
+            <div class="flex col-4 pr-5">
+                <label>Case End Date:
+                </label>
+                <p class="label-text">{{caseInfo?.caseEndDate | date :'dd-MMM-yyyy'}}</p>
+
+            </div>
+            <div class="flex col-4 pr-5">
+                <label>Case Office:
+                </label>
+                <p class="label-text">{{caseInfo?.caseOfficeName}}</p>
+
+            </div>
+            <div class="flex col-4 pr-5">
+                <label>Case Office Cluster:
+                </label>
+                <p class="label-text">{{caseInfo?.officeCluster}}</p>
+
+            </div>-->
+
+        </div>
+
+        <div class="flex-wrap" *ngIf="! pipelineInfo">
+            <div class="load-placeholder h-60"></div>
+        </div>
+    </div>
+    <!-- End Case info section -->
+    <!--Registration Data Section-->
+    <div class="section col-12 long-labels">
+        <h2>Registration Data</h2>
+
+        <div class="flex-wrap" *ngIf="pipelineInfo">
+            <div class="flex-wrap col-8" style="max-width: 67% !important; flex: 0 0 67% !important">
+                <label>Market Questions</label>
+                <div class="flex col-4 pr-5">
+                    <label for="spac">SPAC: &nbsp; <input type="checkbox" class="mr-1" [checked]="isSPAC" name="spac"
+                            disabled /></label>
+                </div>
+                <div class="flex col-4 pr-5">
+                    <label for="PubliclyTradedEquity">Publicly Traded Equity: &nbsp;
+                        <input type="checkbox" class="mr-1" [checked]="isPubliclyTradedEquity"
+                            name="PubliclyTradedEquity" disabled /></label>
+                </div>
+                <div class="flex col-4 pr-5">
+                    <label for="PubliclyTradedDebt">Publicly Traded Debt: &nbsp;
+                        <input type="checkbox" class="mr-1" [checked]="isPubliclyTradedDebt" name="PubliclyTradedDebt"
+                            disabled /></label>
+                </div>
+                <div class="flex col-4 pr-5">
+                    <label for="CarveOut">Carve-Out: &nbsp;
+                        <input type="checkbox" class="mr-1" [checked]="isCarveOut" name="CarveOut" disabled /></label>
+                </div>
+                <div class="flex col-4 pr-5">
+                    <label for="OpenMarketPurchase">
+                        Open Market Purchase: &nbsp;
+                        <input type="checkbox" class="mr-1" [checked]="isOpenMarketPurchase" name="OpenMarketPurchase"
+                            disabled /></label>
+                </div>
+            </div>
+        </div>
+        <div class="flex-wrap" *ngIf="! pipelineInfo">
+            <div class="load-placeholder h-60"></div>
+        </div>
+    </div>
+    <!--End Registration Data section-->
+    <!-- <div class="modal fade" id="linkDealTooltip" role="dialog">
+        <div class="modal-dialog .modal-lg masterContainer" style="max-width: 600px">
+          <div class="modal-content">
+            <app-add-placeholder-to-deal></app-add-placeholder-to-deal>    
+          </div>
+        </div>
+      </div> -->
+</div>
+
+<!-- <ng-template #conflictTooltip>
+    <div class="modal-header">
+        <h5 class="modal-title">
+          <span>Add to existing Deal Tracker</span>
+        </h5>
+        <button type="button" #dismissButton class="close" (click)="closeModal()" data-dismiss="modal">&times;</button>
+      </div>
+    </ng-template> -->
+<!-- <ng-template #linkDealTooltip>
+    <div class="popStyle" id="conflictsIconWrapper"  >
+        <div class="conflicts-header">
+            <span>Add to existing Deal Tracker</span>
+        </div>
+    </div>
+</ng-template> -->

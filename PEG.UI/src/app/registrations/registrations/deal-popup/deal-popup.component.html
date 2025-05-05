@@ -1,0 +1,108 @@
+<div class="modal-header">
+  <h5 class="modal-title">
+    <span>Add to a new Deal Tracker</span>
+  </h5>
+  <button #dismissButton type="button" hidden='true' data-dismiss="modal">&times;</button>
+  <button type="button" (click)="closeModal()" class="close" data-dismiss="modal">&times;</button>
+</div>
+
+<form focusFirstInvalidField class="needs-validation data-collection" novalidate #bulkUpdateForm="ngForm">
+  <div class="modal-body" style="padding: 2rem 1rem;">
+
+    <div class="cole-12 mb-3">
+      <label>Target:
+        *</label>
+      <ng-select [(ngModel)]="selectedTarget" [multiple]="false" bindValue="fieldValue" [clearable]="false"
+        bindLabel="fieldValue" [items]="targetList" name="target" id="target" required>
+      </ng-select>
+      <p class="info">
+        Full name of individual target company
+      </p>
+    </div>
+
+    <div class="cole-12 mb-3">
+      <label>Industry:
+      </label>
+
+      <ng-select id="industries" class="custom compWidth" name="industries" #industry="ngModel" bindLabel="industryName" (change)="onIndustryChange($event)"
+        [multiple]="true" [items]="industryList" [(ngModel)]="selectedIndustry">
+        <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+          <div class="ng-value" *ngFor="let item of items">
+            <span class="ng-value-icon left" (click)="clear(item)" aria-hidden="true">×</span>
+            <span class="ng-value-label"> {{item.industryName}}</span>
+          </div>
+        </ng-template>
+      </ng-select>
+
+    </div>
+    <div class="cole-12 mb-3">
+      <label>Sectors:
+      </label>
+
+      <ng-select id="sectors" class="custom compWidth" name="sectors" #sectors="ngModel" bindLabel="sectorName"
+        [multiple]="true" [items]="sectorsList" [(ngModel)]="selectedSectors">
+        <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+          <div class="ng-value" *ngFor="let item of items">
+            <span class="ng-value-icon left" (click)="clear(item)" aria-hidden="true">×</span>
+            <span class="ng-value-label"> {{item.sectorName}}</span>
+          </div>
+        </ng-template>
+      </ng-select>
+
+    </div>
+
+    <div class="cole-12 mb-3">
+      <label>Publicly Traded:
+      </label>
+      <ng-select class="custom" [items]="publiclyTradedList" bindValue="fieldValue" [searchable]="false"
+        [(ngModel)]="selectedPubliclyTraded" bindLabel="fieldValue" [multiple]="false" name="publiclyTradedSelect">
+      </ng-select>
+    </div>
+
+    <div class="cole-12 mb-3">
+      <label>Country/Location of Deal:</label>
+      <ng-select class="custom" bindValue="fieldValue" bindLabel="fieldValue" [multiple]="false"
+        [(ngModel)]="selectedLocationOfDeal" [items]="locationOfDealList" name="locationOfDealListSelect">
+      </ng-select>
+    </div>
+
+    <div class="cole-12 mb-3">
+      <label>Target Owner:</label>&nbsp;
+      <ng-select class="custom" bindValue="fieldValue" [multiple]="true" bindLabel="fieldValue"
+        [(ngModel)]="selectedTargetOwner" [items]="targetOwnerList" name="targetOwnerSelect">
+      </ng-select>
+    </div>
+
+    <div class="cole-12 mb-3">
+      <label>Region:
+      </label>
+      <ng-select class="custom" [items]="regionList" bindValue="fieldValue" [(ngModel)]="selectedDealRegion"
+        bindLabel="fieldValue" [multiple]="true" name="regionSelect">
+      </ng-select>
+    </div>
+
+    <div class="cole-12 mb-3" [class.invalid]="mbManager.invalid">
+      <label for="mbManagerSelect"> Managed By*
+      </label>
+      <ng-select class="custom" #mbManager="ngModel" [items]="mbManagerList" bindValue="employeeCode"
+        [(ngModel)]="selectedMbManager" bindLabel="searchableName" name="mbManager" id="mbManager" required>
+      </ng-select>
+    </div>
+
+  </div>
+
+  <div class="modal-footer">
+    <div class="form-group">
+      <button type="button" class="btn btn-tertiary ml-3" (click)="closeModal()">Cancel</button>
+      <button type="button" (click)="(bulkUpdateForm && bulkUpdateForm.valid)?creatNewMBTracker(true):null;"
+        class="btn btn-primary ml-3 pl-4 pr-4" [disabled]="(bulkUpdateForm.invalid || copyDealInProgress)">Save & Go to Deal
+        Tracker</button>
+      <button type="button" (click)="(bulkUpdateForm && bulkUpdateForm.valid)?creatNewMBTracker(false):null;"
+        class="btn btn-primary ml-3 pl-4 pr-4" [disabled]="(bulkUpdateForm.invalid || copyDealInProgress)">Save & Close
+        <i class="fas fa-spinner fa-pulse ml-2" *ngIf="copyDealInProgress"></i>
+      </button>
+
+    </div>
+  </div>
+
+</form>

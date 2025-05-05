@@ -1,0 +1,26 @@
+<div id="opsSlideOutPopup" *ngIf="isShow" class="oppSlideoutContainer" [attr.show]="isShow" (click)="closeSlideoutCheck($event)">
+    <div class="oppSlideoutPanel" [style.width.px]="panelWidth">
+        <div class="oppSlideoutButtons">
+            <button type="button" class="close clickable ml-3" (click)="showPanel(false); this.closeFlyoutEmitter.emit(opportunity)"><span id="closeButton">&times;</span></button>
+        </div>
+
+        <tabset #staticTabs>
+            <tab heading="Edit Opp" (selectTab)="selectTab('edit')">
+                <app-opp-edit
+                    [opportunity]="opportunity"
+                    [isConflicted]="isConflicted"
+                    (emitPipelineValue)="updatePipeline($event)"
+                    (emitAddRowinGrid)="addRowinGrid($event)"                  
+                    [oppNameFields]="oppNameFields"
+                    [showPanel]="isShow"
+                    [weeklyBucket]="weeklyBucket" 
+                >
+                </app-opp-edit>
+            </tab>
+
+            <tab heading="Audit Log" (selectTab)="selectTab('audit')">
+                <app-opp-audit *ngIf="currentTab == 'audit'" [opportunity]="opportunity"></app-opp-audit>
+            </tab>
+        </tabset>
+    </div>
+</div>

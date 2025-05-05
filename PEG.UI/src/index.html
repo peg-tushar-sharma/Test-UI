@@ -1,0 +1,45 @@
+﻿<!doctype html>
+<html lang="en" class="no-scroll">
+
+<script>
+  try {
+    const isIE = /msie\s|trident\/|edge\//i.test(window.navigator.userAgent);
+    if (isIE) {
+      var shell = new ActiveXObject("WScript.Shell");
+      window.open('','_self').close();      
+      let currentURL = window.location.href;
+      shell.run('chrome.exe --new-window '  + currentURL);
+    }
+  } catch (error) {
+    
+  }
+  
+</script>
+
+<head>    
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta http-equiv="ScreenOrientation" content="autoRotate:disabled">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, post-check=0, pre-check=0,Cache-Control:private"/>
+  <meta http-equiv="pragma" content="no-cache"/>
+  <meta http-equiv="expires" content="0"/>
+  <base href="/">
+  <link rel="icon" type="image x-icon" href="favicon.ico"> <!-- Bootstrap CSS -->
+  <link rel="stylesheet" type="text/css" href="assets/font-awesome/css/all.min.css">
+
+
+  <title>M&A Conflicts</title>
+  <script>document.execCommand('ClearAuthenticationCache');</script>
+  <script type="text/javascript" src="https://public.tableau.com/javascripts/api/tableau-2.min.js"></script>
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#1976d2">
+</head>
+
+<body>
+  <app-root></app-root>
+  <app-redirect></app-redirect>
+  <noscript>Please enable JavaScript to continue using this application.</noscript>
+</body>
+
+</html>

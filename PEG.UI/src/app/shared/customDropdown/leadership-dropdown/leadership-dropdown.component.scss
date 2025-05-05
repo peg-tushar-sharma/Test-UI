@@ -1,0 +1,87 @@
+.structure {
+    background-color: #fff;
+    padding: 0.5rem 0;
+}
+
+.header {
+    display: grid;
+    grid-template-columns: 10% 1fr 40% 5%;
+    grid-gap: 2px;
+    color: #828282;
+    padding: 0 .5rem;
+}
+
+.body {
+    // display: grid;
+    // grid-template-columns: 10% 40% 1fr 5%;
+    display: flex;
+    padding: 0 .5rem;
+    grid-gap: 2px;
+
+    input {
+        width: 100%;
+        border: 1px solid #eee;
+        color: #000;
+        border-radius: 2px;
+
+        &:active, &:focus {
+            outline: none;
+        }
+    }
+}
+
+.input-list {
+    display: grid;
+    grid-template-columns: 10% 1fr 40% 5%;
+
+    &:hover .input-delete {
+        opacity: 1;
+    }
+
+    &:first-child .input-delete {
+        opacity: 0 !important;
+    }
+}
+
+.input-control {
+    height: 100%;
+}
+
+.person-input {
+    max-width: 400px;
+}
+
+.input-delete {
+    display: flex;
+    opacity: 0;
+    justify-content: center;
+    align-items: center;
+}
+
+
+::ng-deep {
+    .ng-select .ng-select-container {
+
+        min-height: unset !important;
+    }
+
+    .ng-select .ng-select-container {
+        border: 1px solid #eee !important;
+    }
+
+    .dropdown-menu {
+        background-color: #f1f1f1;
+    }
+
+    .dropdown-item.active, div.registrations #stage.advanced-filters-active .dropdown-item.btn.advanced-filters, .dropdown-item:active {
+        background-color: #cc0000;
+    }
+
+    .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-marked {
+        background-color: #cc0000 !important;
+    }
+
+    .ng-dropdown-panel .ng-dropdown-panel-items .ng-option {
+        background-color: #f1f1f1 !important;
+    }
+}

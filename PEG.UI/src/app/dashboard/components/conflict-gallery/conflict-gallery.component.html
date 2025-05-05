@@ -1,0 +1,23 @@
+<div class="gallery-header" [class.blue]="data.length === 0" [class.red]="data.length !== 0">
+  <div class="d-flex">
+    {{ header }} <span class="badge">{{ data.length }}</span>
+  </div>
+  <div class="icon"><i class="fa fa-check-circle"></i></div>
+</div>
+<div class="gallery-list d-flex flex-column" *ngIf="data.length; else noItems">
+  <div class="gallery-item d-flex justify-content-between p-3" *ngFor="let item of data">
+    <div class="d-flex flex-column">
+      <h4>{{ item.companyName }}</h4>
+      <p>Submit Date: {{ item.submittedDate | date:'dd-MMM-yyyy' }}</p>
+      <p><b>Note</b></p>
+      <p>{{ item.notes }}</p>
+    </div>
+    <div class="icon align-self-start">
+      <img src="/assets/icons/trailing-icon.svg" alt="" />
+    </div>
+  </div>
+</div>
+
+<ng-template #noItems>
+  <div class="empty-list">No conflicts found</div>
+</ng-template>

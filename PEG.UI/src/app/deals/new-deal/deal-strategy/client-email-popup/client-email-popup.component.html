@@ -1,0 +1,164 @@
+<div id="clientEmailPopupWrapper">
+  <div class="modal-header">
+    <h5 class="modal-title pull-left">Request updates from partners</h5>
+    <button type="button" (click)="close()" class="btn-close close pull-right" aria-label="Close">
+      <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="table-wrap">
+      <table class="mb-2">
+        <thead>
+          <tr>
+            <th class="w-30"><input type="checkbox" [(ngModel)]="allSelected" (click)="toggleAllSelected()" /></th>
+            <th>Client Name</th>
+            <th style="max-width: 170px">Submitted By</th>
+            <th>Client Head</th>
+            <th>Other Partner(s)</th>
+            <th>Additional Recipients</th>
+            <th style="max-width: 100px">Stage</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let client of filteredClients">
+            <td class="w-30"><input type="checkbox" [(ngModel)]="client.isSelected" /></td>
+            <td>{{ client.client.clientName }}</td>
+            <td>{{ client.registrationSubmittedBy }}</td>
+            <td valign="top">
+              <ng-select
+              name="recipientsList"
+              [addTag]="false"
+              [clearSearchOnAdd]="true"
+              [clearable]="false"
+              [hideSelected]="true"
+              [items]="employeeList"
+              [multiple]="true"
+              [selectOnTab]="true"
+              bindLabel="searchableName"
+              loadingText="loading..."
+              [searchable]="false"
+              [isOpen]="false"
+              class="hide-arrow"
+              (change)="onSelectEmployeeChange($event)"
+              [(ngModel)]="client.clientHeads"
+              >
+                <ng-template ng-multi-label-tmp let-items="items" let-clear="clear" style="width: 95%">
+                  <div class="ng-value" *ngFor="let item of items">
+                    <span class="ng-value-icon left" (click)="clear(item)" aria-hidden="true">×</span>
+  
+                    <span class="ng-value-label">{{
+                      item.lastName +
+                        ', ' +
+                        (item.familiarName != null ? item.familiarName : item.firstName) +
+                        ' (' +
+                        item.officeAbbreviation +
+                        ')'
+                    }}</span>
+                  </div>
+                </ng-template>
+              </ng-select>
+            </td>
+            <td valign="top">
+              <ng-select
+                  name="recipientsList"
+                  [addTag]="false"
+                  [clearSearchOnAdd]="true"
+                  [clearable]="false"
+                  [hideSelected]="true"
+                  [items]="employeeList"
+                  [multiple]="true"
+                  [selectOnTab]="true"
+                  bindLabel="searchableName"
+                  loadingText="loading..."
+                  [searchable]="false"
+                  [isOpen]="false"
+                  class="hide-arrow hide-input"
+                  (change)="onSelectEmployeeChange($event)"
+                  [(ngModel)]="client.othersInvolved"
+              >
+                <ng-template ng-multi-label-tmp let-items="items" let-clear="clear" style="width: 95%">
+                  <div class="items-wrapper">
+                    <div class="ng-value" *ngFor="let item of items">
+                      <span class="ng-value-icon left" (click)="clear(item)" aria-hidden="true">×</span>
+  
+                      <span class="ng-value-label">{{
+                          item.lastName +
+                          ', ' +
+                          (item.familiarName != null ? item.familiarName : item.firstName) +
+                          ' (' +
+                          item.officeAbbreviation +
+                          ')'
+                        }}</span>
+                    </div>
+                  </div>
+                </ng-template>
+              </ng-select>
+            </td>
+            <td valign="top">
+              <ng-select
+                name="recipientsList"
+                [addTag]="false"
+                [clearSearchOnAdd]="true"
+                [clearable]="true"
+                [hideSelected]="true"
+                [items]="employeeList"
+                [multiple]="true"
+                [selectOnTab]="true"
+                [typeahead]="employeeTypeAhead"
+                bindLabel="searchableName"
+                loadingText="loading..."
+                placeholder="Type to search"
+                class="hide-arrow"
+                (change)="onSelectEmployeeChange($event)"
+                [(ngModel)]="client.additionalPartnersToEmail"
+              >
+                <ng-template ng-multi-label-tmp let-items="items" let-clear="clear" style="width: 95%">
+                  <div class="ng-value" *ngFor="let item of items">
+                    <span class="ng-value-icon left" (click)="clear(item)" aria-hidden="true">×</span>
+  
+                    <span class="ng-value-label">{{
+                      item.lastName +
+                        ', ' +
+                        (item.familiarName != null ? item.familiarName : item.firstName) +
+                        ' (' +
+                        item.officeAbbreviation +
+                        ')'
+                    }}</span>
+                  </div>
+                </ng-template>
+              </ng-select>
+            </td>
+            <td>{{ client.registrationStage.stageTypeName }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <div class="row-label mb-2">Note: All emails are sent from you, with the regional deal box CC’d</div>
+
+    <div class="form-group">
+      <label class="row-label pb-0">Subject</label>
+      <div class="row" style="font-size: 14px; color: #121212">
+        <div class="col-12 d-flex align-items-center" style="padding: 10px 16px;">
+          <input type="text" placeholder="[Client] - [Target] info needed" class="form-control" [(ngModel)]="emailSubject" />
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex flex-column">
+      <label class="row-label pb-0">Email Body</label>
+           <textarea rows="9" class="textarea regular-text" [(ngModel)]="emailBody">
+      </textarea>
+    </div>
+  </div>
+
+  <div *ngIf="!isMultipleSendClicked" class="modal-footer">
+    <button class="btn-secondary btn" (click)="close()">Cancel</button>
+    <button class="btn-primary btn" [disabled]="enableSendButton()" (click)="onSend()">Send</button>
+  </div>
+  <div *ngIf="isMultipleSendClicked" class="modal-footer">
+    <span style="padding-right:8px"><b>You have multiple clients selected, please ensure all data is correct</b></span>
+    <button class="btn-secondary btn" (click)="resetModal()">Cancel</button>
+    <button class="btn-primary btn" [disabled]="enableSendButton()" (click)="emitEmailSend()">Send</button>
+  </div>
+</div>

@@ -1,0 +1,9 @@
+<div style='overflow: hidden;
+text-overflow: ellipsis;'>
+   <label *ngIf="preferred"> <i class="fas fa-unlock-alt" style="color: grey;"></i>
+      <b class="textLocation" >{{preferred}}</b> </label>
+   <label *ngIf="conflicted"><i class="fas fa-minus-circle" style="color: red;margin-left: 6px;"></i>
+      <b class="textLocation" >{{conflicted}}</b></label> 
+   <label *ngIf="allocated"><i  class="fas fa-lock" style="margin-left: 6px;"></i>
+      <b class="textLocation" >{{allocated}}</b> </label> 
+</div>

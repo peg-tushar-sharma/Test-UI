@@ -1,0 +1,3 @@
+<div class="status" [class.active]="value === 'active'" [class.archived]="value !== 'active'">
+  <div [classList]="'icon ' + value"></div> {{value}}
+</div>

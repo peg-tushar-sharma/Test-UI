@@ -1,0 +1,29 @@
+<div class="textarea-wrapper">
+    <quill-editor
+[readOnly]="isReadOnly"
+    class="full-width-editor"
+    #quilEditor
+    [(ngModel)]="innerValue"
+      [modules]="modules"
+      (onContentChanged)="onContentChanged($event)"
+      (onBlur)="onBlurEditor()"
+     
+      (onEditorCreated)="onEditorCreated($event)"
+      placeholder="Type @mention here...">
+    </quill-editor>
+    
+    <div #mentionlist
+    *ngIf="showMentionList"
+    class="mention-list"
+    [ngStyle]="{ top: caretTop + 'px', left: caretLeft + 'px' }"
+    >
+    <div
+      *ngFor="let user of filteredUsers"
+      (click)="selectUser(user)"
+      class="mention-item"
+    >
+      {{ user.searchableName }}
+    </div>
+    </div>
+    </div>
+    

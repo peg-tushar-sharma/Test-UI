@@ -1,0 +1,26 @@
+ export interface Employee
+{
+    firstName: string,
+    lastName: string,
+    familiarName: string,
+    employeeCode: string,
+    searchableName: string,
+    officeName:string,
+    homeOfficeCode:number,
+    officeAbbreviation: string,
+    employeeStatusCode?: string,
+    pegRole?: number,
+    pegRoleName?: string,
+    officeAbbrevation?: string,
+    levelName?: string,
+    gradeName?: string,
+    title?: string,
+    abbreviation:string,
+    isRingfenceEmployee: boolean,
+    customGroup?:string,
+    statusCode: string,
+    regionId?:number,
+    empAlertStatus?: any;
+    internetAddress?:string,
+    officeClusterCode:number,
+}

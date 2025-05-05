@@ -1,0 +1,119 @@
+<div class="staff-editible">
+    <ng-container *ngIf="!editing">
+        <!-- for pipeline note -->
+        <ng-container *ngIf="type=='text' && inputName=='pipelineNotes'">
+            <textarea readonly class="editible-value text-area"
+                (dblclick)="convertRow(control)">{{ control?.value }}</textarea>
+            <span class="edit" (click)="convertRow(control)"><i class="fas fa-pencil-alt"></i></span>
+        </ng-container>
+        <!-- for pipeline note -->
+
+        <ng-container *ngIf="(type=='text' || type=='number') && inputName !== 'pipelineNotes'">
+            <div class="editible-value" (dblclick)="convertRow(control)">{{ control?.value }}</div>
+            <span class="edit" (click)="convertRow(control)"><i class="fas fa-pencil-alt"></i></span>
+        </ng-container>
+
+        <ng-container *ngIf="type=='link' && inputName == 'registrationStage'">
+            <div class="editible-value">
+                <a style="cursor: pointer;color: blue;" (click)="openStageModal(control?.value)"
+                    name="registrationStage">{{ control?.value?.stageTypeName }}</a>
+            </div>
+            <span class="edit" (click)="openStageModal(control?.value)"><i class="fas fa-pencil-alt"></i></span>
+        </ng-container>
+
+        <ng-container *ngIf="type=='datepicker'">
+            <div class="editible-value" (dblclick)="convertRow(control)">{{ formatDate(control.value) }}</div>
+            <span class="edit" (click)="convertRow(control)"><i class="fas fa-calendar"></i></span>
+        </ng-container>
+
+        <ng-container *ngIf="type=='typeahead'">
+            <div class="editible-value" (dblclick)="convertRow(type)">{{ formatTypeahead(control?.value) }}</div>
+            <span class="edit" (click)="convertRow(control)"><i class="fas fa-caret-down"></i></span>
+        </ng-container>
+
+        <ng-container *ngIf="type=='select' || type=='multiSelect' || type=='tree'">
+            <div class="editible-value" (dblclick)="convertRow(control)">{{ formatNgSelect(control) }}</div>
+            <span class="edit" (click)="convertRow(control)"><i class="fas fa-caret-down"></i></span>
+        </ng-container>
+        <ng-container *ngIf="type=='opportunityTypeDetailComp'">
+            <div class="editible-value" (dblclick)="convertRow(control)">{{ formatNgSelect(control) }}</div>
+            <span class="edit" (click)="convertRow(control)"><i class="fas fa-caret-down"></i></span>
+        </ng-container>
+    </ng-container>
+
+    <ng-container *ngIf="editing">
+        <form [formGroup]="formGroup">
+            <ng-container *ngIf="type=='opportunityTypeDetailComp'">
+                <app-staffing-opportunity-type-details [buttonType]="'dropdown'" id="oppTypeDetails" [name]="inputName" [formControlName]="inputName" 
+                    (opportunityTypeDetailsChange)="onOpportunityTypeDetailsChange($event)"></app-staffing-opportunity-type-details>
+            </ng-container>
+            <!-- for pipeline note -->
+            <ng-container *ngIf="type=='text' && inputName=='pipelineNotes'">
+                <textarea id="staffingInput" [name]="inputName" (keypress)="validateKeys($event)"
+                    [formControlName]="inputName" (blur)="saveChanges($event)" (keydown.enter)="saveChanges($event)"
+                    style="width: 100%;"></textarea>
+            </ng-container>
+            <!-- for pipeline note -->
+
+            <!--Text & number input-->
+            <ng-container *ngIf="(type=='text' || type=='number') && inputName !== 'pipelineNotes'">
+                <input id="staffingInput" [type]="type" [name]="inputName" (keypress)="validateKeys($event)"
+                    [formControlName]="inputName" (blur)="saveChanges($event)" (keydown.enter)="saveChanges($event)" />
+            </ng-container>
+
+            <!--Datepicker input-->
+            <ng-container *ngIf="type=='datepicker'">
+                <input id="staffingInput" [name]="inputName" type="text" placeholder="DD-MMM-YYYY" #dp="bsDatepicker"
+                    class="mb-2 datepicker datCtrlWidth" bsDatepicker [minDate]="minDate" [formControlName]="inputName"
+                    [bsConfig]="bsConfig" (ngModelChange)="onDateChanged($event)" (dblclick)="dp.show()"
+                    (focus)="dp.show()" readonly (blur)="revertDateInput($event)" (onHidden)="convertOnDelay($event)">
+                <span class="crossIcon" *ngIf="control.value" (click)="clearValue()">×</span>
+            </ng-container>
+
+
+            <!--Ng Select input-->
+            <ng-container *ngIf="type=='select'">
+                <ng-select #ngselect style="width: 200px" id="staffingInput" (focus)="ngselect.open()" [items]="items"
+                    [multiple]="multiple" [bindLabel]="bindLabel" [bindValue]="bindValue" [name]="inputName"
+                    [formControlName]="inputName" [clearable]="isClearable" (change)="onSelectChange($event,inputName)"
+                    (blur)="convertOnDelay($event)">
+                </ng-select>
+            </ng-container>
+
+            <!--Ng Select input to select same values multiple times-->
+            <ng-container *ngIf="type=='multiSelect'">
+                <ng-select #ngselect id="staffingInput" (focus)="ngselect.open()" [items]="teamSizeMasterData"
+                    class="slectComponent" bindLabel="teamSize" bindValue="teamSizeId" [formControlName]="inputName"
+                    [multiple]="true" [(ngModel)]="selectedTeamSize" (add)="onTeamSizeChange('teamSize', $event)"
+                    [hideSelected]="true" [maxSelectedItems]="5" (remove)="onRemoveTeamSize('teamSize',$event)"
+                    style="width: 100%" [clearable]="true" (clear)="onClearAll('teamSize',$event)" placeholder="Select"
+                    (blur)="convertRow(control)">
+                </ng-select>
+            </ng-container>
+
+            <!--Ng Select typeahead-->
+            <ng-container *ngIf="type=='typeahead'">
+                <ng-select id="staffingInput" [name]="inputName" [items]="typeAheadList" [selectOnTab]="true"
+                    [formControlName]="inputName" [addTag]="false" bindLabel="searchableName" [clearable]="true"
+                    (change)="onTypeaheadChange($event,inputName)" [clearSearchOnAdd]="true" loadingText="loading..."
+                    [loading]="peopleTagLoad" [multiple]="multipleTypeahead" [typeahead]="employeeTypeAhead"
+                    [(ngModel)]="selectedValues" style="width:200px"
+                    (blur)="saveTypeheadChanges(); peopleTagLoad = false" [hideSelected]="true">
+                </ng-select>
+            </ng-container>
+
+            <!--Ng Select Location Tree View-->
+            <ng-container *ngIf="type=='tree'">
+                <app-location-tree-view [disabled]="false"
+                    [isStaffing]="true"
+                    [officesToBeStaffed]="items"
+                    [dropdownTextItemsLimit] = 2
+                    (updateOfficeSelection)="updateOfficeSelection($event)"
+                    (blurEvent)="convertRow(control)"
+                    [saveOnlyOnBlur]="true" ></app-location-tree-view>
+            </ng-container>
+
+        </form>
+
+    </ng-container>
+</div>

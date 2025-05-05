@@ -1,0 +1,49 @@
+<div class="modal" id="resouceAllocation" role="dialog">
+  <div class="modal-dialog .modal-md mastercontainer " style="padding-top: 125px;max-width: 1100px;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          <span>Team</span>          
+        </h5>
+        <button type="button" id="btnNoteClose" data-dismiss="modal" (click)="closeModal()" class="close"
+          aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" style="padding: 2rem 1rem;">
+
+        <table border="1" class="resource-table">
+          <tr>
+            <th>Name</th>
+            <th>Level Grade</th>
+            <th>Office</th>
+            <th>Role</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+          </tr>
+
+          <tbody>
+            <tr *ngFor="let data of resourceAllocationInfomration">
+              <td>{{data.employeeName}}</td>
+              <td>{{data.currentLevelGrade}}</td>
+              <td>{{data.operatingOfficeAbbreviation}}</td>
+              <td>{{data.caseRoleCode}}</td>
+              <td>{{data.startDate | date:'dd-MMM-yyyy'}}</td>
+              <td>{{data.endDate | date:'dd-MMM-yyyy'}}</td>
+            </tr>
+          </tbody>
+
+        </table>
+
+      </div>
+
+      <div style="text-align: center;" *ngIf="!resourceAllocationInfomration || resourceAllocationInfomration.length == 0">No rows to show</div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal" >Close</button>
+      </div>
+
+    </div>
+
+  </div>
+</div>

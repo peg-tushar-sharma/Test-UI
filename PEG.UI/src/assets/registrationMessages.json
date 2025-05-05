@@ -1,0 +1,26 @@
+[
+    {
+      "key": "RS",
+      "headerText":"Thank you!",
+      "mainMessage": "Your registration has been submitted successfully.",
+      "infoText": "To view your registrations, please log in on your laptop/desktop.",
+      "buttons": [
+        {
+          "buttonText": "Create new registration",
+          "buttonUrl": ""
+        }
+      ]
+    },
+    {
+      "key": "HS",
+      "HeaderText":"Query Sent!",
+      "mainMessage": "Thank you for sending in your feedback, we’ll get back to you as soon as possible.",
+      "infoText": "",
+      "buttons": [
+        {
+          "buttonText": "Home",
+          "buttonUrl": ""
+        }
+      ]
+    }
+  ]

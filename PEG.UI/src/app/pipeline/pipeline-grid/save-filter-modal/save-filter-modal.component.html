@@ -1,0 +1,31 @@
+<div class="pipeline-filter-modal">
+  <div class="modal-body">
+    <h3>Save Filter</h3>
+    <p>Name this filter to save it to your list of filter presets.</p>
+
+    <form class="needs-validation" [class.submitted]="form.submitted" #form="ngForm">
+      <label class="block">Filter Name <span>*</span></label>
+      <input name="filterName" #formFilterName="ngModel" [(ngModel)]="filterName" type="text"
+        [class.invalid]="form.submitted && formFilterName.invalid" placeholder="Enter filter name" required>
+      
+      <input type="checkbox" name="isDefault" [(ngModel)]="isDefault"><span for="isDefault">Mark as default</span>
+
+      <p></p>
+      <p></p>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" (click)="cancelFilterSave()">Cancel</button>
+        <button type="submit" class="btn btn-default btn-highlighted"
+          (click)="(form && form.valid) ? saveFilter() : null">Save</button>
+      </div>
+
+      <div class="form-row" *ngIf="form.submitted && form.invalid">
+        <ul id="requiredText">
+          <li>Please complete all required fields</li>
+        </ul>
+      </div>
+    </form>
+
+  </div>
+
+</div>

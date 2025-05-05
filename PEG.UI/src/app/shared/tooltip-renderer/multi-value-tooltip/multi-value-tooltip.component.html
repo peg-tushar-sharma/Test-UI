@@ -1,0 +1,9 @@
+<div  *ngIf="multipleValues.length>0">
+  <div class="custom-tooltip" *ngIf="colDefField!='teamSize'" >
+    <div class="notes-container" *ngFor="let item of  multipleValues">
+      <p style="padding:5px;text-align: center;margin-bottom: 0px;">{{item.searchableName}}</p>
+      <p class="wraptext" style="padding:5px;text-align: center;margin-bottom: 0px;">{{item.context}}</p>
+      <p class="wraptext" style="padding:5px;text-align: center;margin-bottom: 0px;">{{item.tags}}</p>
+    </div>
+  </div>
+</div>

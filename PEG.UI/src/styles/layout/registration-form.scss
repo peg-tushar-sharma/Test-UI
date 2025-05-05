@@ -1,0 +1,55 @@
+div.registration-form{
+  background-color: $grey-extra-light;  
+   overflow: auto;
+   //min-height:700px;
+  #stage{
+     height: auto;
+    //overflow-y: auto !important;
+    background-color: $white;
+    // padding-bottom: 100px !important;
+
+    h1{
+      font-size: 20px;
+      margin-bottom: 1em;
+      color: $grey-darkest;
+    @media only screen and (min-width: 992px) {
+        font-size: 28px;
+      }
+      .mb-5{
+        margin-bottom: 2em;
+      }
+    }
+
+    a.close{
+      position: absolute;
+      top:$base-padding*2;
+      right:$base-padding*2;
+      color: $grey-light;
+      font-size:30px;
+      &:hover{
+        color: $grey-dark;
+      }
+    }
+
+    form{
+      h2{
+        font-size: 14px;
+        color: $text-dark;
+        font-weight: 500;
+      @media only screen and (min-width: 992px) {
+        font-size: 15px;
+      }
+    }
+      label.readonly{
+        margin-top:12px;
+      }
+
+      div.disabled{
+        opacity: .5;
+        input{
+          pointer-events: none;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,29 @@
+.date-range-filter{  
+  // width:200px;
+  input{
+    font-size:14px;
+  }
+  .col-auto.hyphen{
+    position: relative;
+    &:after{
+      content: '-';
+      position: absolute;
+      left: 50%;
+      bottom: 17px;
+      transform: translateX(-50%);
+    }
+  } 
+}
+
+.invalid{
+  border-color:#CC0000!important;
+}
+
+.valid{
+  border-color: #D7D7D7!important;
+}
+
+.theme-red .bs-datepicker-head {
+ background-color: #CC0000!important;
+
+ }

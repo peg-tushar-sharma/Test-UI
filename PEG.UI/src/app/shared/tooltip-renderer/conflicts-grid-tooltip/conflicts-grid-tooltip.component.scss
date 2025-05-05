@@ -1,0 +1,86 @@
+:host {
+  position: absolute;
+  overflow: visible;
+  pointer-events: none;
+  transition: opacity 1s;
+  height: 350px;
+}
+
+:host.ag-tooltip-hiding {
+  opacity: 0;
+}
+
+.custom-tooltip-conflicts p {
+  margin: 5px;
+  white-space: nowrap;
+}
+
+.custom-tooltip-conflicts p:first-of-type {
+  font-weight: bold;
+}
+
+
+.conflicts-header {
+background-color: #f7f7f7;
+border-bottom: 1px solid  #ebebeb;
+font-size: .875rem !important;
+display: flex;
+background-color: #DAE5FD;
+.truncate{
+  min-width: 0px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+ padding:10px;
+}
+}
+#conflictsIconWrapper-conflicts {
+  .table-wrapper-conflicts {
+    background-color: white;
+    font-family: "Graphik";
+    border: 2px solid #333; /* Black dark color */  
+   
+  }
+
+  .fl-table-conflicts {
+    color: #121212;
+    width: 100%;
+    max-width: 100%;
+    background-color: white !important;
+    white-space: nowrap;
+  }
+
+  .fl-table-conflicts thead {
+    position: sticky !important;
+    position: -webkit-sticky !important;
+  }
+
+  .fl-table-conflicts td,
+  .fl-table-conflicts th {
+    border: solid #f0f2f3;
+    border-width: 1px 0px;
+    font-size: 12px;
+    text-align: left;
+    padding: 8px 10px;
+    height: 40px;
+  }
+
+  .fl-table-conflicts thead th {
+    background-color: #f7f9ff;
+    color: #616568;
+    font-weight: 500;
+    position: sticky;
+    top: 0px;
+  }
+}
+
+.highlight
+{
+  color: #333;
+  font-weight: bold;
+}
+
+
+
+
+//   //-----------------------popup css----------------------------

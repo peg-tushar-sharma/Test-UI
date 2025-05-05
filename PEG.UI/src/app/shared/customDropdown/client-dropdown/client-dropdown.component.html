@@ -1,0 +1,8 @@
+<div class="client">
+  <div class="client__input">
+    <input type="text" [value]="userInput" (keyup)="onChange($event)" placeholder="Search Client">
+  </div>
+  <ul class="client__list" *ngIf="userSuggestion.length" (click)="OnSelectItem($event)">
+    <li class="client__item" *ngFor="let item of userSuggestion"><span [attr.data-option]="item">{{item}}</span><span>(PIA)</span></li>
+  </ul>
+</div>

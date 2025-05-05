@@ -1,0 +1,19 @@
+// Dropdown Options
+.dropdown-options-wrapper {
+    flex-direction: column;
+    gap: 2px;
+    left: 0px;
+    padding: 10px 0px;
+
+    .dropdown-option {
+        color: #121212;
+        font-weight: 400;
+        padding: 6px 15px;
+        text-align: left;
+
+        &.active,
+        &:hover {
+            background: #ecf0ff;
+        }
+    }
+}

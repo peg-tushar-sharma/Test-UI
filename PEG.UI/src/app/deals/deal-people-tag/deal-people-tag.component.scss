@@ -1,0 +1,174 @@
+@import "../../../styles/abstract/variables.scss";
+// @import "../../../styles/layout/modal.scss";
+// .backdrop {
+//     background-color:rgba(0,0,0,0.6);
+//     position:fixed;
+//     top:0;
+//     left:0;
+//     width:100%;
+//     height:100vh;
+//   }
+
+  .modal{
+    // z-index: 99999 !important;
+    // display: block !important;
+  }
+
+  .modal-header{
+    color: $bain-red !important;
+  }
+
+
+
+  /* list wrapper */
+.add-items-box {
+  border: 1px solid #e0e0e0;
+  padding: 5px;
+  margin: 0 auto;
+  width: 100%;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  height: 200px;
+    overflow-y: scroll;
+}
+
+/* person list */
+ul.addPersonUL {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+ul.addPersonUL li {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.onePerson {
+  border: 1px solid #e0e0e0;
+  display: table;
+  width: 100%;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  background-color: #f2f2f2;
+}
+.onePerson .tCol {
+  display: table-cell;
+  vertical-align: middle;
+}
+.onePerson .col-pic {
+  width: 50px;
+}
+.onePerson .col-info {
+  padding: 0px 10px;
+}
+.onePerson .col-add {
+  padding-right: 15px;
+  text-align: right;
+  // width: 90px;
+}
+
+.box-color {
+  height: 50px;
+  width: 50px;
+}
+.box-blue {
+  background: #8cd8f8;
+}
+.box-orange {
+  background: #f1d66a;
+}
+.box-green {
+  background: #69dfb1;
+}
+
+/*** buttons style ***/
+.btnStyle1 {
+  display: inline-block;
+  font-size: 14px;
+  padding: 10px 15px;
+  text-align: center;
+  text-decoration: none;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}
+.btnStyle2 {
+  background: #2486a9;
+  border: 0;
+  color: #ffffff;
+  cursor: pointer;
+  padding: 10px 15px;
+  text-align: center;
+  text-decoration: none;
+  width: 85px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}
+.btnStyle2:hover {
+  background: #1d8cbe;
+}
+.addBtn {
+  background: #f6f7f8;
+  border: 1px solid #e0e0e0;
+  color: #777777;
+}
+
+.toggle-check-btn{
+  cursor: pointer;
+}
+
+/*** save button ***/
+.button-footer {
+  text-align: center;
+}
+
+.col-info-name{
+  font-weight: 600;
+}
+
+.col-info-location{
+  font-size: 12px;
+}
+
+
+/* width */
+::-webkit-scrollbar {
+  width: 3px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.modal-title{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.roleHeader{
+  width: 100%;
+  padding: 4px 12px;
+  background-color:#CCC;
+  margin-bottom: 5px;
+  color:#4a4a4a;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+

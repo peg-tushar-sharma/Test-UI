@@ -1,0 +1,63 @@
+<div class="container" style="padding:10px 0px">
+  <div class="col-12 ">
+    <h1 class="mb-3">Contact Us<a><i (click)="toggleSidebar()" class="fa fa-times iconHelp"></i></a></h1>
+
+    <form  class="needs-validation data-collection" [class.submitted]="form.submitted"  #form="ngForm" novalidate>
+
+      <div class="form-row mb-12">
+
+        <!-- <h2 class="ml-1 mb-3" style="color: #3C3C3C;
+        font-weight: 500;font-size: 15px;"> </h2> -->
+        <div>
+          <p class="info-text">
+            Need to report an issue? Have questions, feedback or comments? We want to hear them! 
+          </p>
+          
+        </div>
+        <div class="col-12  mb-3">
+          <label>Send to:</label>
+          <div class="">
+            <div class="mb-4 col-12 align-items-center">
+              <input [(ngModel)]="help.templateType" type="radio" name="helpEmail" [value]="2" id="Conflicts"
+                >&nbsp;
+              <label for="Conflicts"> Conflicts</label>
+              <div  class="ml-2 info-sub-text">(For questions regarding conflict registration or status of registration)</div>
+            </div>
+            <div class="col align-items-center">
+              <input [(ngModel)]="help.templateType" type="radio" name="helpEmail" [value]="3" id="PEGCalltoCash"
+                >&nbsp;
+              <label for="PEGCalltoCash"> Call-to-Cash Support </label>
+              <div  class="ml-2 info-sub-text">(For everything else)</div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="form-row mb-12">
+        <div class="col-12  "  >
+          <!-- <label>Write your query here:</label> -->
+          <div class="col-12 col-md-12 mb-3" style="padding: 0px;">
+            <textarea [(ngModel)]="help.query"  name="query" class="form-control help-textarea" rows="5" required 
+              ></textarea>
+          </div>
+
+        </div>
+      </div>
+      <div class="form-row" *ngIf="form.submitted && form.invalid">
+        <ul id="requiredText">
+          <li>This field cannot be left blank.</li>
+        </ul>
+      </div>
+
+      <div class="form-row" style="float: right;">
+        <div class="col d-flex mb-3">
+          <button type="button" (click)="clearQuery()" class="btn btn-tertiary mr-3 ">Clear</button>
+          <button type="submit" class="btn btn-primary" (click)="(form && form.valid)?onSubmitHelp():null;">Send </button>
+
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,66 @@
+<div class="dropdown" dropdown #OppTypeDetailsDropdown="bs-dropdown" [insideClick]="true" id="opptypeDetails"
+  container="body" dropdownAlignRight="true">
+  <button class="dropdown-btn dropdown-toggle d-flex align-items-center justify-content-between text-truncate"
+    dropdownToggle *ngIf="buttonType=='dropdown'">
+    <span class="text-truncate" style="flex-grow: 1; overflow: hidden; text-overflow: ellipsis;">
+      {{OpportunityTypeDetailsLabel ? OpportunityTypeDetailsLabel : 'Select'}}
+    </span>
+    <span class="caret ms-2"></span>
+  </button>
+
+
+  <button [disabled]="isDisabled"  
+    class="casecodedropdown-btn dropdown-toggle d-flex align-items-center justify-content-between text-truncate" [class.isRequired] = "isRequired === true"
+    dropdownToggle *ngIf="buttonType=='caseCodeDropdown'" (click)="onDropdownClick()">
+    <span class="text-truncate" style="flex-grow: 1; overflow: hidden; text-overflow: ellipsis;">
+      {{OpportunityTypeDetailsLabel ? OpportunityTypeDetailsLabel : 'Select'}}
+    </span>
+    <span class="caret ms-2"></span>
+  </button>
+
+
+  <button class="outline-btn" dropdownToggle *ngIf="buttonType=='button'"> {{OpportunityTypeDetailsLabel ?
+    OpportunityTypeDetailsLabel : 'Select'}}</button>
+  <i id='oppTypeEditButton' style="float: inline-end; margin-top: 4px; color: #121212 !important;" dropdownToggle
+    *ngIf="buttonType=='edit-icon'" class="fa fa-edit ml-1"></i>
+  <div class="dropdown-menu" *dropdownMenu>
+    <span *ngIf="hideHeader"> <label class="dropdown-title">Opportunity Type Details</label><br></span>
+    <div class="nested-dropdown">
+      <label class="option-label">
+        <input type="checkbox" [(ngModel)]="opportunityTypeDetails.isNextPhase" (change)="togglePhase()"> Phase
+      </label>
+      <div class="nested-options" *ngIf="opportunityTypeDetails.isNextPhase">
+        <ul>
+          <li *ngFor="let phase of phases">
+            <input type="checkbox" [(ngModel)]="phase.checked">
+            {{phase.label }}
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="nested-dropdown">
+      <label class="option-label">
+        <input type="checkbox" [(ngModel)]="opportunityTypeDetails.isAdditionalTeam" (change)="toggleTeam()"> Team
+      </label>
+      <div class="nested-options" *ngIf="opportunityTypeDetails.isAdditionalTeam">
+        <ul>
+          <li *ngFor="let team of teams"> <input type="checkbox" [(ngModel)]="team.checked">
+            {{team.label }}
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <label class="option-label">
+      <input type="checkbox" [(ngModel)]="opportunityTypeDetails.isRestart"> Restart
+    </label>
+
+    <label class="option-label">
+      <input type="checkbox" [(ngModel)]="opportunityTypeDetails.isContinuation"> Continuation
+    </label>
+    <div class="divider dropdown-divider"></div>
+    <label class="option-label">
+      <button class="apply-btn" (click)="applySelection()">Apply selection</button>
+    </label>
+  </div>
+</div>

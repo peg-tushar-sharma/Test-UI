@@ -1,0 +1,13 @@
+<div class="row no-gutters align-items-center">
+  <div class="col-10 mt-2 ml-2">    
+    <input type="text" placeholder="DD-MMM-YYYY" #dateInput class="form-control mb-2"
+        bsDatepicker [(bsValue)]="myDateValue" value="{{ myDateValue | date:'dd-MMM-yyyy' }}" (bsValueChange)="onDateChanged($event)"
+       [bsConfig]="{ dateInputFormat: 'DD-MMM-YYYY', containerClass : 'theme-red', adaptivePosition: true }" readonly (onShown)="changeCalendarPosition()">
+      <div #calendar id="calender"></div>
+ </div>
+ <div class="col-1">
+  <button type="button" (click)="cancel()" class="close" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+ </div>
+</div>

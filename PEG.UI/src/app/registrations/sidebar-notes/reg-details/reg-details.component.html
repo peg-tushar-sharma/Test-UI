@@ -1,0 +1,393 @@
+<div id="tab-content-registration-details" name="regDetails" class="tab-content">
+  <!-- FOR FUTURE SPRINTS -->
+  <!-- <div class="form-row mb-1">
+        <div class="col-3">
+            <label class="control-label">Client Head Location:</label>
+        </div>
+        <div class="col">
+            <app-dropdown-select
+                (outModelChange)="onBainOfficeChanged($event)"
+                [isEditable]="fieldAuthConfig.bainOffice.isEditable"
+                [id]="'bainOffice'"
+                [labelName]="'officeName'"
+                [labelValue]="'officeCode'"
+                [modelValue]="registration.boc"
+                [selectedText]="registration.bo"
+                [dataObject]="bainOffice"
+            >
+            </app-dropdown-select>
+
+            <label class="control-label">{{ registration.bo ? registration.bo : "-" }}</label>
+        </div>
+    </div> -->
+
+  <!-- FOR FUTUTRE SPRINTS -->
+  <!-- <div class="form-row mb-2">
+        <div class="col form-inline">
+            <app-editable-text
+                [isEditable]="fieldAuthConfig.txtLocation.isEditable"
+                [labelText]="'Target Location'"
+                id="txtTargetLocation"
+                [required]="false"
+                (update)="updateRegistrations($event, 'tln')"
+                [labelValue]="registration.tln + '^^' + registration.id"
+                [registrationId]="registration.id"
+            >
+            </app-editable-text>
+        </div>
+    </div> -->
+
+  <!-- registration information -->
+  <div *ngIf="registration" class="tab-details">
+    <form class="needs-validation data-collection" novalidate>
+      <!-- client | target -->
+      <div class="form-grid">
+        <div>
+          <label id="grid-label">client <span class="sub-label icon">*</span></label>
+          <input *ngIf="!isClientEditing" class="client-input" [disabled]="!fieldAuthConfig.txtClient.isEditable"
+            placeholder="Enter a client" type="text" id="grid-input" value="{{ registration?.cl?.clientName }}"
+            (focus)="isClientEditing=true" />
+
+          <app-client-multi-select-typeahead id="client" (blur)="isClientEditing=false" *ngIf="isClientEditing"
+            [isEditable]="fieldAuthConfig.txtClient.isEditable"
+            (saveValue)="updateClient($event); isClientEditing=false" [selectedValue]="registration?.cl?.clientName"
+            [name]="'client'" [isMultiSelect]="false" [isOnRegistrationForm]="true">
+          </app-client-multi-select-typeahead>
+
+          <!-- is client hf checkbox -->
+          <app-checkbox-select [isEditable]="fieldAuthConfig.HF.isEditable" [labelText]="'Client is a Hedge Fund'"
+            [disabled]="isDisabled" [uniqueId]="'details-hf'" [name]="HF" [modelValue]="registration.hfc"
+            (outModelChange)="hfChange($event)"></app-checkbox-select>
+        </div>
+
+        <div>
+          <label id="grid-label">target <span class="sub-label icon">*</span></label>
+          <input placeholder="Enter a target" [disabled]="!fieldAuthConfig.txtTarget.isEditable" type="text"
+            class="target-input" id="grid-input" name="target" [(ngModel)]="target"
+            (blur)="updateRegistrations(target, 'tdn')" autocomplete="off" required
+            [class.required]="!target && registration?.wti != 8" />
+          <span class="sub-label">Full name of individual target company</span>
+        </div>
+      </div>
+
+      <!-- target owner | website -->
+      <div class="form-grid">
+        <div>
+          <label id="grid-label">target owner / parent company <span class="sub-label icon">*</span></label>
+          <input [disabled]="!fieldAuthConfig.txtCorpRel.isEditable || isTargetOwnerKnown"
+            placeholder="Enter a target owner" type="text" id="grid-input" name="targetOwner" [(ngModel)]="targetOwner"
+            (blur)="updateRegistrations(targetOwner, 'cr')" required
+            [class.required]="!targetOwner &&  registration?.wti != 8 && !isTargetOwnerKnown" />
+
+          <!-- do not know checkbox -->
+          <app-checkbox-select [isEditable]="fieldAuthConfig.txtCorpRel.isEditable" [labelText]="'I do not know'"
+            [disabled]="false" [uniqueId]="'isTargetOwnerKnown'" [name]="targetOwner" [modelValue]="isTargetOwnerKnown"
+            (outModelChange)="toggleCRValidation($event)"></app-checkbox-select>
+
+        </div>
+
+        <div>
+          <label id="grid-label">target website <span class="sub-label icon">*</span></label>
+          <input placeholder="Enter a website" [disabled]="!fieldAuthConfig.txtWebsite.isEditable" type="text"
+            id="grid-input" name="targetWebsite" [(ngModel)]="targetWebsite"
+            (blur)="updateRegistrations(targetWebsite, 'ws')" required
+            [class.required]="!targetWebsite && registration?.wti != 8" />
+        </div>
+      </div>
+
+      <!-- industry | sector -->
+      <div class="form-grid">
+        <div>
+          <label id="grid-label">industry <span class="sub-label">(of Target)</span> <span
+              class="sub-label icon">*</span></label>
+          <app-dropdown-select (outModelChange)="onIndustryChange($event)"
+            [isEditable]="fieldAuthConfig.txtIndustry.isEditable" [id]="'txtIndustry'" [labelName]="'industryName'"
+            [labelValue]="'industryId'" [modelValue]="registration.in?.industryId"
+            [selectedText]="registration.in?.industryName" [dataObject]="topLevelIndustries">
+          </app-dropdown-select>
+          <span *ngIf="registration.in && registration.in?.industryName != '' && !registration.in?.isTopIndustry">
+            <br *ngIf="!fieldAuthConfig.txtIndustry.isEditable" />
+            <i style="color: rgb(175, 5, 5)">
+              The selected industry <span style="color: black"> {{ registration.in?.industryName }}</span>
+              doesn't exists in our current list, Please select a top level industry from the above
+              dropdown.
+            </i>
+          </span>
+        </div>
+
+        <div>
+          <label id="grid-label">sector</label>
+          <ng-select id="sectors" *ngIf="fieldAuthConfig?.sector?.isEditable" name="sectors" bindLabel="sectorName"
+            [multiple]="true" bindValue="sectorId" [(ngModel)]="selectedSectors" [items]="sectors"
+            (ngModelChange)="onSectorChange($event)" placeholder="Select">
+          </ng-select>
+
+          <label *ngIf="!fieldAuthConfig?.sector?.isEditable">{{getSectorName(registration?.sectors)}}</label>
+        </div>
+      </div>
+
+      <!-- work type | market questions -->
+      <div class="form-grid">
+        <div>
+          <label id="grid-label">type of work <span class="sub-label icon">*</span></label>
+          <app-dropdown-select (outModelChange)="onWorkTypeChange($event)"
+            [isEditable]="fieldAuthConfig.workTypeName.isEditable" [id]="'workTypeName'" [labelName]="'workTypeName'"
+            [labelValue]="'workTypeId'" [modelValue]="registration.wti" [selectedText]="registration.wtn"
+            [dataObject]="workTypes">
+          </app-dropdown-select>
+        </div>
+
+        <div>
+          <label id="grid-label">market questions <span class="sub-label">Check all that apply</span></label>
+
+          <div>
+            <!-- open market -->
+            <app-checkbox-select [isEditable]="fieldAuthConfig.openMarketPurchase.isEditable"
+              [labelText]="'Open Market Purchase'" [disabled]="isDisabled" [uniqueId]="'details-iomp'" [name]="IOMP"
+              [modelValue]="registration.iomp" (outModelChange)="iompChange($event)"></app-checkbox-select>
+
+            <!-- spac -->
+            <app-checkbox-select [isEditable]="fieldAuthConfig.PTE.isEditable" [labelText]="'SPAC'"
+              [disabled]="isDisabled" [uniqueId]="'details-spac'" [name]="SPAC" [modelValue]="registration.spac"
+              (outModelChange)="spacChange($event)"></app-checkbox-select>
+
+            <!-- public traded equity -->
+            <app-checkbox-select [isEditable]="fieldAuthConfig.PTE.isEditable" [disabled]="isDisabled"
+              [labelText]="'Publicly Traded Equity'" [uniqueId]="'details-pt'" [name]="PTE"
+              [modelValue]="registration.pte" (outModelChange)="pteChange($event)"></app-checkbox-select>
+
+            <!-- public traded debt -->
+            <app-checkbox-select [isEditable]="fieldAuthConfig.PTD.isEditable" [labelText]="'Publicly Traded Debt'"
+              [disabled]="!isPTDDisabled() || isDisabled" [uniqueId]="'details-ptd'" [name]="PTD"
+              [modelValue]="registration.ptd" (outModelChange)="ptdChange($event)"></app-checkbox-select>
+
+            <!-- carve out -->
+            <app-checkbox-select [isEditable]="fieldAuthConfig.CO.isEditable" [labelText]="'Carve-Out'"
+              [disabled]="isDisabled" [uniqueId]="'details-co'" [name]="CO" [modelValue]="registration.co"
+              (outModelChange)="coChange($event)"></app-checkbox-select>
+          </div>
+        </div>
+      </div>
+
+      <!-- location | dates -->
+      <div class="form-grid">
+        <div>
+          <label id="grid-label">country / location of deal <span class="sub-label icon">*</span></label>
+          <app-dropdown-select (outModelChange)="onDealLocationChanged($event)"
+            [isEditable]="fieldAuthConfig.txtLocation.isEditable" [id]="'locationofDeal'" [labelName]="'locationName'"
+            [labelValue]="'locationName'" [modelValue]="registration.lodn" [selectedText]="registration.lodn"
+            [dataObject]="locationOfDeal">
+          </app-dropdown-select>
+        </div>
+
+        <!-- ..work to start within / estimated start date -->
+        <div class="form-grid">
+          <div>
+            <label id="grid-label">work to start within</label>
+            <span>{{ registration.wtsdn }}</span>
+          </div>
+
+          <div class="estimated-start-date">
+            <label id="grid-label">estimated start date</label>
+
+            <!-- if editable -->
+            <div class="grid-input-wrapper" *ngIf="fieldAuthConfig.estimatedStartDate.isEditable">
+              <i class="fas fa-times" *ngIf="estimatedStartDate" (click)="clearDate('esd')"></i>
+              <input type="text" id="grid-input" placeholder="DD-MMM-YYYY" autocomplete="off" #estimatedStartDateInput
+                bsDatepicker [(bsValue)]="estimatedStartDate" (bsValueChange)="onEstimatedStartDateChange($event)"
+                [bsConfig]="bsConfig" />
+            </div>
+
+            <!-- if not editable -->
+            <div class="grid-input-wrapper" *ngIf="!fieldAuthConfig.estimatedStartDate.isEditable">
+              <span class="date-display">{{ registration?.expectedStart?.expectedStartDate ? registration?.expectedStart?.expectedStartDate : "-" }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- case start & end dates -->
+      <!-- <div class="form-grid">
+        <div>
+          <label id="grid-label">case start date</label>
+
+          <div class="grid-input-wrapper" *ngIf="fieldAuthConfig.caseStartDate.isEditable">
+            <i class="fas fa-times" *ngIf="caseStartDate" (click)="clearDate('csd')"></i>
+            <input type="text" id="grid-input" placeholder="DD-MMM-YYYY" autocomplete="off" #caseStartDateInput
+              bsDatepicker [(bsValue)]="caseStartDate" [bsConfig]="bsConfig" />
+          </div>
+
+          <div class="grid-input-wrapper" *ngIf="!fieldAuthConfig.caseStartDate.isEditable">
+            <span>{{ caseStartDate ? (caseStartDate | date : "dd-MMM-yyyy") : '-' }}</span>
+          </div>
+        </div>
+
+        <div>
+          <label id="grid-label">case end date</label>
+
+          <div class="grid-input-wrapper" *ngIf="fieldAuthConfig.caseEndDate.isEditable">
+            <i class="fas fa-times" *ngIf="caseEndDate" (click)="clearDate('ced')"></i>
+            <input type="text" id="grid-input" placeholder="DD-MMM-YYYY" autocomplete="off" #caseEndDateInput
+              bsDatepicker [(bsValue)]="caseEndDate" [bsConfig]="bsConfig" />
+          </div>
+
+          <div class="grid-input-wrapper" *ngIf="!fieldAuthConfig.caseEndDate.isEditable">
+            <span>{{ caseEndDate ? (caseEndDate | date : "dd-MMM-yyyy") : '-' }}</span>
+          </div>
+        </div>
+      </div> -->
+
+      <!-- case rows -->
+      <div class="form-grid">
+        <div style="grid-column: span 2">
+          <label id="grid-label">Case</label>
+
+          <!-- if no case exists -->
+          <ng-container *ngIf="!registration?.case">
+            <app-case-editor style="height: 36px" [fromSidebar]="true"
+              (caseDataChanges)="updateCaseData($event,'caseCode')"
+              [isEditable]="fieldAuthConfig.txtCaseCode.isEditable"
+              [caseCode]='registration.case && registration.case.caseCode ? registration.case.caseCode :  null'>
+            </app-case-editor>
+          </ng-container>
+
+          <!-- if case exists -->
+          <div class="case-row" *ngIf="registration?.case && registration?.case?.caseCode">
+            <ng-container>
+              <!-- ..code -->
+              <span title="{{ registration?.case?.caseCode }}">{{ registration?.case?.caseCode }}</span>
+
+              <!-- ..name -->
+              <span title="{{ registration?.case?.caseName }}">{{ registration?.case?.caseName }}</span>
+
+              <!-- ..office -->
+              <span title="{{ registration?.case?.caseOfficeName }}">{{ registration?.case?.caseOfficeName }}</span>
+
+              <!-- ..start / end dates -->
+              <span title="{{ registration?.case?.caseStartDate | date :
+                'dd-MMM-yyyy' }} - {{ registration?.case?.caseEndDate
+                | date : 'dd-MMM-yyyy' }}">{{ registration?.case?.caseStartDate | date :
+                "dd-MMM-yyyy" }} - {{ registration?.case?.caseEndDate
+                | date : "dd-MMM-yyyy" }}</span>
+
+              <button class="delete-row-cta fa fa-times" (click)="updateCaseData(null,'caseCode')"></button>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+
+      <!-- client.. -->
+      <div class="form-grid">
+        <!-- ..head -->
+        <div>
+          <label id="grid-label">client heads</label>
+          <app-multi-select-typeahead id="clientHead" [isEditable]="fieldAuthConfig.clientHead.isEditable"
+            [isDisabled]="isDisabled" (saveValue)="updateClientHeads($event)" [levelStatusCode]="levelStatusCode"
+            [employeeStatusCode]="employeeStatusCode" [selectedValue]="registration.ch"
+            (blur)="isEditingClientHead = false" [name]="'clientHead'" [isMultiSelect]="true">
+          </app-multi-select-typeahead>
+        </div>
+
+        <!-- ..sector leads -->
+        <div>
+          <label id="grid-label">client sector leads</label>
+          <app-multi-select-typeahead id="clientSectorLead" [isEditable]="fieldAuthConfig.clientSectorLead.isEditable"
+            [isDisabled]="isDisabled" (saveValue)="updateClientSectorLeads($event)" [levelStatusCode]="levelStatusCode"
+            [employeeStatusCode]="employeeStatusCode" [selectedValue]="registration.csl"
+            (blur)="isEditingClientSectorLeads = false" [name]="'clientSectorLead'" [isMultiSelect]="true">
+          </app-multi-select-typeahead>
+        </div>
+
+        <!-- ..other partners -->
+        <div>
+          <label id="grid-label">other partners who should see this registration</label>
+          <app-multi-select-typeahead id="othersInvolved" [isEditable]="fieldAuthConfig.othersInvolved.isEditable"
+            [isDisabled]="isDisabled" (saveValue)="updateOthersInvolved($event)"
+            [employeeStatusCode]="employeeStatusCode" [levelStatusCode]="levelStatusCode"
+            [selectedValue]="registration.oi" (blur)="isEditingOthersInvolved = false" [name]="'othersInvolved'"
+            [isMultiSelect]="true"></app-multi-select-typeahead>
+        </div>
+      </div>
+
+      <!-- risk management -->
+      <div class="form-grid">
+        <div>
+          <label id="grid-label">Risk Management Needed </label>  
+        </div>
+      </div>
+      <div class="form-grid">
+        <div>
+         <label id="grid-label"> Is this a target company or industry with which we would be proud to be associated?
+          &nbsp;<app-info-icon *ngIf="infoText" [name]="'risk'" [infoText]="infoText.RiskTarget"></app-info-icon> </label>
+          </div>
+          <div>
+          <app-radio-list-select [id]="'isRen'" (outModelChange)="onRenChanged($event)"
+            [isEditable]="fieldAuthConfig.isREN.isEditable" [options]="isRENRadiooptions"
+            [selectedValue]="registration.isREN"></app-radio-list-select>
+        </div>
+      </div>
+      <br/>
+      <div class="form-grid">
+        <div>
+          <label id="grid-label">Does the target operate in any of the below industries?<app-info-icon *ngIf="infoText"
+            [name]="'risk'" [infoText]="infoText.RiskProduct"></app-info-icon> </label>
+          </div>
+          <div>
+          <app-radio-list-select [id]="'isProductRen'" (outModelChange)="onProductRenChanged($event)"
+            [isEditable]="fieldAuthConfig.isProductREN.isEditable" [options]="isProductRENRadiooptions"
+            [selectedValue]="registration.isProductREN"></app-radio-list-select>
+          </div>
+      </div>
+      <br/>
+      <div class="form-grid"></div>
+      <!-- submitter information -->
+      <div class="form-row">
+        <table class="table registration-details-table">
+          <tbody>
+            <tr>
+              <!-- name -->
+              <td>
+                <span id="label">Submitted By:</span>
+                <span>{{ registration.sb?.searchableName }}</span>
+              </td>
+
+              <!-- office -->
+              <td>
+                <span id="label">Submitter Office:</span>
+                <span>{{ registration.sb?.officeName }}</span>
+              </td>
+
+              <!-- last upated -->
+              <td>
+                <span id="label">Last Updated Date:</span>
+                <span>{{ _regReqService.registration.lud ? (_regReqService.registration.lud |
+                  formatTimeZone : true) : "-" }}</span>
+              </td>
+            </tr>
+
+            <tr>
+              <!-- submitted date -->
+              <td>
+                <span id="label">Submit Date:</span>
+                <span>{{ registration.lsd ? (registration.lsd | formatTimeZone) : "-" }}</span>
+              </td>
+
+              <!-- comitted date -->
+              <td>
+                <span id="label">Commit Date:</span>
+                <span *ngIf="!fieldAuthConfig.commitDate.isEditable">{{registration.cd ? (registration.cd |
+                  formatTimeZone) : "-" }}</span>
+                <div class="grid-input-wrapper" *ngIf="fieldAuthConfig.commitDate.isEditable">
+                  <i class="fas fa-times" *ngIf="commitedDate" (click)="clearDate('cd')"></i>
+                  <input type="text" id="grid-input" placeholder="DD-MMM-YYYY" autocomplete="off" #commitedDateInput
+                    bsDatepicker [(bsValue)]="commitedDate" [bsConfig]="bsConfig"
+                    (onHidden)="updateCommitDate($event)" />
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </form>
+  </div>
+</div>

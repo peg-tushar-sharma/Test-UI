@@ -1,0 +1,3 @@
+<input type="checkbox" [(ngModel)]="isChecked" btnCheckboxTrue='isChecked' [id]='controlName' (ngModelChange)=updateValue($event); [disabled]="accessTierId != 1">
+
+<label [for]="controlName" class="ml-2 checkLbl">{{labelText}}</label>

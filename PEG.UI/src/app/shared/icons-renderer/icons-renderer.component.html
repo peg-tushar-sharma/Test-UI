@@ -1,0 +1,31 @@
+<div *ngIf="hasDeal">
+  <a (click)="redirectToDeal()" *ngIf="hasDeal" style="text-decoration: none;" target="_blank">
+      <div *ngIf="hasDeal" class="tracker">
+          {{dealId}}
+      </div>
+  </a>
+
+
+</div>
+
+<div class="p-1" *ngIf="hasRegistration">
+  <span *ngIf="registrationID > 0">
+      <i *ngIf="!show" (mouseover)="showID()" class="far fa-registered" style="color: lightgreen; font-size: 20px;">
+      </i>
+      <label *ngIf="show" (mouseout)="showID()" style=" font-size: 18px;"> {{registrationID}}</label>
+  </span>
+</div>
+
+<div *ngIf="isDeleteTracker">
+  <div style="cursor:pointer"><i class="fas fa-trash cell-icon"></i></div>
+</div>
+
+
+<div *ngIf="trackerId">
+  <a style="text-decoration: none;" >
+      <div class="tracker">{{dealId}}
+      </div>
+  </a>
+
+
+</div>

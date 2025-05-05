@@ -1,0 +1,12 @@
+<a href="javascript:void(0);" style="cursor: pointer;" id={{name}} name="infoTooltip" [tooltip]="template"
+   [placement]="placement" triggers="" (click)="manageTooltip($event);" 
+   (mouseenter)="showToolTip($event)" (mouseleave)="hideToolTip($event)"
+   #infoIcon="bs-tooltip"><i class="fa fa-info-circle fa-s"
+      aria-hidden="true"></i></a>
+<ng-template #template>
+   <ul *ngIf="infoText" [class.multiList]="infoText.length>1" [class.singleList]="infoText.length==1">
+      <li *ngFor="let text of infoText">
+         <p style="margin-bottom: 1px !important" [innerHtml]="parseText(text)"></p>
+      </li>
+   </ul>
+</ng-template>

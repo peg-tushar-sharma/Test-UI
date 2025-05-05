@@ -1,0 +1,189 @@
+// CSLs popover
+:host::ng-deep .sharing-popover {
+    border: none;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.15);
+
+    .popover-body {
+        color: #121212;
+        font-family: "Graphik";
+        font-size: 12px;
+        line-height: 16px;
+        max-width: 150px;
+        padding: 15px;
+    }
+}
+
+.sharing-modal-wrapper {
+    font-family: "Graphik";
+    padding: 20px 40px;
+
+    h2,
+    h3,
+    p,
+    label {
+        color: #121212;
+        margin: 0px;
+    }
+
+    // header
+    &__header {
+        display: grid;
+        gap: 8px;
+        margin-bottom: 30px;
+
+        // edit sharing
+        h2 {
+            font-size: 24px;
+            line-height: 24px;
+        }
+
+        // case info | submitted by
+        p {
+            color: #616568;
+            font-size: 12px;
+            line-height: 16px;
+
+            &#bold {
+                font-weight: 500;
+            }
+
+            #target-name {
+                font-size: 14px;
+                font-weight: 500;
+            }
+        }
+    }
+
+    // body
+    &__body {
+
+        // input sections
+        .section {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+
+            label {
+                font-size: 12px;
+                font-weight: 500;
+                margin-bottom: 8px;
+
+                span {
+                    color: #cc0000;
+                }
+
+                .fas {
+                    color: #c2c9d1;
+                    cursor: pointer;
+                }
+            }
+
+            input {
+                border: 1px solid #e0e4e8;
+                border-radius: 4px;
+                color: #121212;
+                font-size: 16px;
+                padding: 6px 10px;
+            }
+        }
+    }
+
+    // footer
+    &__footer {
+        gap: 10px;
+        justify-content: flex-end;
+
+        // btns
+        .btn {
+            font-size: 12px;
+            font-weight: 500;
+            line-height: 12px;
+            padding: 14px 20px;
+
+            &.primary {
+                background-color: #284ce0;
+                color: #fff;
+
+                &:hover {
+                    background-color: #1d3fca;
+                }
+            }
+
+            &.secondary {
+                background-color: #fff;
+                border: 1px solid #284ce0;
+                color: #284ce0;
+
+                &:hover {
+                    border: 1px solid #1d3fca;
+                    color: #1d3fca;
+                }
+            }
+        }
+    }
+}
+
+// custom toggle switch
+/* The switch - the box around the slider */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 30px;
+    height: 16px;
+    margin-inline: 8px !important;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* The slider */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 12px;
+    width: 12px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked+.slider {
+    background-color: #2196F3;
+}
+
+input:focus+.slider {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked+.slider:before {
+    -webkit-transform: translateX(14px);
+    -ms-transform: translateX(14px);
+    transform: translateX(14px);
+}
+
+/* Rounded sliders */
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}

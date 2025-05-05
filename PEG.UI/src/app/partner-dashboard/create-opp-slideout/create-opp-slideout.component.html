@@ -1,0 +1,57 @@
+<div class="create-new-opp" [ngClass]="{ open: openForm }" (click)="handleOutsideClick($event)">
+  <div class="create-new-opp-wrapper" [ngClass]="{ open: openForm }">
+    <!-- Body -->
+    <!-- Place form content here -->
+    <div id="registrations-sidebar" class="col sidebar-column registration-sidebar active">
+      <!-- flyout-header -->
+      <div class="flyout-header d-flex align-items-center justify-content-between">
+        <div class="d-flex">
+          <span>{{ registration?.cl?.clientName }}</span>
+          <span class="mx-4">|</span>
+          <span>Priority: {{ registration?.cl?.clientPriorityName ?
+            registration?.cl?.clientPriorityName : 'Non-P' }}</span>
+        </div>
+
+        <i class="fa fa-times" (click)="toggleSlideOut(false,0)" style="cursor: pointer"></i>
+      </div>
+
+      <!-- content -->
+      <div class="container sidebar-normal">
+        <!-- summary -->
+        <div class="target-summary d-flex align-items-center">
+          <!-- target -->
+          <span title="{{ registration.tdn && registration.tdn !== '' ? registration.tdn : 'Project Name' }}"
+            id="target">Target: {{ registration.tdn && registration.tdn !== "" ? registration.tdn :
+            "Project Name"
+            }}</span>
+
+          <!-- clearance status | bidder -->
+          <div class="d-flex align-items-center" id="idStatusTypeName">
+            <span>Status</span>
+
+            <!-- status -->
+            <div id="status">
+              {{ registration && registration.stn ? registration.stn.statusTypeName
+              :'' }}
+            </div>
+
+            <!-- stage -->
+            <div class="stage">
+              {{ registration.sgTN }}
+            </div>
+
+            <!-- bidder -->
+            <!-- <app-custom-tags [ispubliclyTradedEquity]="registration.pte" [ispubliclyTradedDebt]="registration.ptd"
+              [workToStart]="registration.wts" [typeOfWork]="registration.wti" [isMultibidder]="registration.imb"
+              [isSingleBidder]="registration.isb" [isSeller]="registration.isSeller"
+              [openMarketPurchase]="registration.iomp" [showFullTagName]="showFullTagName"></app-custom-tags> -->
+          </div>
+        </div>
+
+        <app-sidebar-notes style="height: 100%; width: 100%; overflow: auto" [fieldAuthConfig]="fieldAuth"
+          [sgTI]="registration.sgTI" [completionDate]="registration.ceD" [commitDate]="registration.cd"
+          [registrationId]="registration.id" [isMasked]="registration.isMasked"></app-sidebar-notes>
+      </div>
+    </div>
+  </div>
+</div>

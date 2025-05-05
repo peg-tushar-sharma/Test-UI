@@ -1,0 +1,25 @@
+
+.ag-menu {
+    min-width: 254px!important;
+}
+
+::ng-deep .ag-filter-value{
+    margin-left:32px !important;
+}
+
+
+::ng-deep .ag-theme-bootstrap .ag-filter .ag-filter-checkbox{
+    height: 24px;
+}
+
+::ng-deep .ag-theme-bootstrap .ag-filter .ag-filter-checkbox{
+    padding-top:0px
+}
+
+::ng-deep #selectAll {
+    margin-right: 0px !important;
+}
+
+::ng-deep .ag-virtual-list-container label {
+    margin-bottom: 0px !important;
+}

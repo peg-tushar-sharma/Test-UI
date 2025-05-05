@@ -1,0 +1,49 @@
+<div class="custom-card">
+  <div class="d-flex align-items-center justify-content-between">
+    <div class="custom-nav d-flex align-items-center">
+      <ul class="nav nav-tabs">
+        <li class="nav-item">
+          <a class="nav-link pointer" [class.font-weight-normal]="currentTab !== 'LEGAL'"
+            [class.active]="currentTab === 'LEGAL'" (click)="changeTab('LEGAL')">Pending Legal Approval <span>({{
+              pendingLegal.length }})</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link pointer" [class.font-weight-normal]="currentTab !== 'PARTNER'"
+            [class.active]="currentTab === 'PARTNER'" (click)="changeTab('PARTNER')">Pending Partner Approval <span>({{
+              pendingPartner.length }})</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link pointer" [class.font-weight-normal]="currentTab !== 'COMPLETED'"
+            [class.active]="currentTab === 'COMPLETED'" (click)="changeTab('COMPLETED')">Completed</a>
+        </li>
+      </ul>
+    </div>
+    <div class="cta justify-self-end align-items-end mt-3" *ngIf="currentTab != 'COMPLETED'" >
+      <a class="align-self-end" style="cursor: pointer;color: #284ce0;font-size: 13px;font-weight: 500;">
+        <label> <input type="checkbox" [(ngModel)]="isAssignedToMe" (click)="onAssignToMeClick()" /> Only show items assigned to me</label>
+      </a>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="search-input-wrapper d-flex align-items-center">
+      <i class="fas fa-search text-danger"></i>
+      <input class="inpt" id="filter-text-box" [(ngModel)]="filterTerm" placeholder="Search by Target or Client"
+        (input)="applyFilter()" />
+    </div>
+
+    <div [class.card-height]="currentTab != 'COMPLETED'">
+      <ng-container *ngIf="currentTab === 'LEGAL'">
+        <app-conflict-card *ngFor="let row of filteredPendingLegal; trackby:trackBy" [rowData]="row" [stages]="stages"
+          [statuses]="statuses"
+          (update)="updateOpportunity($event)"></app-conflict-card>
+      </ng-container>
+      <ng-container *ngIf="currentTab === 'PARTNER'">
+        <app-conflict-card *ngFor="let row of filteredPendingPartner; trackby:trackBy" [rowData]="row" [stages]="stages" class=""
+          [statuses]="statuses" (update)="updateOpportunity($event)"></app-conflict-card>
+      </ng-container>
+      <ng-container *ngIf="currentTab === 'COMPLETED'">
+        <app-conflict-grid [filterTerm]="filterTerm"></app-conflict-grid>
+      </ng-container>
+    </div>
+  </div>
+</div>

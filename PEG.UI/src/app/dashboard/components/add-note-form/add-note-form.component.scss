@@ -1,0 +1,21 @@
+.add-note-wrapper {
+  font-size: 14px;
+
+  textarea {
+    border-radius: 8px;
+    border: solid 1px #E6E6E6;
+    padding: 16px;
+  }
+
+  .header > h4 {
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 21px;
+  }
+
+  button:not(.btn-link) {
+    background-color: rgba(40, 76, 224, 1) !important;
+    border: 0 !important;
+  }
+}

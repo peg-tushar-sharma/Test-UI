@@ -1,0 +1,32 @@
+<div class="custom-cell">
+  
+  <div>
+    <label class="container">SPAC <input type="checkbox"  #clientTypes (change)="onCheckboxChange($event,'isSpecialPurposeAcquisitionCompany')"
+        [checked]="clientTypeObj.isSpecialPurposeAcquisitionCompany">
+      <span class="checkmark"></span>
+    </label>
+    <label class="container">HF <input type="checkbox" (change)="onCheckboxChange($event,'isHedgeFundClient')" 
+        [checked]="clientTypeObj.isHedgeFundClient">
+      <span class="checkmark"></span>
+    </label>
+    <label class="container">Private Equity <input type="checkbox" (change)="onCheckboxChange($event,'isPrivateEquity')"
+        [checked]="clientTypeObj.isPrivateEquity">
+      <span class="checkmark"></span>
+    </label>
+    <label class="container">Infra  <input type="checkbox"  (change)="onCheckboxChange($event,'isInfra')"
+        [checked]="clientTypeObj.isInfra">
+      <span class="checkmark"></span>
+    </label>
+    <label class="container">Corporate  <input type="checkbox" (change)="onCheckboxChange($event,'isCorporate')"
+        [checked]="clientTypeObj.isCorporate">
+      <span class="checkmark"></span>
+    </label>
+    <label class="container">Growth Equity  <input type="checkbox"  (change)="onCheckboxChange($event,'isGrowthEquity')"
+        [checked]="clientTypeObj.isGrowthEquity">
+      <span class="checkmark"></span>
+    </label>
+  </div>
+
+
+
+</div>

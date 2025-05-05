@@ -1,0 +1,211 @@
+// Partner Dashboard
+.dashboard-page {
+    background: #f7f9ff;
+    font-family: "Graphik";
+    height: calc(100vh - 57px);
+    width: 100%;
+
+    // Left Menu
+    .left-side-menu-wrapper {
+        background: #edf0ff;
+        border-right: 1px solid #e0e4e8;
+        box-sizing: border-box;
+        flex-direction: column;
+        width: 60px;
+
+        // Menu Items
+        button {
+            border-bottom: 1px solid #e0e4e8;
+            box-sizing: border-box;
+            color: #616568;
+            font-size: 10px;
+            font-weight: 400;
+            padding: 14px 0px 12px;
+            text-align: center;
+            width: 100%;
+
+            // Icons
+            .icon-wrapper {
+                // border: 2px solid #616568;
+                border-radius: 50px;
+                height: 25px;
+                margin: 0px auto 6px;
+                width: 25px;
+
+                &.with-icon {
+                    border-color: #284ce0;
+                }
+
+                i {
+                    color: #284ce0;
+                    font-size: 12px;
+                }
+            }
+        }
+    }
+
+    // Page Wrapper
+    .right-side-wrapper {
+        display: flex;
+        flex-direction: column;
+        height: calc(100% - 25px);
+        padding: 20px 40px;
+        width: 100%;
+
+        .content-wrapper {
+            background: #fff;
+            border: 1px solid #e0e4e8;
+            border-radius: 4px;
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+            padding: 20px;
+            width: 100%;
+
+            // Header
+            .header-wrapper {
+                align-items: center;
+                display: grid;
+                gap: 10px;
+                grid-template-areas:
+                    "header1 header2 search cta1 cta2";
+                grid-template-columns: auto 1fr 1fr auto auto;
+
+                // Active opps...
+                h5 {
+                    font-size: 16px;
+                    line-height: 20px;
+                    margin: 0px;
+                    font-weight: 400;
+                    cursor: pointer;
+                }
+
+                .activeHeader {
+                    color: #cc0000;
+                    font-weight: 500;
+                }
+                .archiveHeader {
+                    width:35%;
+                }
+                // Archived opps...
+                p {
+                    color: #616568;
+                    font-size: 16px;
+                    font-weight: 400;
+                    line-height: 20px;
+                    margin: 0px;
+                }
+
+                // Search Wrapper
+                .search-input-wrapper {
+                    position: relative;
+
+                    i {
+                        color: #121212;
+                        font-size: 12px;
+                        left: 10px;
+                        position: absolute;
+                    }
+
+                    input {
+                        padding-left: 30px;
+                        width: 100%;
+                        // width: 370px;
+                    }
+                }
+
+                // New Registration
+                a {
+                    justify-content: center;
+                    text-decoration: none;
+                }
+            }
+
+            // Table Wrapper
+            .table-wrapper {
+                display: flex;
+                flex: 1;
+                flex-direction: column;
+                margin-top: 20px;
+            }
+        }
+    }
+}
+
+.color-lav {
+    background: #f7f9ff;
+    // border-bottom-color: #c2c9d1;
+    border: 1px solid #f0f1f2;
+    color: #616568 !important;
+    cursor: pointer;
+
+    &.full {
+        border-radius: 4px;
+        height: 32px;
+        padding: 0px 10px;
+    }
+}
+
+::ng-deep .ag-theme-alpine .ag-popup-editor {
+
+    position: absolute !important;
+    margin-top: -40px !important;
+
+}
+
+// reduce horizontal padding in cells
+::ng-deep .ag-theme-alpine .ag-header-cell,
+::ng-deep .ag-theme-alpine .ag-header-group-cell,
+::ng-deep .ag-theme-alpine .ag-cell,
+::ng-deep .ag-theme-alpine .ag-full-width-row .ag-cell-wrapper.ag-row-group {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+}
+
+// pinned columns
+::ng-deep .ag-theme-alpine .ag-pinned-left-header,
+::ng-deep .ag-theme-alpine .ag-cell.ag-cell-last-left-pinned:not(.ag-cell-range-right):not(.ag-cell-range-single-cell) {
+    border-right: solid 1px #e0e4e8 !important;
+}
+
+// media queries
+@media only screen and (max-width: 1081px) {
+    .dashboard-page {
+        flex-direction: column;
+
+        .left-side-menu-wrapper {
+            flex-direction: row;
+            height: 60px;
+            width: 100%;
+
+            button {
+                align-items: center;
+                border-right: 1px solid #e0e4e8;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                gap: 2px;
+                padding: 10px 20px;
+                width: auto;
+
+                .icon-wrapper {
+                    margin: 0px;
+                }
+            }
+        }
+
+        .right-side-wrapper {
+            padding: 20px;
+        }
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .header-wrapper {
+        grid-template-areas:
+            "search search cta1 cta2"
+            "header1 header2 header2 header2" !important;
+        grid-template-columns: auto 1fr !important;
+        row-gap: 20px !important;
+    }
+}

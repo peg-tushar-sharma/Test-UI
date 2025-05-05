@@ -1,0 +1,9 @@
+<span *ngIf="isUserAccessAllowed">
+  <app-navigation></app-navigation>
+  <main>
+    <div class="masterContainer" id="masterContainer">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+  <app-footer></app-footer>
+</span>

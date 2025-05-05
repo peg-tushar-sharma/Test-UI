@@ -1,0 +1,68 @@
+@import "../../../../../styles/abstract/variables.scss";
+
+.modal-header {
+  color: $bain-red !important;
+}
+
+.box-color {
+  height: 50px;
+  width: 50px;
+}
+
+.box-blue {
+  background: #8cd8f8;
+}
+
+.box-orange {
+  background: #f1d66a;
+}
+
+.box-green {
+  background: #69dfb1;
+}
+
+/*** save button ***/
+.button-footer {
+  text-align: center;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 3px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.modal-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.allocationNoteInput {
+  border: none;
+  outline: 1px solid #616568;
+  padding: 10px;
+}
+
+.modal-backdrop {
+  z-index: 2 !important;
+}
+
+pre {
+  white-space: pre-wrap;
+  font: 12px sans-serif, Graphik;
+}

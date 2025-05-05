@@ -1,0 +1,29 @@
+.tag-filter{
+  li.orange, li.purple, li.blue{
+    &:before{
+      content: '';
+      display: inline-block;
+      position: relative;
+      top: 5px;
+      margin-right: calc($base-padding/2);
+      width:20px;
+      height:20px;
+      border-radius: 3px;
+    }
+  }
+  li.orange{
+    &:before{
+      background-color: $tag-1;
+    }
+  }
+  li.purple{
+    &:before{
+      background-color: $tag-2;
+    }
+  }
+  li.blue{
+    &:before{
+      background-color: $tag-3;
+    }
+  }
+}

@@ -1,0 +1,16 @@
+<!-- <div class="cell-width">
+  
+    <div class="custom" style="margin-top: 5px;">
+        <span># Weeks:</span>
+        <span><input  [ngClass]="this.hideWeeks ? 'hide' : 'input'" maxlength="16" [(ngModel)]="noOfWeek" [disabled]="this.hideWeeks" (keyup)="viewEdit('weeks')"  style="width: 100%;" placeholder="" type="text"/></span>
+    </div>
+    <div class="custom" style="margin-top: 5px;">
+        <span>  Range:</span>
+        <span><input  [ngClass]="this.hideRange ? 'hide' : 'input'" maxlength="16" [disabled]="this.hideRange" [(ngModel)]="range" (keyup)="viewEdit('range')" style="width: 100%;" placeholder="" type="text"/></span>
+    </div>
+    <div class="custom" style="margin-top: 5px;">
+        <span> Other:</span>
+        <span><input class="input" [(ngModel)]="durationInfo" maxlength="100" style="width: 100%;" placeholder="" type="text"/></span>
+    </div>
+</div> -->
+<input  [(ngModel)]="durationInfo" (keypress)="validateKeysForDuration($event)" maxlength="4" style="width: 100%;" placeholder="" type="text"/>

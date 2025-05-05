@@ -1,0 +1,22 @@
+#toast-container{
+  .toast{
+    padding-left: 15px!important;
+    width: auto;
+  }
+
+  .toast-title, .toast-message{
+    display: inline-block;
+  }
+
+  .toast-message{
+    margin-right: $base-padding;
+  }
+
+  .toast-success {
+    background-image: none!important;
+  }
+
+  .toast-close-button{
+    top: unset!important;
+  }
+}

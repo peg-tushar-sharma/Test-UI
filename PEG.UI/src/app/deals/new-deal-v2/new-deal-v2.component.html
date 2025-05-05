@@ -1,0 +1,305 @@
+<div *ngIf="trackerStatus"
+  style="position:absolute; background-color: gray; opacity:0.9;color:black; z-index:999; left:0;top:60px; height:100vh;width:100%;font-weight: 700;font-size: 19px;text-align: center;padding-top: 60px;">
+  <span>Tracker has been deleted or does not exist. Please click <a class="backLink" (click)="routeBack()">here</a> to
+    go back to Deal Tracker grid.</span>
+</div>
+<ng-container>
+
+
+  <div class="container-fluid target-history" style="height: 92vh; font-family: 'Graphik';">
+    <form (keydown.enter)="$event.preventDefault()" focusFirstInvalidField #parentHeight
+      class="needs-validation data-collection" novalidate #form="ngForm">
+      <div id="new-deal-header" *ngIf="deal" class="edit-mode" #firstChild>
+
+        <div class="mb-nav-segment col-5">
+          <div class="col-6">
+            <h4>Name</h4>
+            <input id="targetName" type="text" class="form-control col-12"    autocomplete="off" name="targetName"  [disabled]='dealTracker.isMasked'
+              (focusout)="onFormValueChanged('targetName','fromProperty')" [(ngModel)]="dealTracker.targetName">
+          </div>
+
+          <div class="mb-nav-block col-6">
+            <h4>Asset Status:</h4>
+            <ng-container>
+              <div class="btn-group" dropdown>
+                <button id="button-basic" style="overflow: hidden; text-overflow: ellipsis;" dropdownToggle
+                  type="button" class="btn btn-secondary dropdown-toggle header-dropdown"
+                  aria-controls="dropdown-basic">
+                  {{selectedStatus?selectedStatus.dealStatusName:'Deal/Asset Status'}} <span class="caret"></span>
+                </button>
+                <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+
+                  <li *ngFor="let status of dealStatus" role="menuitem"><a class="dropdown-item"
+                      (click)="selectStatus(status)"
+                      style="cursor: pointer;color: #212529;">{{status.dealStatusName}}</a>
+                  </li>
+                </ul>
+              </div>
+            </ng-container>
+          </div>
+
+          <div id="industry" class="mb-nav-block col-6">
+            <h4>Industry:</h4>
+            <div class="mx-n row no-gutters" [class.touched]="industry.touched" [class.invalid]="industry.invalid">
+              <ng-select id="industries" class="custom compWidth" style="width: 100%;" name="industries"
+                #industry="ngModel" bindLabel="industryName" [multiple]="true" [items]="industries"
+                [(ngModel)]="dealTracker.industries" (change)="onIndustryChange($event)"
+                (remove)="onIndustryRemove($event)" (clear)="onIndustryClear($event)">
+                <ng-template ng-multi-label-tmp let-items="items" let-clear="clear" style="width: 95%;">
+                  <div class="ng-value" *ngFor="let item of items | slice:0:1" title="{{item.industryName}}" style="max-width: 50%;">
+                    <span class="ng-value-icon left" (click)="clear(item)" aria-hidden="true">×</span>
+
+                    <span class="ng-value-label"> {{item.industryName}}</span>
+                  </div>
+                  <div class="ng-value" *ngIf="items.length > 1">
+                    <span class="ng-value-label">+{{items.length - 1}}</span>
+                  </div>
+                </ng-template>
+              </ng-select>
+            </div>
+          </div>
+
+          <div id="mb-status-block" class="mb-nav-block col-3">
+            <h4>MB Status</h4>
+            <div class="btn-group" dropdown>
+              <button id="mbStatus" style="overflow: hidden;text-overflow: ellipsis;" dropdownToggle type="button"
+                title="{{selectedMBStatus?selectedMBStatus.mbStatusName:'MB Status'}}"
+                class="btn btn-secondary dropdown-toggle header-dropdown" aria-controls="dropdown-basic">
+                {{selectedMBStatus?selectedMBStatus.mbStatusName:'MB Status'}} <span class="caret"></span>
+              </button>
+              <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+                <li *ngFor="let status of mbStatus" role="menuitem"><a class="dropdown-item"
+                    (click)="selectMBStatus(status)" style="cursor: pointer;color: #212529;">{{status.mbStatusName}}</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div id="mb-status-block" class="mb-nav-block col-3">
+            <h4>Sell-Side Status</h4>
+            <div class="btn-group" dropdown>
+              <button id="sellSideStatus" style="overflow: hidden;text-overflow: ellipsis;" dropdownToggle type="button"
+                      title="{{selectedSellSideStatus?selectedSellSideStatus.sellSideStatusName:'Sell-Side Status'}}"
+                      class="btn btn-secondary dropdown-toggle header-dropdown" aria-controls="dropdown-basic"
+                      [class.bold-status]="selectedSellSideStatus?.sellSideStatusId == 3 || selectedSellSideStatus?.sellSideStatusId == 4">
+                {{selectedSellSideStatus?selectedSellSideStatus.sellSideStatusName:'Sell-Side Status'}} <span class="caret"></span>
+              </button>
+              <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+                <li *ngFor="let status of sellSideStatus" role="menuitem"><a class="dropdown-item"
+                    (click)="selectSellSideStatus(status)" style="cursor: pointer;color: #212529;">{{status.sellSideStatusName}}</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="mb-nav-block col-6">
+            <h4>Public</h4>
+            <div class="d-flex align-items-center">
+              <label for="publicYes" class="radioContainer">
+                <input type="radio" [value]="true" name="publiclyTraded" [(ngModel)]="dealTracker.publiclyTraded"
+                  id="publiclyNo" (change)="onFormValueChanged('publiclyTraded','fromProperty')">
+                <span class="radioMark"></span>
+                Yes
+              </label>
+
+              <label for="publicNo" class="radioContainer ml-2">
+                <input type="radio" [value]="false" name="publiclyTraded" [(ngModel)]="dealTracker.publiclyTraded"
+                  id="publiclyNo" (change)="onFormValueChanged('publiclyTraded','fromProperty')">
+                <span class="radioMark"></span>
+                No
+              </label>
+
+            </div>
+          </div>
+
+          <div id="sector" class="mb-nav-block col-3">
+            <h4>Sector:</h4>
+            <div class="mx-n row no-gutters">
+              <ng-select id="sectors" class="custom compWidth" name="sectors" #sectors="ngModel" style="width: 100%;"
+                bindLabel="sectorName" [multiple]="true" [items]="sectorsList" [(ngModel)]="dealTracker.sectors"
+                (change)="onSectorChange($event)" (remove)="onSectorRemove($event)" (clear)="onSectorClear($event)">
+                <ng-template ng-multi-label-tmp let-items="items" let-clear="clear" style="width: 95%;">
+                  <div class="ng-value" *ngFor="let item of items | slice:0:1" title="{{item.sectorName}}"style="max-width: 50%;">
+                    <span class="ng-value-icon left" (click)="clear(item)" aria-hidden="true">×</span>
+                    <span class="ng-value-label"> {{item.sectorName}}</span>
+                  </div>
+                  <div class="ng-value" *ngIf="items.length > 1">
+                    <span class="ng-value-label">+{{items.length - 1}}</span>
+                  </div>
+                </ng-template>
+              </ng-select>
+            </div>
+          </div>
+
+          <div id="subsector" class="mb-nav-block col-3">
+            <h4>Subsector:</h4>
+            <ng-container>
+              <ng-select id="subSectors" class="custom compWidth" name="subSectors" #sectors="ngModel"
+                style="width: 100%;" bindLabel="subSectorName" [multiple]="true" [items]="subSectorsList"
+                [(ngModel)]="dealTracker.subSectors" (change)="onSubSectorChange($event)">
+                <div class="mx-n row no-gutters pr-2"></div>
+                <ng-template ng-multi-label-tmp let-items="items" let-clear="clear" style="width: 95%;">
+                  <div class="ng-value" *ngFor="let item of items | slice:0:1" title="{{item.subSectorName}}"style="max-width: 50%;">
+                    <span class="ng-value-icon left" (click)="clear(item)" aria-hidden="true">×</span>
+                    <span class="ng-value-label"> {{item.subSectorName}}</span>
+                  </div>
+                  <div class="ng-value" *ngIf="items.length > 1">
+                    <span class="ng-value-label">+{{items.length - 1}}</span>
+                  </div>
+                </ng-template>
+              </ng-select>
+            </ng-container>
+          </div>
+
+
+
+        </div>
+        <!--end nav segment-->
+
+        <div class=" mb-nav-segment col-3">
+          <div class="mb-nav-block col-12">
+            <h4>Notes:</h4>
+            <textarea id="mb-notes" type="text" class="form-control mb-2 mr-sm-2" rows="4" #notes="ngModel"
+              autocomplete="off" name="notes" (focusout)="onFormValueChanged('notes','fromProperty')"
+              (keydown.enter)="onEnterKeyPress($event)" [(ngModel)]="dealTracker.notes"
+              id="deal-header-notes"></textarea>
+          </div>
+        </div>
+
+        <div class="mb-nav-segment col-4">
+          <div class="mb-nav-flex col-6">
+            <div class="mb-nav-block col-12">
+              <div [class.touched]="managedBy.touched" [class.invalid]="managedBy.invalid" class="form-inline">
+                <h4>Managed By *:</h4>
+                <ng-select class="custom header-dropdown" required #managedBy="ngModel" [items]="mbManagerList"
+                  bindValue="employeeCode" [(ngModel)]="dealTracker.managedBy" bindLabel="searchableName"
+                  name="managedBy" [searchFn]="customManagedBySearch" (change)="onManagedByChange($event)">
+                </ng-select>
+              </div>
+            </div>
+            <div class="mb-nav-block col-12">
+              <h4>Redbook ODA</h4>
+              <div>
+                <app-redbook-available [redbookAvailable]="redbookAvailable" (redbookChange)="redbookChange($event)"
+                  [containerName]="redbookContainerName"></app-redbook-available>
+              </div>
+
+            </div>
+            <div class="mb-nav-block col-12">
+              <h4>Deal in the news?</h4>
+              <div style="margin-top: 2px;">
+                <label style= "font-size: 13px !important" for="dealNewsYes" >Yes
+                  <input type="radio"  (change)="onDealNewsChange(true)"
+                    [checked]="isDealNews" id="dealNewsYes">
+                  </label>
+
+                  <label style= "font-size: 13px  !important" for="dealNewsNo" class="ml-2">No
+                  <input type="radio"  (change)="onDealNewsChange(false)"
+                    [checked]="!isDealNews" id="dealNewsNo">
+                  </label>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="mb-nav-flex col-4" id="advisorMB">
+            <div class="mb-nav-block col-12">
+              <h4>MB Advisor:</h4>
+              <ng-container>
+                <ng-select id="mbadvisor" [items]="mbAdvisorList" class="compWidth w-100" [selectOnTab]="true"
+                  bindLabel="searchableName" [clearSearchOnAdd]="true" [addTag]="false" [loading]="mbAdvisorLoad"
+                  loadingText="loading..." [multiple]="true" [hideSelected]="true" [clearable]="true"
+                  [typeahead]="mbAdvisorListTypeAhead" [(ngModel)]="selectedMBAdvisor"
+                  [ngModelOptions]="{standalone: true}" (change)="onMbAdvisorChange($event)">
+                  <ng-template ng-multi-label-tmp let-items="items" let-clear="clear" style="width: 95%;">
+                    <div class="ng-value" *ngFor="let item of items" title="{{item.searchableName}}">
+                      <span class="ng-value-icon left" (click)="clear(item)" aria-hidden="true">×</span>
+                      <span class="ng-value-label">{{item.searchableName}}</span>
+                    </div>
+                  </ng-template>
+                </ng-select>
+              </ng-container>
+            </div>
+
+          </div>
+          <div id="trackerControlsContainer" class="mb-nav-flex col-2">
+            <div class="smsHeaderWidth">
+              <div class="btn-class">
+
+                <button (click)="routeBack()" class="clickable ml-3" id="close-tracker">
+                  <span class="fa fa-times fa-2x"></span>
+                </button>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+
+      <p></p>
+      <!-- Tabs -->
+      <div class="col-12 tbs" style="height: 100%; overflow: hidden;">
+        <tabset #staticTabs style="height: 100%;">
+
+          <tab heading="Context" (selectTab)="selectTab('context')">
+            <app-dealv2-context [dealTracker]="dealTracker" [dealClient]="dealClient" *ngIf="currentTab == 'context'" [refreshImportantDates]="refreshImportantDates"
+              (refreshDeal)="dataFromTabs($event)"></app-dealv2-context>
+          </tab>
+
+          <tab style="height: 100%;" heading="Allocation" active="true" (selectTab)="selectTab('strategy')">
+            <app-deal-strategy *ngIf="currentTab == 'strategy'" [dealId]="dealId" [targetName]="dealTracker.targetName" [isOpenMailPopup]="isOpenMailPopup"
+              (updateMBStatus)="updateMBStatus($event)" (updateAssetStatus)="updateAssetStatus()" [dealLabel]="dealLabel" [isTabReadOnly]="false"
+              (openExpertiseRequestEmail)="openExpertiseRequestEmail($event)" (updateSellSideStatus) = "updateSellSideStatus($event)"
+              (updateDealTracker)="updateDealTracker($event)" [managedByRegion]="managedByRegion">
+            </app-deal-strategy>
+          </tab>
+
+        </tabset>
+      </div>
+
+    </form>
+
+  </div>
+</ng-container>
+<ng-template #targetTemplate>
+  <form #popform="ngForm" novalidate>
+    <div class="modal-header">
+      <h5 class="modal-title">Create New Deal Tracker</h5>
+      <button type="button" id="btnNoteClose" data-dismiss="modal" (click)="closeCreateNewDealModal()" class="close"
+      aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+    <div class="modal-body">
+      <div class="container">
+        <div style="color: #949494;">Target Name*:</div>
+        <div class="row mb-3">
+          <div class="col-12">
+            <div>
+              <br>
+              <input id="targetName" type="text" class=" col-12" autocomplete="off" name="targetName" required
+                [(ngModel)]="dealTracker.targetName">
+            </div>
+          </div>
+        </div>
+        <div style="color: #949494;">Managed By*:</div>
+        <div class="row mb-3">
+          <div class="col-12">
+            <div>
+              <br>
+              <ng-select class="custom header-dropdown" required #managedBy="ngModel" [items]="mbManagerList"
+                bindValue="employeeCode" [(ngModel)]="dealTracker.managedBy" bindLabel="searchableName" name="managedBy"
+                [searchFn]="customManagedBySearch" >
+              </ng-select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-primary" (click)="createDealTracker('targetName','fromProperty')"
+      [disabled]="!(form && form.valid && dealTracker.targetName.trim() !== '')">Create</button>
+    </div>
+  </form>
+</ng-template>

@@ -1,0 +1,7 @@
+<div [style.width]="(isOnRegistrationForm == true) ? '100%' : '150px'">
+  <ng-select id="client" class="custom" name="client" #selectClient [items]="clients" [selectOnTab]="true"
+    dropdownPosition="auto" bindLabel="clientName" bindValue="clientName" [clearSearchOnAdd]="true" maxSelectedItems=5
+    [multiple]="isMultiple" [loading]="clientLoad" (change)="emitValue($event)" loadingText="loading..."
+    [hideSelected]="false" [typeahead]="clientTypeAhead" [(ngModel)]="selectedClient" [addTag]="!isMultiple"
+    (blur)="updateValue();"></ng-select>
+</div>

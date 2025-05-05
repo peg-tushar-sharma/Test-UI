@@ -1,0 +1,870 @@
+@import "abstract/variables.scss";
+@import "./../styles/abstract/variables.scss";
+@import "./../styles/layout/modal.scss";
+@import "./../styles/layout/form";
+
+.pipelineContainer {
+  font-family: "Graphik";
+  position: relative;
+  right: 0;
+  transition: all 0.15s ease-out;
+}
+
+/* New navigation START */
+.navigationFirstRow {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 50px;
+  align-items: center;
+}
+
+.has-search .form-control {
+  padding-left: 2.375rem;
+}
+
+.search-wrapper {
+  align-items: center;
+  border: 1px solid #e0e4e8;
+  border-radius: 4px;
+  display: flex;
+  color: #121212;
+  font-size: 12px;
+  gap: 5px;
+  padding-inline: 10px;
+  width: 300px;
+
+  &:hover {
+    border-color: #284ce0;
+  }
+
+  input {
+    border: none;
+    height: 32px;
+    outline: none;
+    overflow: hidden;
+    padding: 0px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+  }
+
+  .btn {
+    background: none;
+    border: none;
+    outline: none;
+    padding: 0px;
+  }
+
+  .fas {
+    color: #121212;
+    font-size: 12px;
+  }
+}
+
+.blue-left-border {
+  border-left: 3px solid #0075ff !important;
+}
+
+.green-left-border {
+  border-left: 3px solid #008000 !important;
+}
+
+.red-left-border {
+  border-left: 3px solid $bain-red !important;
+}
+
+.colContainer {
+  display: flex;
+  flex: 1;
+  flex-basis: 100%;
+}
+
+.colContainer2 {
+  display: flex;
+}
+
+.colContainerRegion {
+  display: flex;
+  padding: 5px;
+  margin-left: 25px;
+  height: 30px;
+  border: 1px solid #e4e1e1;
+}
+
+.utilityContainer {
+  display: flex;
+  justify-content: flex-end;
+  flex-basis: 100%;
+
+  .defaultBlock {
+    width: auto;
+    height: 30px;
+    background: #ffffff;
+    border: 1px solid #c4c4c4;
+    border-radius: 4px;
+    color: $bain-red;
+    font-size: 13px;
+    line-height: 1.25;
+    padding: 6px 10px 6px 10px;
+    margin: 0 5px;
+    outline: none;
+    cursor: pointer;
+
+    &.pip {
+      width: 40px;
+    }
+  }
+
+  .defaultBlock:hover {
+    background-color: #cc0000;
+    color: #ffffff;
+    border: 1px solid #cc0000;
+  }
+}
+
+.reports-block {
+  position: absolute;
+  top: 2.6rem;
+  right: 6.2rem;
+  min-width: 180px;
+  min-height: 100px;
+  z-index: 1000;
+
+  background: #ffffff;
+  border: 1px solid #cc0000;
+  box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.25);
+  border-radius: 3px;
+  padding: 8px;
+  color: #000000;
+}
+
+.report-btn {
+  background: #cc0000;
+  border-radius: 4px;
+  color: #ffffff;
+  height: 22px;
+  font-size: 12px;
+  line-height: 14px;
+  outline: none;
+  border: none;
+  width: 100px;
+  left: 15%;
+  text-align: center;
+}
+
+.differentFontBlock {
+  position: absolute;
+  background-color: #ffffff;
+  top: 2.6rem;
+  right: 4.1rem;
+  border: 1px solid #cc0000;
+  border-radius: 4px;
+  width: 108px;
+  height: 30px;
+  padding-left: 5px;
+  z-index: 1000;
+}
+
+.fontSizeBlock {
+  width: 24px;
+  color: #cc0000;
+  font-family: "Tiempos Headline" !important;
+  line-height: 1.8rem;
+  text-align: center;
+  cursor: pointer;
+}
+
+.font-block-1 {
+  font-size: 9px;
+  line-height: 2rem;
+}
+
+.font-block-2 {
+  font-size: 11px;
+  line-height: 2rem;
+}
+
+.font-block-3 {
+  font-size: 13px;
+}
+
+.font-block-4 {
+  font-size: 15px;
+}
+
+.fontSizeBlock:hover {
+  background: #cc0000;
+  color: #ffffff;
+  font-weight: 550;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  height: 24px;
+}
+
+.font-size-active {
+  background: #cc0000;
+  color: #ffffff;
+  font-weight: 550;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  height: 24px;
+}
+
+.activateDiv {
+  background-color: #b20000 !important;
+  color: #ffffff !important;
+}
+
+/* Custom radio button START */
+
+/* The container */
+.radioContainer {
+  display: block;
+  position: relative;
+  padding-left: 20px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default radio button */
+.radioContainer input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Create a custom radio button */
+.radioMark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 16px;
+  width: 16px;
+  background-color: #fff;
+  border-radius: 50%;
+  border: 1px solid #cc0000;
+}
+
+/* On mouse-over, add a grey background color */
+.radioContainer:hover input~.radioMark {
+  background-color: #cc0000;
+}
+
+/* When the radio button is checked, add a blue background */
+.radioContainer input:checked~.radioMark {
+  background-color: #ffffff;
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.radioMark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.radioContainer input:checked~.radioMark:after {
+  display: block;
+}
+
+/* Style the indicator (dot/circle) */
+.radioContainer .radioMark:after {
+  top: 2.5px;
+  left: 2.5px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #cc0000;
+}
+
+/* Custom radio button ENDS */
+
+/* Checkbox START */
+/* The checkContainer */
+.checkContainer {
+  display: block;
+  position: relative;
+  padding-left: 25px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  font-size: 12px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.checkContainer input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 18px;
+  width: 18px;
+  background-color: #fff;
+  border: 1px solid #cc0000;
+  box-sizing: border-box;
+  border-radius: 3px;
+}
+
+/* On mouse-over, add a grey background color */
+.checkContainer:hover input~.checkmark {
+  background-color: #cc0000;
+}
+
+/* When the checkbox is checked, add a blue background */
+.checkContainer input:checked~.checkmark {
+  background-color: #cc0000;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.checkContainer input:checked~.checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.checkContainer .checkmark:after {
+  left: 6px;
+  top: 2px;
+  width: 5px;
+  height: 11px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+/* Checkbox END */
+
+.disableButton {
+  background: rgba(204, 0, 0, 0.15);
+  border: 1px solid rgba(204, 0, 0, 0.2);
+}
+
+/* Grid columns filter */
+
+.pipelinesColumn {
+  position: absolute;
+  top: 2.6rem;
+  right: 0.5rem;
+  width: 350px;
+  height: 85vh;
+  background: #ffffff;
+  border: 1px solid #dadada;
+  box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.25);
+  border-radius: 3px;
+  z-index: 1000;
+}
+
+.filter-nav {
+  display: flex;
+  width: 100%;
+  height: 40px;
+  list-style: none;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.nav-item {
+  color: #000000;
+  font-size: 18px;
+  font-family: "Graphik";
+  outline: none;
+  text-align: center;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.nav-item:hover {
+  color: $bain-red;
+  font-weight: 650;
+  border-bottom: 1px solid $bain-red;
+}
+
+.activeFilter {
+  color: $bain-red;
+  font-weight: 650;
+  border-bottom: 1px solid $bain-red;
+}
+
+.resetGrid {
+  font-size: 12px;
+  line-height: 14px;
+  color: #000000;
+  margin-bottom: 0px;
+  text-decoration: underline;
+  text-align: center;
+  cursor: pointer;
+}
+
+.grid-columns {
+  margin-top: 5px;
+  padding-left: 10px;
+  height: 73.5vh;
+  overflow-y: auto;
+}
+
+.grid-columns {
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: #ffffff;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #929090;
+    border-radius: 4px;
+  }
+}
+
+.filter-text {
+  font-size: 12px;
+  color: #000000;
+}
+
+.filter-btn {
+  background: #cc0000;
+  border-radius: 4px;
+  color: #ffffff;
+  height: 24px;
+  font-size: 12px;
+  line-height: 14.4px;
+  outline: none;
+  border: none;
+  width: 70px;
+}
+
+.reset-btn {
+  margin-bottom: 8px;
+  color: #000000;
+  font-size: 14px;
+  font-weight: 550;
+  text-decoration: underline;
+  text-align: center;
+  cursor: pointer;
+}
+
+.default-list {
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+
+.dragable-div {
+  display: flex;
+  align-items: center;
+  height: 20px;
+  color: #000000;
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+
+.div-numbers {
+  width: 24px;
+}
+
+.dropping-item {
+  padding-left: 4px;
+  border: 1px solid #e5e5e5;
+  border-radius: 3px;
+  width: 80%;
+  cursor: move;
+
+  &:hover {
+    border: 1px solid #666666;
+  }
+}
+
+.removeBorder {
+  border: none;
+}
+
+.custom-placeholder {
+  width: 90%;
+  background: #ffffff;
+  border: 2px solid #999999;
+  border-radius: 4px;
+  min-height: 25px;
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.lines {
+  letter-spacing: 3px;
+  font-weight: 600;
+}
+
+/* Grid column filter END */
+/* New navigation END */
+
+/* Custom Check Box */
+.container {
+  display: block;
+  position: relative;
+  padding-left: 25px;
+  cursor: pointer;
+  margin-bottom: 0px !important;
+  font-size: 15px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+  top: 2px;
+  left: 0;
+  height: 17px;
+  width: 17px;
+}
+
+/* On mouse-over, add a grey background color */
+.container:hover input~.checkmark {
+  background-color: rgb(255, 255, 255);
+}
+
+/* When the checkbox is checked, add a blue background */
+.container input:checked~.checkmark {
+  background-color: #cc0000;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.container input:checked~.checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.container .checkmark:after {
+  left: 5px;
+  top: 1px;
+  width: 6px;
+  height: 12px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+.includearchive {
+  width: fit-content;
+  float: left;
+  margin-left: 0;
+}
+
+#archivedRegistrations {
+  margin-right: 5px;
+}
+
+.searcableArea {
+  position: absolute;
+  left: 0;
+  top: 100%;
+  background-color: #fff;
+  // width: 50%;
+  width: auto;
+  padding: 0.5rem;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.15);
+  z-index: 3000;
+  max-height: 375px;
+  overflow-y: scroll;
+  border: 1px solid #e0e4e8;
+
+  .regMatchParent {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0px 10px 10px;
+
+    .regMatch {
+      color: #121212;
+      margin: 0px;
+    }
+  }
+}
+
+.flex-parent {
+  display: flex;
+  margin: 5px auto;
+  flex: 1;
+  background-color: #f0f2f3;
+  padding: 5px 5px 5px 10px;
+  font-size: 12px;
+  border: 1px solid #e0e4e8;
+  border-radius: 4px;
+  color: #121212;
+  gap: 5px;
+  align-items: center;
+}
+
+.flex-item {
+  flex: 1;
+  border: none !important;
+  line-height: 16px;
+
+  #bolded {
+    font-weight: 500;
+    margin-right: 4px;
+  }
+}
+
+.flex-item-fixed {
+  flex: 0 0 45px;
+  font-size: 12px;
+  text-align: center;
+  padding: 0px 5px;
+  cursor: pointer;
+  font-weight: 500;
+  line-height: 16px;
+
+  .fa,
+  .fas {
+    font-size: 16px;
+  }
+}
+
+.flex-date-width {
+  max-width: 19%;
+}
+
+.addIcon {
+  color: #284ce0;
+
+  &:hover {
+    color: #093ba8;
+  }
+}
+
+.openIcon {
+  border-left: 2px solid #e0e4e8;
+  box-sizing: content-box;
+  color: #cc0000;
+  flex: 0 0 20px;
+  font-size: 20px;
+
+  &:hover {
+    color: #800000;
+  }
+}
+
+.tagName {
+  color: black;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.tagHolder {
+  color: black;
+  font-size: 12px;
+  font-weight: 700;
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+.headerContainer {
+  min-height: 33px;
+  border: 1px solid darkgrey;
+  border-radius: 4px;
+  padding: 4px;
+}
+
+.appliedHeaders {
+  margin-right: 4px;
+  background-color: #8ccdff;
+  color: black;
+  font-size: 21px;
+  margin-bottom: 7px;
+  padding: 4px;
+  border-radius: 4px;
+  font-size: 11px;
+}
+
+::ng-deep .dropdown-toggle {
+  background: #dbdbdb !important;
+}
+
+.date-range-picker {
+  width: 150px !important;
+  height: 30px !important;
+  font-size: 14px !important;
+  padding: 0 0 0 30px !important;
+  border-radius: 4px;
+  padding: 0px 0px 0px 20px !important
+}
+
+.date-range-label {
+  width: 85px;
+}
+
+.start-date-range {
+  width: 24% !important;
+}
+
+.filterDiv {
+  font-size: 12px;
+
+  &.savedFiltersContainer {
+    display: inline-flex;
+    padding: 0px 0px 0px 0px;
+    margin-bottom: 3px;
+    align-items: flex-start;
+  }
+
+  label {
+    color: #000;
+  }
+
+  button,
+  button[disabled],
+  button:hover {
+    background: none !important;
+    color: #284ce0;
+    font-size: 12px;
+    margin: 0 5px;
+
+    i {
+      margin-right: 5px;
+    }
+
+    &.dropdown-toggle,
+    &.dropdown-toggle:hover {
+      border-radius: 4px;
+      border: 1px solid #e0e4e8;
+      color: #616568;
+    }
+  }
+
+  #filterSaveNew {
+    i {
+      border: 1px solid #284ce0;
+    }
+  }
+
+  .dropdown {
+    margin: 0 10px 0 5px;
+  }
+
+  .bootstrap-select {
+    width: 150px !important;
+  }
+}
+
+// filter wrapper
+.filter-wrapper {
+  font-family: "Graphik";
+  gap: 10px;
+
+  p {
+    color: #616568;
+    font-size: 12px;
+    font-weight: 500;
+    margin: 0px;
+    white-space: nowrap;
+  }
+}
+
+.filter-wrapper {
+  ::ng-deep .custom-dropdown {
+    .dropdown-toggle {
+      min-width: 265px;
+      background-color: #fff !important;
+      border: 1px solid #e0e4e8 !important;
+      color: #121212 !important;
+      font-family: "Graphik" !important;
+      font-size: 12px !important;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 25px 6px 10px;
+      position: relative;
+
+      .dropdown-text {
+        text-align: left;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .dropdown-arrow {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+
+      &:hover {
+        border-color: #284ce0 !important;
+        color: #121212 !important;
+      }
+    }
+
+    .dropdown-menu {
+      min-width: 265px;
+      max-width: none;
+      width: auto;
+      padding: 0px;
+
+      ::ng-deep app-tree {
+        display: block;
+        width: 100%;
+      }
+      ::ng-deep.mat-tree {
+        overflow: hidden !important;
+        padding : 10px 0px 0px 0px !important;
+      }
+      ::ng-deep .mat-tree-node{
+        font-size:12px !important;
+      }
+      ::ng-deep .tree-node-nostyle-list{
+        padding-left: 0px !important;
+      }
+    }
+  }
+}
+
+// ng select dropdown panel
+.savedFiltersContainer ::ng-deep .ng-dropdown-panel .ng-dropdown-panel-items {
+  max-height: 500px !important;
+}
+

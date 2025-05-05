@@ -1,0 +1,118 @@
+<div class="row no-gutters" style="display: none;">
+
+  <div class="col-12 row no-gutters" id="breadcrumbs">
+    <div class="col-10">
+      <h1>Settings</h1>
+    </div>
+  </div>
+  <div id="sidebar">
+    <ul class="list">
+      <!-- <li class="active">
+        <a><i class="fas fa-industry" (click)="onTabChange($event)"></i> &nbsp; Industries</a>
+      </li> -->
+      <li class="">
+        <a><i class="fas fa-industry"></i> &nbsp; Hangfire</a>
+      </li>
+    </ul>
+  </div>
+
+  <div style="overflow-y:auto !important;" class="col">
+    <!-- <div><button class="btn btn-primary" (click)="onIndustryClick()">Sync Industries</button> </div> -->
+    <iframe [src]="HangfireDashboadUrl" width="100%" height="700px"></iframe>
+
+
+  </div>
+
+</div>
+
+<div class="settings-page d-flex">
+  <nav>
+    <a *ngFor="let nav of navConfig" [ngClass]="(nav?.isActive ==true)?'active':''"
+      (click)="toggleNav(nav)">{{nav.name}}</a>
+  </nav>
+  <div class="content-wrapper">
+    <!-- Header Wrapper -->
+    <div class="job-wrapper" *ngIf="getActiveNav('hangfireJobs')">
+      <iframe [src]="HangfireDashboadUrl" width="100%" height="700px"></iframe>
+
+    </div>
+
+    <div class="configuration-wrapper" *ngIf="getActiveNav('configuration')">
+      <div class="my-2">
+
+        <!-- Header -->
+        <div class="mb-4">
+          <p class="text-muted">Manage system operations, configure the application, and update its look and feel.
+
+          </p>
+        </div>
+
+        <!-- Add User Card -->
+        <!-- <div class="mb-4 p-4 rounded card-custom">
+          <div class="d-flex flex-wrap">
+            <div class="col-60 pe-3">
+              <h5>Add User</h5>
+              <p class="text-muted">Add a new user to the system with a name and email.</p>
+            </div>
+            <div class="col-40">
+              <div class="row g-2">
+                <div class="col-md-6 col-12">
+                  <input type="text" class="form-control" placeholder="Name">
+                </div>
+                <div class="col-md-6 col-12">
+                  <input type="email" class="form-control" placeholder="Email">
+                </div>
+                <div class="col-12">
+                  <button class="btn btn-primary w-100">Add</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> -->
+
+
+
+        <!-- Toggle Feature Card -->
+        <div class="mb-4 p-4 rounded card-custom">
+          <div class="d-flex flex-wrap">
+            <div class="col-70 pe-3">
+              <h5>Mask & Un-Mask Target Information</h5>
+              <p class="text-muted">Unmasking or masking Target data is applied only on the application interface. Users
+                can still access sensitive data through browser's developer tools. This is for demonstration purposes
+                only — please do not share access with sensitive user groups without proper consultation.</p>
+            </div>
+            <div class="col-30 d-flex align-items-center">
+              <div class="row g-2">
+
+                <div class="col-12">
+                  <label class="custom-switch">
+                    <input type="checkbox" [(ngModel)]="isDataMasked" (click)="toggleTargetMask()" />
+                    <span class="slider"></span>
+                  </label>
+                </div>
+                <div class="col-12" *ngIf="!isDataMasked">
+                  <input type="checkbox" [(ngModel)]="checkMaskAllUsers"  /> Check this only if you want to mask data for all users.
+
+
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-4 p-4 rounded card-custom">
+          <div class="d-flex flex-wrap">
+            <div class="col-70 pe-3">
+              <h5>Sync Industries</h5>
+              <p class="text-muted">Sync industry infromation from basis (Deprecated)</p>
+            </div>
+            <div class="col-30 d-flex align-items-center">
+              <button class="btn btn-primary" (click)="onIndustryClick()" disabled="true">Sync Industries</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

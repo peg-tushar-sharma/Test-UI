@@ -1,0 +1,13 @@
+<div class="office-tree-editor">
+  <ng-container *ngIf="!isLoading; else loadingTemplate">
+    <app-tree [treeData]="treeData" [defaultSelectedNodes]="defaultSelectedNodes"
+      (selectionChanged)="onSelectionChanged($event)" [disabled]="isDisabled">
+    </app-tree>
+  </ng-container>
+  <ng-template #loadingTemplate>
+    <div class="loading-overlay">
+      Loading offices...
+    </div>
+  </ng-template>
+</div>
+

@@ -1,0 +1,36 @@
+.flex-parent {
+    display: inline-flex;
+    flex: 1 1 0px;
+    color: #000000;
+    flex-wrap: wrap;
+  }
+
+  .flex-item  {
+    flex: 1 1 0px;
+    border:1px solid #c4c4c4;
+  }
+
+  .flex-item-clientname{
+    flex: 1;
+    min-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .flex-item-priorityname{
+    flex: 1;
+    min-width: 40px; 
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: normal;
+  }
+
+:host::ng-deep .ng-dropdown-panel-items {
+  max-height: 171px !important;
+}
+.divWidth
+{
+  width: 300px;
+}

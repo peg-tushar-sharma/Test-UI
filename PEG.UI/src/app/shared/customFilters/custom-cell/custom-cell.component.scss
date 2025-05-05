@@ -1,0 +1,33 @@
+@import "../../../../styles/abstract/variables.scss";
+
+.cellText {
+  color: #000000;
+  font-family: Graphik;
+  font-size: 11px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 74%;
+  width: 100%;
+}
+
+.priority {
+  color: #929090;
+  font-size: 10px;
+  font-family: Graphik;
+}
+
+.fa-flag {
+  color: #DADADA;
+  padding-right: 9px;
+  font-size: 10px;
+}
+
+.red {
+  color: $bain-red;
+}
+
+.customeCellGrouping {
+  display: flex;
+  align-items: center;
+}

@@ -1,0 +1,6 @@
+
+export const EMPLOYEE_STATUS_CODE: string ='N,A,L';
+export const LEVEL_STATUS_CODE: string ='V,M';
+export const EXPERT_PARTNER_LEVELGRADE: string ='EV1,F14,TD14,TT11,TT14';
+export const GENERAL_CONSULTANTS_CODE:string ='A,C,V,M,SC'
+export const GENERAL_CONSULTANTS_LEVELGRADE:string = 'A1,A2,A3,A4,A5,A6,A7,C1,C2,C3,C4,C5,C6,C7,M1,M2,M3,M4,M5,M6,M7,M8,M9,SC1,SC6,V3,V7'

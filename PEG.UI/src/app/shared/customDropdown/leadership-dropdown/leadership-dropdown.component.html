@@ -1,0 +1,40 @@
+<div class="structure">
+  <div class="header">
+    <span>Role</span>
+    <span>Person</span>
+    <span>Qualifier</span>
+    <span style="color: #0f77c7;justify-self: center;font-size: 1.2rem;font-weight: 700;" (click)="addInput()">+</span>
+  </div>
+
+  <div class="body">
+    <div class="input-wrapper">
+      <div class="input-list" *ngFor="let item of inputList">
+
+        <div class="role-input">
+          <input type="search" [(ngModel)]="item.role" 
+             [typeahead]="listOfRole" class="input-control">
+        </div>
+
+        <div class="person-input">
+          <ng-select 
+            [items]="listOfPerson"
+            [multiple]="true"
+            [closeOnSelect]="false"
+            bindLabel="name"
+            placeholder="Search People"
+            [(ngModel)]="item.person">
+          </ng-select>
+        </div>
+
+        <div class="qualifier-input">
+          <input type="search" placeholder="Qualifier" [(ngModel)]="item.qualifier" class="input-control">
+        </div>
+
+        <div class="input-delete">
+          <i class="fas fa-trash" (click)="deleteInput(item.id)"></i>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

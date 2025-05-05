@@ -1,0 +1,6 @@
+<div style="width:200px">
+  <ng-select  [multiple]="false"  [items]="values" #BooleanCellEditorComp
+  [(ngModel)]="selectedValue" [clearable]	 = "false" (change)="onSelectionChange($event)" bindLabel="name" 
+  bindValue="value" (clear)="resetDropDown();" >
+  </ng-select>
+</div>

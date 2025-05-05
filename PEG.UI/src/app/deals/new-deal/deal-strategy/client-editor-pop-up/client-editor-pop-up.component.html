@@ -1,0 +1,48 @@
+<div class="modal-header">
+  <h5 class="modal-title">
+    <span>Create Placeholder</span>
+  </h5>
+
+</div>
+<div class="modal-body" id="dealCreatePlaceholder">
+  <div class="">
+    <div class="form-group">
+      <label for="exampleInputEmail1">Client</label>
+      <ng-select id="clientComp" class="custom" #clientComp name="client" required [items]="clients"
+        [selectOnTab]="true" dropdownPosition="bottom" bindLabel="clientName" [clearSearchOnAdd]="true"
+        [loading]="clientLoad" loadingText="loading..." [hideSelected]="false" [typeahead]="clientTypeAhead"
+        [(ngModel)]="selectedClient" [addTag]="true">
+
+        <ng-template ng-option-tmp let-item="item">
+          <div class="flex-parent">
+            <div title="{{item.clientName}}" class="flex-item-clientname">{{item.clientName}} </div>
+            <div title="{{item.clientPriorityName}}" class="flex-item-priorityname"> {{item.clientPriorityName ? ' - ' +
+              item.clientPriorityName : '' }}</div>
+          </div>
+        </ng-template>
+
+      </ng-select>
+    </div>
+    <div class="form-group" >
+      <label for="exampleInputPassword1">Submitted By</label>
+
+      <ng-select dropdownPosition="auto" [items]="trainersList" [selectOnTab]="true" bindLabel="searchableName"
+        placeholder="Submitted By" [clearSearchOnAdd]="true" (change)="setTrainers($event)" loadingText="loading..."
+        [multiple]="false" [loading]="submittedByLoad" [hideSelected]="true" [clearable]="true"
+        [typeahead]="trainersTypeAhead" [(ngModel)]="selectedSubmittedBy">
+        <ng-template ng-option-tmp let-item="item">
+          <div [title]="item.employeeStatusCode!='EX'?item.employeeCode:''">{{item.searchableName}}
+            <span *ngIf="item.employeeStatusCode=='EX'" style="font-size: 10px;
+              padding: 0px 2px !important;" class="tag tag-gray ng-star-inserted">BAN</span>
+          </div>
+        </ng-template>
+      </ng-select>
+    </div>
+
+  </div>
+</div>
+<div class="modal-footer">
+  <button *ngIf="mode == 'add'" type="button" (click)="save()" class="btn btn-danger" [disabled]="!selectedClient">Add</button>
+  <button *ngIf="mode == 'edit'" type="button" (click)="save()" class="btn btn-danger" [disabled]="!selectedClient">Save Changes</button>
+  <button type="button" id="btnNoteClose" data-dismiss="modal" (click)="close()" class="btn btn-danger">Close</button>
+</div>

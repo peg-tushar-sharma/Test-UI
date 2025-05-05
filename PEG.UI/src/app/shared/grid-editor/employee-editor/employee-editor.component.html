@@ -1,0 +1,13 @@
+<div [style.width.px]="width" >
+  <ng-select id="dealExpert" #expertSelect name="dealExpert"   [items]="typeaheadEmployeeList" [selectOnTab]="true"
+    bindLabel="searchableName"  [clearable]="true" (change)="onSelectionChange($event)"
+    loadingText="loading..." [multiple]="isMultiple" [hideSelected]="true" [typeahead]="selectEmployeeTypeAhead" [dropdownPosition]="dropdownPosition"
+    [(ngModel)]="selectedExpert" [addTag]="isAddItem" >
+   
+    <ng-template ng-option-tmp let-item="item">     
+      <div [title]="item.employeeStatusCode!='EX'?item.employeeCode:''">{{item.searchableName}} 
+        <span *ngIf="item.employeeStatusCode=='EX'" style="font-size: 10px;
+        padding: 0px 2px !important;" class="tag tag-gray ng-star-inserted">BAN</span></div>
+    </ng-template>
+  </ng-select>
+</div>

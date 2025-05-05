@@ -1,0 +1,93 @@
+@use "sass:math";
+
+div.dashboard{
+  #stage{
+    background-color: $grey-extra-light;
+    overflow-y:auto;
+    height: calc(100vh - 133px);
+  }
+  .dashboard-grid{
+    .grid-header{
+      font-weight: 500;
+    }
+    .grid-header, .grid-row{
+      box-shadow: 3px 3px 5px rgba(228, 228, 228, 1);
+      border: 1px solid $grey-alt-6;
+      border-radius: 4px;
+      margin-bottom: math.div($base-padding,2);
+      padding: $base-padding $base-padding*2;
+      background-color: $white;
+
+      > div{
+        align-self: center;
+      }
+    }
+    .grid-row{
+      position: relative;
+      transition: border-top-color .5s, border-bottom-color .5s, border-radius .5s;
+      cursor: pointer;
+
+      &:before, &:after{
+        content: '';
+        display: block;
+        position: absolute;
+        top: -1px;
+        bottom: -1px;
+        width:0px;
+        background-color: $white;
+        z-index: 2;
+      }
+
+      &:before{
+        left:0;
+        transition: left .5s, width .5s, border-top-color .5s, border-bottom-color .5s, border-left-color .5s;
+        border: 1px solid $grey-alt-6;
+        border-right: none;
+
+      }
+      &:after{
+        right:0;
+        transition: right .5s, width .5s, border-top-color .5s, border-right-color .5s, border-bottom-color .5s;
+        border: 1px solid $grey-alt-6;
+        border-left: none;
+      }
+
+      &:hover{
+        border-top: 1px solid $accent-3;
+        border-left-color: transparent;
+        border-right-color: transparent;
+        border-bottom: 1px solid $accent-3;
+        border-radius: 0;
+        &:before, &:after{
+          width:15px;
+          border-top: 1px solid $accent-3;
+          border-bottom: 1px solid $accent-3;
+          border-radius: 0 4px 4px 0;
+          border-right: 1px solid transparent;
+          border-left: 1px solid transparent;
+        }
+        &:before{left:-14px;border-left: 1px solid $accent-3;   }
+        &:after{right: -14px;border-right: 1px solid $accent-3;   }
+      }
+
+      .tag:not(:last-child){
+        margin-right: math.div($base-padding,4);
+      }
+
+      .target{
+        font-size: 18px;
+      }
+
+      .type{
+        span{
+          display: inline-block;
+          background-color: $grey-light;
+          padding: math.div($base-padding,4) math.div($base-padding,2);
+          color: $text-dark;
+          white-space: inherit;
+          font-size: 14px;
+        }
+      }
+    }
+  }
+}

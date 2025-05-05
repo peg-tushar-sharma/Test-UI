@@ -1,0 +1,40 @@
+.toggle-container{
+  display: flex;
+  align-items: center;
+  .toggle{
+    display: inline-block;
+    width:40px;
+    height: 24px;
+    border-radius: 20px;
+    border: 2px solid $grey-medium;
+    background-color: $white;
+    position: relative;
+    cursor: pointer;
+    transition: background-color .3s, border-width .3s;
+    &:after{
+      content: '';
+      background-color: $white;
+      border-radius: 50%;
+      border: 2px solid $grey-medium;
+      height: 22px;
+      width: 22px;
+      position: absolute;
+      right: 16px;  
+      top: 50%;
+      transform: translateY(-50%);  
+      transition: right .3s;      
+    }
+
+    &.on{
+      border-width: 0;                
+      &:after{
+        right: 0px;
+      }
+
+      &.toggle-orange{background-color: $accent-2;&:after{border-color: $accent-2;}}
+      &.toggle-purple{background-color: $accent-5;&:after{border-color: $accent-5;}}
+      &.toggle-blue{background-color: $accent-3;&:after{border-color: $accent-3;}}
+      &.toggle-green{background-color: $accent-4;&:after{border-color: $accent-4;}}
+    }
+  }
+}

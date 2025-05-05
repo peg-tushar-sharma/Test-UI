@@ -1,0 +1,74 @@
+
+  <a #prohibitionForm hidden="true" class="dropdown-item" href="#" data-toggle="modal" data-backdrop="static"
+    data-target="#prohibition-form">Edit Prohibition</a>
+<div class="modal" id="prohibition-form" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{prohibition.id > 0 ? 'Edit' : 'Create New'}} Prohibition</h5>
+
+        <button type="button" (click)="cancel()" id='closeProhibition' class="close" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form class="needs-validation data-collection" autocomplete="off" novalidate #form="ngForm" >
+          <h2>Prohibition Information</h2>
+          <div class="form-row mb-3">
+            <div class="col-4" [class.has-error]="companyName.touched && companyName.invalid">
+              <label>Company Name: *</label>
+              <input type="text" [disabled]="inProgress" #companyName="ngModel" maxlength="1200" class="form-control" name="companyName" required [(ngModel)]="prohibition.tdn">
+              <!-- <validation [control]="companyName"></validation> -->
+            </div>
+            <div *ngIf="prohibition.id > 0; else blankSpace;" class="col-4">
+              <label>Stage: *</label>
+              <div class="form-row">
+                <div class="col-5 align-items-center">
+                  <input type="radio" [disabled]="inProgress" [(ngModel)]="prohibition.iac" name="stage"
+                    [value]="!!true" id="activate">
+                  <label for="activate">Active</label>
+                </div>
+                <div class="col align-items-center">
+                  <input type="radio" [disabled]="inProgress" [(ngModel)]="prohibition.iac" name="stage"
+                    [value]="!!false" id="terminate">
+                  <label for="terminate">Terminated</label>
+
+                </div>
+              </div>
+            </div>
+            <ng-template #blankSpace>
+              <div class="col-4"></div>
+            </ng-template>
+            <div class="col-4">
+              <div class="form-group">
+                <label>Submitted By:</label>
+                <label class="readonly d-block">  
+                  <!-- [title]="prohibition.id > 0 ? prohibition.sb : submittedByEcode" -->
+                  {{ ((prohibition.id > 0) ? (prohibition.sbn || 'Legal') : submittedByName) }}</label>
+              </div>
+            </div>
+          </div>
+         
+          <div class="form-row">
+            <div class="col-12">
+              <div class="form-group">
+                <label for="">Notes:</label>
+                <textarea rows="3" [disabled]="inProgress" maxlength="2000" style="min-height: 100px; max-height: 230px;" name="notes" [(ngModel)]="prohibition.ln" class="form-control"></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="form-row terminated-text" *ngIf="!prohibition.iac">
+            <!-- <i class="fa fa-asterisk fa-1" aria-hidden="true"></i> -->
+            * Terminated notes will not be visible in the registration grid.
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-tertiary" (click)="cancel()">Cancel</button>
+        <button [disabled]="inProgress" type="button" class="btn btn-primary" (click)="form.valid ? save() : null" [disabled]="form && form.invalid">Save</button>
+
+        <button #dismissButton type="button" hidden='true' data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>

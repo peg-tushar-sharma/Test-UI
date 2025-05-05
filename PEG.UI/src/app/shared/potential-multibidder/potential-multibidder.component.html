@@ -1,0 +1,19 @@
+<div class="mb-div" *ngIf="possibleMBmatches.length > 0 && !showLoader">
+  <span class="mb-span1">Possible Multibidder Matches <i class="fas fa-times close" (click)="closePopup()"></i></span>
+  <p class="trackerMB">
+    <span class="tracker" *ngIf="possibleMBmatches.length > 0  && !showLoader"> Opportunities</span>
+    <li style="margin-top: 4px;" *ngIf="possibleMBmatches.length > 0"># {{possibleMBmatches[0].id}}</li>
+    <li style="margin-top: 4px;" *ngIf="possibleMBmatches.length > 1"># {{possibleMBmatches[1].id}}</li>
+  </p>
+
+  <div class="viewClick" *ngIf="possibleMBmatches.length > 0 && !showLoader">
+    <span style="cursor: pointer; text-decoration: underline;" (click)="viewSelected()">View All</span>
+  </div>
+
+</div>
+<div class="noMatches" *ngIf="possibleMBmatches.length == 0 && !showLoader"> <i class="fas fa-times close" (click)="closePopup()"></i>
+  <span class="mb-span1">No Possible Multibidder Matches</span>
+</div>
+<div class="noMatches" *ngIf="showLoader">
+  <span class="mb-span1">Loading ...</span>
+</div>

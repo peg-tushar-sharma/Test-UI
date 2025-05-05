@@ -1,0 +1,24 @@
+@use "sass:math";
+
+.column-filter{  
+  width:auto;
+  background-color: $white;
+  padding:math.div($base-padding,2);
+  max-height: 360px;
+  overflow-y: auto;
+
+
+  button{
+    width:calc(100% - 4px);
+    &.btn-secondary{
+      background-color: $white!important;
+      border-color: $bain-red!important;
+      color: $bain-red!important;
+    }
+    &.btn-primary{
+      background-color: $bain-red;
+      color: $white;
+      border-color: $bain-red!important;
+    }
+  }
+}

@@ -1,0 +1,59 @@
+@import "../abstract/variables.scss";
+.addBid {
+  cursor: pointer;
+  color: $bain-red !important;
+}
+
+.labelText {
+  font-size: 13px;
+  color: #6d6d6d;
+}
+
+.font-weight-600 {
+  font-weight: bold;
+}
+
+textarea {
+  resize: none;
+}
+
+.btn-link {
+  text-decoration: none !important;
+  color: #3c3c3c !important;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+// .ng-invalid {
+//   border:  1px solid $bain-red !important;
+// }
+
+.submitted {
+  div.invalid > label {
+    color: #cc0000 !important;
+  }
+}
+
+.needs-validation {
+  div.invalid.touched > label {
+    color: #cc0000 !important;
+  }
+}

@@ -1,0 +1,13 @@
+<div #mainDiv class="ag-header-cell-contents ">
+<div  (click)="onSortToggleRequested($event)" class="customHeaderGrouping">
+  <div class="customHeaderLabel">{{agParams.displayName}}</div>
+  <div *ngIf="agParams.enableSorting" (click)="onSortRequested('asc', $event)" [ngClass]="ascSort" class="customSortDownLabel">
+    <i  class="fa fa-sort-down">
+    </i></div> 
+  <div *ngIf="agParams.enableSorting" (click)="onSortRequested('desc', $event)" [ngClass]="descSort" class="customSortUpLabel"><i class="fa fa-sort-up"></i></div> 
+
+  </div>
+  <div *ngIf="agParams.enableMenu" #menuButton class="customHeaderMenuButton" (click)="onMenuClicked($event)">
+    <i id="{{agParams.displayName}}-filter" class="fa {{agParams.menuIcon}}"></i>
+  </div> 
+</div>

@@ -1,0 +1,99 @@
+.wrapper {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 15px;
+  color: #666;
+  padding: 16px;
+  display: grid;
+  grid-template-columns: 3fr 5fr 1fr;
+  border-bottom: dashed 1px rgba(204, 204, 204, 1);
+
+}
+
+.conflict-data-form {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+}
+
+h4 {
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 30px;
+  text-align: center;
+  color: #000;
+  margin-bottom: 0;
+
+  span {
+    font-weight: 400;
+  }
+}
+
+.mb-status, .sell-side-status {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 14px;
+  text-align: center;
+  color: #000;
+
+  .badge-pill {
+    margin-left: 8px;
+    padding: 4px 8px 4px 8px;
+    gap: 2px;
+    border-radius: 8px;
+  }
+}
+
+
+label {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 14.4px;
+  text-align: left;
+}
+
+:host {
+  ::ng-deep .ng-select .ng-select-container,
+  ::ng-deep .ng-select.ng-select-single .ng-select-container {
+    min-height: 5px;
+    font-size: 1em;
+  }
+
+  ::ng-deep .ng-select.ng-select-single .ng-select-container {
+    height: 26px !important;
+    font-size: 1em !important;
+  }
+
+  .cta {
+    width: 160px;
+    a.btn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    button,
+    a.btn {
+      height: 35px;
+      font-size: 12px;
+      font-weight: 500;
+      text-align: left;
+      color: rgba(40, 76, 224, 1);
+      border: solid 1px rgba(40, 76, 224, 1);
+
+      &:hover {
+        color: #fff;
+        background: rgba(40, 76, 224, 1);
+      }
+    }
+
+    a {
+      color: rgba(40, 76, 224, 1);
+      font-size: 13px;
+      font-weight: 500;
+      line-height: 16.8px;
+      letter-spacing: 0.3856479823589325px;
+      text-align: left;
+    }
+  }
+
+}

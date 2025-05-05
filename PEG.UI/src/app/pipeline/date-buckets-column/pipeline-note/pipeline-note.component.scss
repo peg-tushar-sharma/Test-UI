@@ -1,0 +1,167 @@
+.resource-note-modal {
+    font-family: "Graphik";
+    gap: 30px;
+    padding: 20px 40px;
+
+    .levelOfImpact {
+        display: flex;
+        flex-direction: row;
+        /* Items aligned horizontally */
+        gap: 20px;
+        /* Add spacing between items */
+        flex-wrap: wrap;
+        /* Wrap to next row if necessary */
+        align-items: flex-start;
+        /* Align items to the top */
+    }
+
+   
+
+    // Header
+    &__header-wrapper {
+        color: #121212;
+
+        h3 {
+            font-size: 24px;
+            margin: 0px;
+        }
+
+        // Close CTA
+        .resource-note-header-cta {
+            background: none;
+            border: none;
+            font-size: 20px;
+            outline: none;
+            padding: 0px;
+        }
+    }
+
+    // Outages, Available Date, Preferences
+    &__section-wrapper {
+
+        flex-direction: column;
+        flex: 1;
+        /* Allow items to grow/shrink equally */
+        min-width: 250px;
+        /* Optional: Set a minimum width for sections */
+        margin: 10px;
+
+        // iframe
+        iframe {
+            background: #fff;
+            height: 100%;
+            width: 100%;
+        }
+
+        // Label
+        .section-label {
+            color: #121212;
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 16px;
+            margin: 0px;
+        }
+
+        // Date Picker Input
+        .availabledatwidth {
+            background: #fff;
+            border: 1px solid #e0e4e8;
+            border-radius: 4px;
+            font-size: 14px;
+            height: 35px;
+            margin-top: 5px;
+            outline: none;
+            text-align: center;
+            width: 65px;
+
+            &:focus {
+                border-color: #284ce0;
+            }
+        }
+
+        // Textarea
+        .section-input {
+            background: #fff;
+            border: 1px solid #e0e4e8;
+            border-radius: 4px;
+            color: #121212;
+            font-size: 14px;
+            line-height: 20px;
+            margin-top: 5px;
+            max-height: 200px;
+            min-height: 100px;
+            outline: none;
+            padding: 8px 10px;
+            width: 100%;
+
+            &:focus {
+                border-color: #284ce0;
+            }
+        }
+
+        // Level of Impact
+        .level-of-impact-wrapper {
+            margin-left: 10px;
+            position: relative;
+
+            // Toggle CTA
+            &__cta {
+                border: none;
+                border-radius: 50rem;
+                background: #f0f2f3;
+                color: #c2c9d1;
+                font-size: 10px;
+                font-weight: 500;
+                gap: 5px;
+                line-height: 12px;
+                outline: none;
+                padding: 4px 8px;
+
+                &.colorSelected {
+                    color: #fff;
+                }
+            }
+
+            // Dropdown Menu
+            &__dropdown-menu {
+                min-width: fit-content;
+
+                .dropdown-item {
+                    cursor: pointer;
+                }
+
+                &__level-cta {
+                    border: none;
+                    border-radius: 50rem;
+                    font-size: 10px;
+                    font-weight: 500;
+                    line-height: 12px;
+                    outline: none;
+                    padding: 4px 8px;
+                    width: 100px;
+                }
+            }
+        }
+    }
+
+    // Footer
+    &__footer-wrapper {
+        .resource-note-footer-cta {
+            background: #284ce0;
+            border: none;
+            border-radius: 4px;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 16px;
+            outline: none;
+            padding: 12px 20px;
+        }
+    }
+}
+
+// change z-index so it appears over modal's z-index
+::ng-deep bs-datepicker-container,
+::ng-deep bs-daterangepicker-container {
+    z-index: 99999 !important;
+}

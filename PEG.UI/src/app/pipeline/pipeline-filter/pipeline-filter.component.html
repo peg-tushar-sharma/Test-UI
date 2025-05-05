@@ -1,0 +1,60 @@
+<div class="button-container">
+
+  <button class="pipelineFilterButton" (click)="refreshCurPage()">
+    <i class="fa fa-redo"></i>&nbsp; Refresh Data
+  </button>
+  <button class="pipelineFilterButton" (click)="showPanel(true)">
+    <i class="fa fa-cog"></i>&nbsp; Page Settings
+  </button>
+
+
+</div>
+
+<div class="pipelineFilterContainer" [attr.show]="isShow">
+  <div class="pipelineFilterPanel">
+    <div class="header">
+      <h2>Page Settings</h2>
+      <button class="closeFilterPanel" (click)="showPanel(false)"></button>
+    </div>
+    <form id="pipelineFilterForm" class="content" #form="ngForm">
+      <div>
+        <h3 class="mb-3">Regional Data Source</h3>
+        <div class="checkGroup">
+          <label class="checkContainer" *ngFor="let item of region">
+            <input type="checkbox" name="dataSource{{ item.regionId }}" [(ngModel)]="item.isChecked" />
+            <span class="checkmark"></span>
+            {{ item.regionName }}
+          </label>
+        </div>
+      </div>
+      <span *ngFor="let buckItem  of bucketColumnOptions">
+        <div class="column-wrapper d-flex align-items-center justify-content-between mt-4" *ngIf="!buckItem.isHide">
+          <h3>{{buckItem.label}}</h3>
+
+
+          <!-- column picker -->
+          <div class="btn-group" dropdown >
+            <button class="dateBucketExpand d-flex align-items-center"aria-controls="dropdown-columns-picker" dropdownToggle
+              id="button-column-picker">
+              <span>{{ buckItem.columnValue }} {{ buckItem.columnValue == 1 ? "Column" : "Columns" }}</span>
+              <i class="fas fa-chevron-down ml-2"></i>
+            </button>
+            <span *ngIf="!isColumnSwappedOnWeekends">
+              <ul *dropdownMenu role="menu" id="dropdown-columns-picker" class="dropdown-menu dropdown-menu-right"
+                aria-labelledby="button-column-picker">
+                <li role="menuitem" *ngFor="let item of columnViewOptions">
+                  <button class="dropdown-item" [class.active]="item.value == buckItem.columnValue"
+                    (click)="toggleColumnNumber(buckItem.weekNumber,item.value)">
+                    {{ item.label }}
+                  </button>
+                </li>
+              </ul>
+            </span>
+          </div>
+        </div>
+      </span>
+      <input class="pipelineFilterSubmit" (click)="form && form.valid ? saveChanges() : null" type="submit"
+        value="Save Changes" />
+    </form>
+  </div>
+</div>

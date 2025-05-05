@@ -1,0 +1,100 @@
+<section>
+    <div class="sharing-modal-wrapper" *ngIf="registration">
+        <!-- header -->
+        <div class="sharing-modal-wrapper__header">
+            <h2>Edit Sharing</h2>
+            <!-- Commented submitter detail for temporary  -->
+            <!-- client name | case code | submitted by -->
+            <p>[{{ registration.registrationClient?.clientName }}] <span id="target-name">[{{
+                targetName }}]</span> submitted by {{ submittedBy }}</p>
+
+            <!-- submitted access -->
+            <!-- <div class="d-flex align-tems-center">
+                <p>Submitter access</p>
+
+             
+                <label class="switch">
+                    <input type="checkbox" (change)="toggleSubmitterAccess()" [(ngModel)]="isToggleChecked">
+                    <span class="slider round"></span>
+                </label>
+
+                
+                <p id="bold">{{ isToggleChecked ? 'Enabled' : 'Disabled' }}</p>
+            </div> -->
+        </div>
+
+        <!-- body -->
+        <div class="sharing-modal-wrapper__body">
+            <!-- CSLs -->
+            <div class="section">
+                <label>Client Sector Leads <i class="fas fa-info-circle"
+                        ngbPopover="Indicate the sector leads for the specific client (if one exists)"
+                        popoverClass="sharing-popover" triggers="mouseenter:mouseleave"></i></label>
+
+                <app-multi-select-typeahead id='clientSectorLead' [isEditable]="true" [isDisabled]="false"
+                    (saveValue)="updateClientSectorLeads($event)" [levelStatusCode]="levelStatusCode"
+                    [employeeStatusCode]="employeeStatusCode" [selectedValue]="registration.clientSectorLeads"
+                    (blur)="isEditingClientSectorLeads=false" [name]="'clientSectorLead'" [isMultiSelect]="true">
+                </app-multi-select-typeahead>
+            </div>
+
+            <!-- CHs -->
+            <div class="section">
+                <label>Client Heads <span>*</span><span *ngIf="!isSaveValid">- required</span></label>
+
+                <app-multi-select-typeahead id='clientHead' [isEditable]="true" [isDisabled]="false"
+                    (saveValue)="updateClientHeads($event)" [levelStatusCode]="levelStatusCode"
+                    [employeeStatusCode]="employeeStatusCode" [selectedValue]="registration.clientHead"
+                    (blur)="isEditingClientHead=false" [name]="'clientHead'" [isMultiSelect]="true">
+                </app-multi-select-typeahead>
+            </div>
+
+            <div class="section">
+                <label>OVPs</label>
+
+                <app-multi-select-typeahead id='ovp' [isEditable]="true" [isDisabled]="false"
+                    (saveValue)="updateOVP($event)"
+                    [employeeStatusCode]="employeeStatusCode" [selectedValue]="registration?.operatingPartner"
+                    (blur)="isEditingOVP=false" [name]="'svp'" [isMultiSelect]="true">
+                </app-multi-select-typeahead>
+            </div>
+
+            <div class="section">
+                <label>SVPs</label>
+
+                <app-multi-select-typeahead id='svp' [isEditable]="true" [isDisabled]="false"
+                    (saveValue)="updateSVP($event)" 
+                    [employeeStatusCode]="employeeStatusCode" [selectedValue]="registration?.svp"
+                    (blur)="isEditingSVP=false" [name]="'svp'" [isMultiSelect]="true">
+                </app-multi-select-typeahead>
+            </div>
+
+            <div class="section">
+                <label>Selling Partners</label>
+
+                <app-multi-select-typeahead id='sellingPartner' [isEditable]="true" [isDisabled]="false"
+                    (saveValue)="updateSellingPartner($event)"
+                    [employeeStatusCode]="employeeStatusCode" [selectedValue]="registration?.sellingPartner"
+                    (blur)="isEditingSellingPartner=false" [name]="'sellingPartner'" [isMultiSelect]="true">
+                </app-multi-select-typeahead>
+            </div>
+
+            <!-- OPs -->
+            <div class="section">
+                <label>Other Partners Who Should See This Registration</label>
+
+                <app-multi-select-typeahead id='othersInvolved' [isEditable]="true" [isDisabled]="false"
+                    (saveValue)="updateOthersInvolved($event)" [levelStatusCode]="levelStatusCode"
+                    [employeeStatusCode]="employeeStatusCode" [selectedValue]="registration.othersInvolved"
+                    (blur)="isEditingOthersInvolved=false" [name]="'othersInvolved'" [isMultiSelect]="true">
+                </app-multi-select-typeahead>
+            </div>
+        </div>
+
+        <!-- footer -->
+        <div class="sharing-modal-wrapper__footer d-flex">
+            <button class="btn secondary" (click)="closeModal()">Cancel</button>
+            <button class="btn primary" (click)="saveChanges()" [disabled]="!isSaveValid">Save</button>
+        </div>
+    </div>
+</section>

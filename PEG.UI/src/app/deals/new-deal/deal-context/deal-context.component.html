@@ -1,0 +1,47 @@
+
+
+
+<div class="context-data">
+  <div class="row">
+    <div class="col-7">
+      <div>
+        <p class="deal-headings">Deal Stats</p>
+            <div class="row">
+                              
+                   <div class="col-3 labelText"># Work Completed: <span>{{mbHighlights.workCompleted}}</span></div>
+                
+
+                
+                  <div class="col-3 labelText" style="padding: 0px;"># Clients: <span>{{totalUniqueClients}}</span></div>
+                  <div class="col-3 labelText"># Work Started:<span>{{mbHighlights.workStarted}}</span></div>
+
+                
+                
+                  <div class="col-3 labelText" style="padding: 0px;"># Registrations: <span>{{totalRegistration}}</span></div>
+                  <div class="col-3 labelText"># Committed:<span>{{mbHighlights.commitment}}</span></div>
+
+                
+                
+                  <div class="col-3 labelText" style="padding: 0px;"># Closed: <span>{{mbHighlights.terminated}}</span>
+                  </div>
+                  <div class="col-3 labelText"># Interest: <span>{{mbHighlights.interest}}</span></div>              
+              
+            </div>
+            <br/>
+          </div>
+      <div>
+        <p class="deal-headings">Deal Information</p>
+        <app-deal-info [deal]="deal"   [dealLabel]="dealLabel" [isTabReadOnly]="isTabReadOnly" ></app-deal-info>
+      </div>
+      <div style="margin-top: 20px;">
+        <p class="deal-headings">Deal Process</p>
+        <app-deal-process [deal]="deal" [dealLabel]="dealLabel" [isTabReadOnly]="isTabReadOnly"></app-deal-process>
+      </div>
+    </div>
+
+    <div class="col-5 smsPadding">
+      <p class="deal-headings">Bain Information</p>
+      <app-deal-bain-history  [deal]="deal" [dealLabel]="dealLabel" [isTabReadOnly]="isTabReadOnly"></app-deal-bain-history>
+    </div>
+  </div>
+</div>

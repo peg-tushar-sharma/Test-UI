@@ -1,0 +1,37 @@
+<!--
+<!-- Page div will have blue-ish bg color -->
+<div class="dashboard-page d-flex">
+  <!-- Left Side Navigation -->
+  <div class="left-side-menu-wrapper d-flex">
+    <!-- Buttons -->
+    <button class="btn-class" *ngFor="let item of menuButtons" (click)="openLink(item)">
+      <div
+        class="icon-wrapper d-flex align-items-center justify-content-center"
+        [ngClass]="item.icon ? 'with-icon' : ''"
+      >
+        <i class="fas fa-{{ item.icon }}" *ngIf="item.icon !== null"></i>
+        <img
+          src="./../../../assets/img/{{ item.image }}"
+          alt="{{ item.label }}"
+          *ngIf="item.image !== null"
+          height="{{ item.height }}"
+        />
+      </div>
+      <span>{{ item.label }}</span>
+    </button>
+  </div>
+
+  <!-- Wrapper will have white bg -->
+  <div class="right-side-wrapper">
+    <div class="content-wrapper">
+      <!-- Header Wrapper -->
+      <div class="header-wrapper">
+        <!--        <h4 style="grid-area: header1" class="activeHeader">Conflicts</h4>-->
+      </div>
+      <!-- new design -->
+      <div class="content">
+        <app-conflicts-list></app-conflicts-list>
+      </div>
+    </div>
+  </div>
+</div>

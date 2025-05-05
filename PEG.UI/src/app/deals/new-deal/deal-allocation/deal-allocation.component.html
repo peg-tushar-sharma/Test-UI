@@ -1,0 +1,388 @@
+<div *ngIf="isEnabled" style="height: 100%;">
+  <div class="row" cdkDropListGroup style="background: #fff;height: 100%;">
+
+    <div class="allocation-expert-container">
+
+      <div id='allocation-expert-group'
+        style="background: #f6f6f6;padding: 20px 7px 20px 20px; height: 100%;overflow-y: scroll;">
+
+        <div style="height: 40px;">
+          <ng-select (clear)="filterClose()" id="ddlfilter" [items]="dealExpertsGroups" *ngIf="isFilterHidden"
+            style="    width: 80%;    display: inline-block;" placeholder="Search Expert Groups"
+            bindLabel="expertGroupName" bindValue="expertGroupId" (change)="filterExperts($event)">
+          </ng-select>
+          <span style="font-size: 18px;display: inline-block;padding: 5px 0px;" *ngIf="!isFilterHidden">Experts</span>
+          <button class="btn btn-secondary" id="btnFilter" (click)="toggelFilter()"
+            style="float: right;padding: 5px 10px;"><i class="fas fa-filter"></i></button>
+        </div>
+
+
+
+        <div *ngFor="let group of deal.expertGroup;let i = index">
+          <div class="expertGroup outer" [hidden]="group.filterState==1">
+
+            <div class="one"
+              [style.background-color]="group.expertPoolColor!=undefined && group.expertPoolColor.colorCode!=undefined?group.expertPoolColor.colorCode:''"
+              style="height: 12px; width:12px; border-radius: 50%;"></div>
+            <div class="two" style="text-overflow:ellipsis;overflow: hidden;white-space: nowrap;width: 94%;"
+              title="{{group.expertGroupName}}"> {{group.expertGroupName}}</div>
+          </div>
+
+          <div cdkDropList id='expertGroupList{{i}}' [cdkDropListData]="group.experts"
+            [cdkDropListConnectedTo]="listClientAccess" (cdkDropListDropped)="drop($event)">
+            <div [hidden]="item.filterState==1" class="expert-pool-box"
+              [class.disbaledColor]="(item.expertState==1||hasNACategory(item) || (item.expertState==2 && item.isAllocationActive))"
+              *ngFor="let item of sortBy(group.experts,group)" [cdkDragData]="item" cdkDrag
+              [cdkDragDisabled]="(item.expertState==1||hasNACategory(item)|| (item.expertState==2 && item.isAllocationActive) || isTabReadOnly)">
+              <span *ngIf="(item.expertState==2)" style="color: #C9C9C9;"></span>
+
+              <div class="row no-gutters">
+
+                <!-- Check these INITIALS as per Depth of Expertise -->
+                <div id="expert-category" style="text-align: center;" class="col-1">{{item.categoryName == 'Not
+                  Available' ? 'NA' : item.categoryName}}</div>
+
+                <div class="col-5 add-ellipsis" id='expert-name'
+                  [title]="!item.isExternalEmployee ? item.employeeCode : ''">
+                  {{item.expertNameWithoutAbbreviation}} {{item.statusCode == 'L' || item.statusCode == 'T' ? '(' + item.statusCode + ')' : ''}} </div>
+
+                <div id='expert-abbreviation' class="col-2">{{item.abbreviation}}</div>
+
+                <!-- Bain office short form should come here -->
+
+                <div id='office-abbreviation' class="col-1">{{item.officeAbbreviation}}
+                </div>
+
+                <div [ngClass]="item.isExternalEmployee?'col-3':'col-3'" style="padding-right: 6px;">
+                  <i id="expert-info" [class.disbaledColor]="(item.expertState==1||item.expertState==2)"
+                    class="fas fa-info-circle infoIcon ml-1" [class.colorblue]="item.note!=''" [popover]="popTemplate"
+                    [containerClass]="tooltip" placement="right" triggers="click" [outsideClick]="true"></i>
+
+                  <ng-template #popTemplate>
+                    <app-user-profile-tooltip-allocation [item]="item"></app-user-profile-tooltip-allocation>
+                  </ng-template>
+
+                  <span *ngIf="!hasNACategory(item)">
+                    <i *ngIf="!item.isAllocationActive" id="expert-group-unallocated"
+                      class="fas fa-lock-open colorGray activeIcon lock-unlock"></i>
+
+                    <i *ngIf="item.isAllocationActive" id="expert-group-allocated"
+                      class="fas fa-lock colorBlack activeIcon lock-unlock"></i>
+                  </span>
+                  <i *ngIf="hasNACategory(item)" id="expert-group-na"
+                    class="fas fa-minus-square colorRed activeIcon"></i>
+
+
+
+                  <span *ngIf="item.isExternalEmployee" class="tag-small">B</span>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div *ngIf="!(deal.expertGroup && deal.expertGroup.length>0)" style="text-align: center;padding-top: 125px;">No
+          expert found</div>
+
+      </div>
+    </div>
+
+    <div class="" style="height: 100%; flex: 1; overflow: auto;">
+
+      <div class="table-scroll">
+
+        <table id='client-allocation'>
+
+          <thead>
+            <tr>
+              <th style="font-weight: 700 !important;">Clients</th>
+              <th>Allocated</th>
+              <th>Hypothesis</th>
+              <th>Expert calls</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+
+          <tbody class="tbody" style="height: 90%;">
+
+            <tr *ngFor="let client of uniqueClients(); let i = index">
+
+              <th id="clientInfo{{client.dealClientId}}"
+                [ngClass]="client.registrationStatus && (client.registrationStatus.registrationStatusId == duplicateStatusID || client.registrationStatus.registrationStatusId == conflictedStatusID 
+                || client.stage?.registrationStageId ==  this.terminatedStageID
+                || client.stage?.registrationStageId ==  this.closedLostStageID
+                || client.stage?.registrationStageId ==  this.closedDroppedStageID
+                || client.stage?.registrationStageId ==  this.closedBainTurnedDownStageID ) ? 'highlight-duplicate' : ''">
+                <div>
+                  <span class="clientName float-left">
+                    <b class="text-ellipsis" [title]="client.client.clientName">{{client.client.clientName}}</b>
+                    <span style="font-size: 12px;" *ngIf="!(client.priority==null)">
+                      {{client.priority!=null && client.priority!=undefined && client.priority.priorityName &&
+                      client.priority.priorityName!='' ?'('+client.priority.priorityName+')':''}}
+                    </span>
+                  </span>
+                  <span class="subLables case-office" *ngIf="client.caseOffice">{{client.caseOffice.officeAbbr}}</span>
+                  <div class="clearfix"></div>
+                </div>
+                <div><span class="subLables" *ngIf="client.allocationDescription"
+                    [innerHTML]="client.allocationDescription"></span></div>
+                <div>
+                  <div *ngIf="client.seekingExpertise" style="display: inline-block; line-height: 1.3;">
+                    <span class="subLables"><b>Expertise Needs:</b></span>&nbsp;
+                    <span class="subLables"><span>{{client.seekingExpertise | slice:0:100 }}</span>
+                      <span style="display: none;"
+                        id="extraExpertiesNotes{{client.dealClientId}}">{{client.seekingExpertise | slice:101:10000
+                        }}</span>
+                      <a id="currentReadButton{{client.dealClientId}}" (click)="toggleExpertNotes(client,this)"
+                        style="cursor: pointer;color: #007dc4;" *ngIf="client.seekingExpertise.length>100"> Read
+                        more</a>
+                    </span>
+                  </div>
+                </div>
+              </th>
+              <td cdkDropList id="comittedList{{i}}" [cdkDropListData]="client.committed"
+                [cdkDropListConnectedTo]="listClientAccess" (cdkDropListDropped)="drop($event,i)">
+                <div>
+                  <div class="example-box expert iconVisiblity" *ngFor="let item of sortByPoolColor(client.committed)"
+                    [cdkDragDisabled]="true"
+                    [class.disbaledColor]="item && item.expertPoolColor?.length>0 &&  hasNACategory(item)"
+                    [cdkDragData]="item" cdkDrag>
+                    <ng-container *ngIf="item.expertPoolColor.length >= 1">
+                      <div class="row no-gutters">
+                        <div id="expert-allocated-expertname" class="col-6 add-ellipsis">
+                          <span
+                            [title]="!item.isExternalEmployee ? item.employeeCode : ''">
+                            {{item.expertNameWithoutAbbreviation}} {{item.statusCode == 'L' || item.statusCode == 'T' ? '(' + item.statusCode + ')' : ''}}
+                          </span>&nbsp;
+                        </div>
+                        <div class="col-2 remove-padding" id='expert-allocated-abbreviation'>
+                          <span *ngIf="item.abbreviation">
+                            {{item.abbreviation}} </span>
+                        </div>
+                        <div class="col-4 remove-padding">
+                          <i *ngIf="!isTabReadOnly"
+                            (click)="item.isAllocationActive?removeItemShowConfirm(item,i):removeItem(client,'Committed',item,i)"
+                            class="fas fa-times infoIcon itemVisible ml-2 "></i><i class="fas fa-info-circle infoIcon "
+                            [class.colorblue]="isNoteAvailable(item)" [popover]="popTemplate" [containerClass]="tooltip"
+                            placement="auto" triggers="click" [outsideClick]="true"></i>
+                          <ng-template #popTemplate>
+                            <app-user-profile-tooltip-allocation [item]="item"></app-user-profile-tooltip-allocation>
+                          </ng-template>
+                          <span *ngIf="!hasNACategory(item)">
+                            <i id='expert-allocated-unlock' *ngIf="!item.isAllocationActive"
+                              (click)="!isTabReadOnly?toggleAllocationActiveState(item):return;"
+                              class="fas fa-lock-open colorGray activeIcon lock-unlock"></i>
+                            <i id='expert-allocated-lock' *ngIf="item.isAllocationActive"
+                              (click)="!isTabReadOnly?allocationActiveConfirm(item,i):return;"
+                              class="fas fa-lock colorBlack activeIcon lock-unlock"></i>
+                          </span>
+                          <i id="expert-allocated-na" class="fas fa-minus-square colorRed activeIcon"
+                            *ngIf="hasNACategory(item)"></i>
+                          <span *ngIf="item.isExternalEmployee" class="tag-small"
+                            style="float: right; margin-right: 3px;" title="BAN Expert">B</span>
+
+                          <!-- Bain office short form should come here -->
+                          <span id='expert-allocated-office-abbreviation'>{{item.officeAbbreviation}}</span>
+                        </div>
+                        <div id="aa_comittedList_{{i+'_'+item.employeeCode}}" class="overlay">
+                          <div class="innerContent row">
+                            <div class="col-8 innerContentTitle">
+                              <span>Has client released expert?</span>
+                            </div>
+                            <div class="col-4">
+                              <button class=" overlayButton" (click)="cancelAllocationActiveConfirm(item,i)">No</button>
+                              <button class=" overlayButton ml-1"
+                                (click)="toggleAllocationActiveState(item,i)">Yes</button>
+                            </div>
+                          </div>
+                        </div>
+                        <div id="removeItem_comittedList_{{i+'_'+item.employeeCode}}" class="overlay">
+                          <div class="innerContent row">
+                            <div class="col-8 innerContentTitle">
+                              <span>Remove expert allocation?</span>
+                            </div>
+                            <div class="col-4">
+                              <button class=" overlayButton" (click)="removeItemCancelConfirm(item,i)">No</button>
+                              <button class=" overlayButton ml-1"
+                                (click)="removeItem(client,'Committed',item,i)">Yes</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row no-gutters">
+                        <div class="pr-1" style="width: max-content;" *ngFor="let itemColor of item.expertPoolColor;">
+                          <div class="mulPoolContainer">
+                            <span class="roundedPoolColor"
+                              [style.background-color]="itemColor.expertPoolColor?itemColor.expertPoolColor.colorCode:'#b3b3b3'"></span>
+                            <span style="padding-left:8px; font-weight: 600;font-size: 11px;"> {{itemColor?.categoryId
+                              == NACategoryID ? 'NA' : itemColor?.categoryId == 0 ? '-' : itemColor?.categoryName}}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </ng-container>
+
+                  </div>
+
+                </div>
+
+              </td>
+              <td cdkDropList id="heardFromList{{i}}" [cdkDropListData]="client.heardFrom"
+                [cdkDropListConnectedTo]="listClientAccess" (cdkDropListDropped)="drop($event,i)">
+                <div>
+
+                  <ng-container
+                    *ngIf="client.heardFrom != null && client.heardFrom != undefined && client.heardFrom.length >0">
+                    <div class="example-box expert iconVisiblity" *ngFor="let item of sortByPoolColor(client.heardFrom)"
+                      [cdkDragDisabled]="true" [cdkDragData]="item"
+                      [class.disbaledColor]="(item.expertState==1||item.expertState==2 || (item && item.expertPoolColor?.length>0 &&  hasNACategory(item)))"
+                      cdkDrag>
+
+
+                      <ng-container *ngIf="item.expertPoolColor.length >= 1">
+                        <div class="row no-gutters">
+
+                          <div class="col-6 add-ellipsis" [title]="!item.isExternalEmployee ? item.employeeCode : ''">
+                            {{item.expertNameWithoutAbbreviation}} {{item.statusCode == 'L' || item.statusCode == 'T' ? '(' + item.statusCode + ')' : ''}}
+                          </div>
+                          <div class="col-2 remove-padding">
+                            {{item.abbreviation!=undefined?item.abbreviation:''}}
+                          </div>
+                          <div class="col-4  remove-padding">
+
+                            <i *ngIf="!isTabReadOnly" (click)="removeItem(client,'HeardFrom',item,i)"
+                              class="fas fa-times infoIcon itemVisible  ml-2"></i>
+                            <i [class.disbaledColor]="(item.expertState==1||item.expertState==2)"
+                              class="fas fa-info-circle infoIcon " [class.colorblue]="isNoteAvailable(item)"
+                              [popover]="popTemplate" [containerClass]="tooltip" placement="auto" triggers="click"
+                              [outsideClick]="true"></i>
+                            <i id="expert-heardform-na" class="fas fa-minus-square colorRed activeIcon"
+                              *ngIf="hasNACategory(item)"></i>
+
+                            <ng-template #popTemplate>
+                              <app-user-profile-tooltip-allocation [item]="item"></app-user-profile-tooltip-allocation>
+                            </ng-template>
+                            <span *ngIf="item.isExternalEmployee" class="tag-small"
+                              style="float: right; margin-right: 3px;" title="BAN Expert">B</span>
+
+                            <!-- Bain office short form should come here -->
+                            <span>{{item.officeAbbreviation}}</span>
+                          </div>
+                        </div>
+
+                        <div class="row no-gutters">
+                          <div class="pr-1" style="width: max-content;" *ngFor="let itemColor of item.expertPoolColor;">
+                            <div class="mulPoolContainer">
+                              <span class="roundedPoolColor"
+                                [style.background-color]="itemColor.expertPoolColor?itemColor.expertPoolColor.colorCode:'#b3b3b3'"></span>
+                              <span style="padding-left:8px; font-weight: 600;font-size: 11px;"> {{itemColor?.categoryId
+                                == NACategoryID ? 'NA' : itemColor?.categoryId == 0 ? '-' : itemColor?.categoryName}}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </ng-container>
+
+                    </div>
+                  </ng-container>
+                </div>
+              </td>
+              <td cdkDropList id="nextCallList{{i}}" [cdkDropListData]="client.nextCall"
+                [cdkDropListConnectedTo]="listClientAccess" (cdkDropListDropped)="drop($event,i)">
+                <div>
+
+                  <ng-container
+                    *ngIf="client.nextCall != null && client.nextCall != undefined && client.nextCall.length >0">
+                    <div class="example-box expert iconVisiblity cdk-drag-disabled	"
+                      *ngFor="let item of sortByPoolColor(client.nextCall)"
+                      [class.disbaledColor]="(item.expertState==1||item.expertState==2 || (item && item.expertPoolColor?.length>0 && hasNACategory(item)))"
+                      [cdkDragData]="item" [cdkDragDisabled]="true" cdkDrag>
+
+
+                      <ng-container *ngIf="item.expertPoolColor.length >= 1">
+                        <div class="row no-gutters">
+                          <div class="col-6 add-ellipsis" [title]="!item.isExternalEmployee ? item.employeeCode : ''">
+                            {{item.expertNameWithoutAbbreviation}} {{item.statusCode == 'L' || item.statusCode == 'T' ? '(' + item.statusCode + ')' : ''}}
+                          </div>
+                          <div class="col-2 remove-padding">
+                            {{item.abbreviation!=undefined?item.abbreviation:''}}
+                          </div>
+                          <div class="col-4  remove-padding">
+                            <i *ngIf="!isTabReadOnly" (click)="removeItem(client,'NextCall',item,i)"
+                              class="fas fa-times infoIcon itemVisible  ml-2"></i><i
+                              [class.disbaledColor]="(item.expertState==1||item.expertState==2)"
+                              class="fas fa-info-circle infoIcon " [class.colorblue]="isNoteAvailable(item)"
+                              [popover]="popTemplate" [containerClass]="tooltip" placement="auto" triggers="click"
+                              [outsideClick]="true"></i>
+                            <i id="expert-nextcall-na" class="fas fa-minus-square colorRed activeIcon"
+                              *ngIf="hasNACategory(item)"></i>
+
+                            <ng-template #popTemplate>
+                              <app-user-profile-tooltip-allocation [item]="item"></app-user-profile-tooltip-allocation>
+                            </ng-template>
+                            <span *ngIf="item.isExternalEmployee" class="tag-small"
+                              style="float: right; margin-right: 3px;" title="BAN Expert">B</span>
+
+                            <!-- Bain office short form should come here -->
+                            <span>{{item.officeAbbreviation}}</span>
+                          </div>
+                        </div>
+
+                        <div class="row no-gutters">
+                          <div class="pr-1" style="width: max-content;" *ngFor="let itemColor of item.expertPoolColor;">
+                            <div class="mulPoolContainer" style="display: flex;align-items: center;">
+                              <span class="roundedPoolColor"
+                                [style.background-color]="itemColor.expertPoolColor?itemColor.expertPoolColor.colorCode:'#b3b3b3'"></span>
+                              <span style="padding-left:8px; font-weight: 600;font-size: 11px;"> {{itemColor?.categoryId
+                                == NACategoryID ? 'NA' : itemColor?.categoryId == 0 ? '-' : itemColor?.categoryName}}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </ng-container>
+
+                    </div>
+                  </ng-container>
+                </div>
+              </td>
+              <td (dblclick)="selectAllocationNote(client.dealClientId)">
+
+                <div *ngIf="client.allocationNote!=undefined" class="notes" id="allocationNotes{{client.dealClientId}}">
+                  <pre>{{client.allocationNoteFormatted}}</pre>
+                  <div><a id="currentAllocationNotesReadButton{{client.dealClientId}}"
+                      (click)="toggleAllocationNotes(client)" style="cursor: pointer;color: #007dc4;"
+                      *ngIf="client.allocationNote.length>400 || client.allocationNote.split('\n').length > 4"> Read
+                      more</a></div>
+                </div>
+              </td>
+            </tr>
+            <tr *ngIf="!IsReadyForAllocation">
+              <td colspan="5" style="text-align: center; padding-top: 150px; height: 100%;">
+                <div>No Clients found. Please add clients to continue with experts allocation.</div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+
+    </div>
+
+    <app-edit-allocation-notes [deal]="deal" [dealClientId]="selectedDealClientId" [dealLabel]="dealLabel"
+      [isTabReadOnly]="isTabReadOnly">
+    </app-edit-allocation-notes>
+
+    <i id="AllocationNotes" data-toggle="modal" data-target="#dealAllocationNotes" data-backdrop="static"
+      data-keyboard="false"></i>
+
+    <app-resource-allocation-information></app-resource-allocation-information>
+
+    <i id="resourceAllocation" data-toggle="modal" data-target="#resouceAllocation" data-backdrop="static"
+      data-keyboard="false"></i>
+
+  </div>
+
+</div>

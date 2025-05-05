@@ -1,0 +1,21 @@
+<div class="structure">
+  <div class="header">
+    <span>Date</span>
+    <span>Qualifier</span>
+  </div>
+
+  <div class="body">
+    <div class="date-body">
+      <input class="date-input" [(ngModel)]="mCOunt" type="text" placeholder="M+#" style="border: 1px solid #eee;" />
+    </div>
+    <div class="dropdown-body">
+      <input class="dropdown-body-input" [(ngModel)]="mDescription" placeholder="Add Text" type="text" style="border: 1px solid #eee;" />
+      <ul (click)="selectOption($event)">
+        <li style="padding: 4px;" data-select="None">None</li>
+        <li style="padding: 4px;" data-select="earliest">earliest</li>
+        <li style="padding: 4px;" data-select="larger">larger</li>
+        <li style="padding: 4px;" data-select="smaller">smaller</li>
+      </ul>
+    </div>
+  </div>
+</div>

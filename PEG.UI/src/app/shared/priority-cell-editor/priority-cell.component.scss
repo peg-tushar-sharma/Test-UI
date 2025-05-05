@@ -1,0 +1,39 @@
+ 
+.clientPriority-cell{
+    width: 341px;
+    height: 45px;
+    padding: 2px;
+}
+#clientPriority
+{
+.location-edit{
+    height: 38px;
+    padding: 5px;
+    display: grid;
+    grid-template-columns: 35% 64%;
+    color: grey;
+  
+}
+
+.inputlocation{
+    outline: none;
+    border: 0.8px solid grey;
+    border-radius: 4px;
+    margin-top: -8px;
+    height: 32px;
+    margin-left: 24px;
+}
+
+::ng-deep .ng-select .ng-select-container {
+    height: 30px !important;
+    min-height: 30px !important;
+  }
+  ::ng-deep .ng-select .ng-clear-wrapper {
+    cursor: pointer;
+    display: none;
+  }
+  ::ng-deep .ng-select .ng-arrow-wrapper{
+    display: none;
+  }
+
+}

@@ -1,0 +1,165 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="panel panel-default">
+      <table class="table table-fixed">
+        <thead>
+          <tr>
+            <th class="col-xs-2" width="15%">Name</th>
+            <th class="col-xs-6" width="10%">Role</th>
+            <th class="col-xs-3 align-center">Access tier</th>
+            <th class="col-xs-2 align-center"></th>
+            <th class="col-xs-2 align-center" width="5%"></th>
+          </tr>          
+        </thead>
+        <tbody>
+          <p></p>
+          <tr style="width:30%;border: none;">
+           <td colspan="5" style="padding: 0px;">
+            <form class="data-collection" novalidate #securityForm="ngForm">
+              <ng-select id="dealTagPeopleList" *ngIf="!isReadOnly" placeholder="Type Name to Add" name="dealTagPeopleList" [items]="typeaheadPeopleList" [selectOnTab]="true"
+              bindLabel="searchableName" bindValue="employeeCode" [addTag]="false" [loading]="dealPeopleLoad" 
+              [clearable]="true" [clearSearchOnAdd]="true" (close)="clearItems();" loadingText="loading..." [multiple]="false" [hideSelected]="true"
+              [typeahead]="selectPeopleTypeAhead" [(ngModel)]="selectedPeople" (change)="onPeopleAdd($event)">
+  
+              <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                <div>
+                  <div>
+                    <div>
+                      {{ item.lastName + ', ' + (item.familiarName != null ? item.familiarName : item.firstName) + ' (' + item.officeAbbreviation + ')'}}
+                    </div>
+                    <div class="col-info-location"> {{item.officeName}}</div>
+                  </div>
+  
+                </div>
+              </ng-template>
+            </ng-select>
+          </form>
+           </td>
+          </tr>
+          <tr *ngFor="let securityItem of deal.dealSecurity">
+            <td class="col-xs-2 va-m" width="15%">{{ securityItem.employee.lastName + ', ' + (securityItem.employee.familiarName != null ? securityItem.employee.familiarName : securityItem.employee.firstName) + ' (' + securityItem.employee.officeAbbreviation + ')'}}</td>
+            <td class="col-xs-6 va-m" width="10%">{{securityItem.employee.pegRoleName}}</td>
+            <td class="col-xs-3 va-m align-center">
+              <div class="btn-group" style="height: 38px;">
+                <label (ngModelChange)=updateTier(securityItem.employee,$event); [disabled]="securityItem.employee.pegRole==2 ||securityItem.employee.pegRole==3||securityItem.employee.pegRole==4" *ngFor="let accessTier of dealAccessTier;let i = index"  [(ngModel)]="securityItem.accessTierId" 
+                class="tierButton" name="{{accessTier.accessTierId}}" ngDefaultControl 
+                  [class.disabled]="(securityItem.employee.pegRole==2 ||securityItem.employee.pegRole==3||securityItem.employee.pegRole==4) && accessTier.accessTierName =='Administrator'"           
+                  [class.nonActive]="(securityItem.employee.pegRole==2 ||securityItem.employee.pegRole==3||securityItem.employee.pegRole==4) && accessTier.accessTierName !='Administrator'"
+
+                  [ngClass] ="{
+                              'border-radius-left':i==0 , 
+                              'border-radius-right':i == dealAccessTier.length-1, 
+                              'disabled':(securityItem.employee.pegRole==2 ||securityItem.employee.pegRole==3||securityItem.employee.pegRole==4) && accessTier.accessTierName =='Administrator',
+                              'active':accessTier.accessTierId ==securityItem.accessTierId
+                            }"                
+                
+                [btnRadio]="accessTier.accessTierId" tabindex="0"
+                  role="button">{{accessTier.accessTierName}}</label>                
+              </div>
+            </td>
+            
+            <td class="col-xs-2 permission ">
+              <div class="row mb-2">
+                <div class="col-2 permission-header" id="p1">Header</div>
+                <div class="col-2 col-half-offset permission-header" id="p2">Context</div>
+                <div class="col-2 col-half-offset permission-header" id="p3">Experts</div>
+                <div class="col-2 col-half-offset permission-header" id="p4">Clients</div>
+                <div class="col-2 col-half-offset permission-header" id="p5">Allocations</div>
+              </div>
+              <div class="row">
+                <div class="col-2">
+                  <div class="btn-group">
+                    <div>                      
+                      <security-checkbox [isChecked]="securityItem.tabs.header.isVisible" [accessTierId]= "securityItem.accessTierId" (outSecurityValue)="onUpdateValue($event)"  [accessTierId]= "securityItem.accessTierId" 
+                      employeeCode="{{securityItem.employee.employeeCode}}" tabName="header" property="isVisible" labelText="View" controlName="headerview{{securityItem.employee.employeeCode}}">
+                      </security-checkbox>
+                      
+                    </div>
+                    <div>                      
+                      <security-checkbox [isChecked]="securityItem.tabs.header.isEditable" [accessTierId]= "securityItem.accessTierId" (outSecurityValue)="onUpdateValue($event)"  [accessTierId]= "securityItem.accessTierId" 
+                      employeeCode="{{securityItem.employee.employeeCode}}" tabName="header" property="isEditable" labelText="Edit" controlName="headerEdit{{securityItem.employee.employeeCode}}">
+                      </security-checkbox>
+                      
+                    </div>
+                    
+                  </div>
+                </div>
+                <div class="col-2 col-half-offset" id="p2">
+                  <div class="btn-group">
+                    <div>
+                      <security-checkbox [isChecked]="securityItem.tabs.context.isVisible" (outSecurityValue)="onUpdateValue($event)"  [accessTierId]= "securityItem.accessTierId" 
+                      employeeCode="{{securityItem.employee.employeeCode}}" tabName="context" property="isVisible" labelText="View" controlName="contextview{{securityItem.employee.employeeCode}}">
+                      </security-checkbox>
+                    </div>
+                    <div>
+                      <security-checkbox [isChecked]="securityItem.tabs.context.isEditable" (outSecurityValue)="onUpdateValue($event)"  [accessTierId]= "securityItem.accessTierId" 
+                      employeeCode="{{securityItem.employee.employeeCode}}" tabName="context" property="isEditable" labelText="Edit" controlName="contextEdit{{securityItem.employee.employeeCode}}">
+                      </security-checkbox>
+                    </div>
+                    <div>
+                    </div> 
+                  </div>
+                </div>
+                <div class="col-2 col-half-offset" id="p3">
+                  <div class="btn-group">
+                    <div>                                          
+                      <security-checkbox [isChecked]="securityItem.tabs.experts.isVisible" (outSecurityValue)="onUpdateValue($event)"  [accessTierId]= "securityItem.accessTierId" 
+                      employeeCode="{{securityItem.employee.employeeCode}}" tabName="experts" property="isVisible" labelText="View" controlName="expertview{{securityItem.employee.employeeCode}}">
+                      </security-checkbox>
+                    </div>
+                    <div>                                          
+                      <security-checkbox [isChecked]="securityItem.tabs.experts.isEditable" (outSecurityValue)="onUpdateValue($event)"  [accessTierId]= "securityItem.accessTierId" 
+                      employeeCode="{{securityItem.employee.employeeCode}}" tabName="experts" property="isEditable" labelText="Edit" controlName="expertEdit{{securityItem.employee.employeeCode}}">
+                      </security-checkbox>
+                    </div>
+                    <div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-2 col-half-offset" id="p4">
+                  <div class="btn-group">
+                    <div>                      
+                      <security-checkbox [isChecked]="securityItem.tabs.clients.isVisible" (outSecurityValue)="onUpdateValue($event)"  [accessTierId]= "securityItem.accessTierId" 
+                      employeeCode="{{securityItem.employee.employeeCode}}" tabName="clients" property="isVisible" labelText="View" controlName="clientview{{securityItem.employee.employeeCode}}">
+                      </security-checkbox>
+                    </div>
+                    <div>                      
+                      <security-checkbox [isChecked]="securityItem.tabs.clients.isEditable" (outSecurityValue)="onUpdateValue($event)"  [accessTierId]= "securityItem.accessTierId" 
+                      employeeCode="{{securityItem.employee.employeeCode}}" tabName="clients" property="isEditable" labelText="Edit" controlName="clientEdit{{securityItem.employee.employeeCode}}">
+                      </security-checkbox>
+                    </div>
+                    <div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-2 col-half-offset" id="p5">
+                  <div class="btn-group">
+                    <div>
+                      <security-checkbox [isChecked]="securityItem.tabs.allocation.isVisible" (outSecurityValue)="onUpdateValue($event)"  [accessTierId]= "securityItem.accessTierId" 
+                      employeeCode="{{securityItem.employee.employeeCode}}" tabName="allocation" property="isVisible" labelText="View" controlName="allocationview{{securityItem.employee.employeeCode}}">
+                      </security-checkbox>
+                    </div>
+                    <div>
+                      <security-checkbox [isChecked]="securityItem.tabs.allocation.isEditable" (outSecurityValue)="onUpdateValue($event)"  [accessTierId]= "securityItem.accessTierId" 
+                      employeeCode="{{securityItem.employee.employeeCode}}" tabName="allocation" property="isEditable" labelText="Edit" controlName="allocationEdit{{securityItem.employee.employeeCode}}">
+                      </security-checkbox>
+                    </div>
+                    <div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+            <td style="cursor: pointer;" class="col-xs-2 va-m align-center c-p" width="5%">
+              <i  (click) = 'deletePeople(securityItem)' class="fas fa-trash-alt" *ngIf="(securityItem.employee.pegRole!=2 && securityItem.employee.pegRole!=3 && securityItem.employee.pegRole!=4)"></i>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+
+  <app-deal-preset-popup></app-deal-preset-popup>
+
+</div>
